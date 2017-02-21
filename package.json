@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "bswap": "^1.1.6",
+    "ip": "^1.1.4",
     "sdrjs": "0.0.6",
     "speaker": "^0.3.0",
     "to-arraybuffer": "^1.0.1",

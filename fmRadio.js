@@ -4,14 +4,16 @@ const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
+//const audio = require('./demodulator/audio.js')
 //const localPlayer = require('./localPlayer.js');
 const upnpPlayer = require('./upnpPlayer.js');
+//let player = audio.Player();
 
 let device;
-let offset = 0;// 100000;
+let offset = 100000;
 let isStereo = true;
 let gains = []              //usable mono     //best comp//bad    //bad    //bad
-const sampleRates = [288000, 960000, 1200000, 1440000, 2000000, 2560000, 2700000];
+const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2560000, 2700000];
 let sampleRate = sampleRates[5];
 
 const onBtn = document.getElementById('radio-on');
@@ -113,6 +115,8 @@ listen = () => {
 
 //var outS = fs.createWriteStream('out.raw');
 
+var event = new Event('change');
+
 //var player = main.getPlayer();
 decoder.addEventListener('message', function (msg) {
   var level = msg.data[2]['signalLevel'];
@@ -120,11 +124,10 @@ decoder.addEventListener('message', function (msg) {
   var right = new Float32Array(msg.data[1]);
   stereoText.innerText = msg.data[2]['stereo'];
   levelText.innerText = level.toFixed(2);
-  var event = new Event('change');
   levelText.dispatchEvent(event);
   //localPlayer.play(left, right);
   upnpPlayer.play(left, right);
-  //main.play(left,right);
+  //player.play(left, right, level, 0.05);
 })
 
 sendData = (data) => {

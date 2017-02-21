@@ -1,7 +1,8 @@
 //const events = require('events');
 //const fs = require('fs');
 const path = require('path');
-var bswap = require('bswap')
+const bswap = require('bswap');
+var ip = require('ip');
 //const ssdpSearch = require('./ssdpSearch.js')
 const Speaker = require('speaker');
 
@@ -93,7 +94,7 @@ var options = {
   }
 };
 
-client.load('http://192.168.1.98:1337/', options, function (err, result) {
+client.load('http://'+ip.address()+':1337/', options, function (err, result) {
   if (err) throw err;
   console.log('playing ...');
 });
