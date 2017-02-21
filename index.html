@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>FM Radio</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="dist/css/photon.min.css">
+</head>
+
+<body>
+  <div class="window">
+    <!--<header class="toolbar toolbar-header">
+      <h1 class="title">FM Radio</h1>
+    </header>-->
+    <div class="window-content">
+      <div class="pane-group">
+        <div class="pane-mini sidebar">
+          <button type="button" , id='radio-on'>Radio on</button>
+          <button type="button" , id='radio-off'>Radio off</button>
+          <button type="button" , id='reset'>Reset</button>
+        </div>
+        <div class="pane">
+          <div class="btn-group">
+
+            </button>
+            <button class="btn btn-large btn-default" id="scanDown">
+              <span class="icon icon-to-start"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="freqDown">
+              <span class="icon icon-fast-backward"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="freqUp">
+              <span class="icon icon-fast-forward"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="scanUp">
+              <span class="icon icon-to-end"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="scanUp">
+              <span class="icon icon-network"></span>
+            </button>
+          </div>
+          <div class='pane'>
+            <input type="text" class ="form-group" id="freq"></input>
+            <input type="text" class ="form-group" id="gain"></input>
+            <span class='form-group' id='level'></span>
+            <span class='form-group' id='isStereo'></span>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-large btn-default" id="start">
+              <span class="icon icon-play"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="stop">
+              <span class="icon icon-pause"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="mono">
+              <span class="icon icon-note"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="stereo">
+              <span class="icon icon-note-beamed"></span>
+            </button>
+            <button class="btn btn-large btn-default" id="scanUp">
+              <span class="icon icon-tape"></span>
+            </button>
+          </div>
+          <h1>FM Electron App</h1>
+          <!-- All of the Node.js APIs are available in this renderer process. -->
+          We are using Node.js
+          <script>
+            document.write(process.versions.node)
+          </script>, Chromium
+          <script>
+            document.write(process.versions.chrome)
+          </script>, and Electron
+          <script>
+            document.write(process.versions.electron)
+          </script>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script>     
+  require('./fmRadio.js')
+</script>
+
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "fmradio",
+  "version": "0.1.2",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild -version 1.4.15 -f -w fmradio"
+  },
+  "author": "Dominic Mooney",
+  "keywords": [
+    "sdr",
+    "electron"
+  ],
+  "style": "dist/css/photon.css",
+  "sass": "sass/photon.scss",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/connors/photon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/connors/photon/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "1.4.15",
+    "electron-rebuild": "1.5.7"
+  },
+  "dependencies": {
+    "bswap": "^1.1.6",
+    "sdrjs": "0.0.6",
+    "speaker": "^0.3.0",
+    "to-arraybuffer": "^1.0.1",
+    "upnp-mediarenderer-client": "^1.2.4"
+  }
+}
