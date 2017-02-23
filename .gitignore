@@ -29,6 +29,7 @@ nbproject
 *.sublime-project
 *.sublime-workspace
 .idea
+.cpuprofile
 
 # Komodo
 *.komodoproject

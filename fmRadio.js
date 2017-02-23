@@ -271,21 +271,8 @@ getLevel = () => {
   return parseFloat(levelText.innerText);
 }
 
-//let castWindow
 openCastWindow = () => {
-  //let child = new BrowserWindow({parent: top})
-
-  //castWindow = new BrowserWindow({ parent: mainWindow, width: 400, height: 400, webaudio: false })
-
-  // and load the index.html of the app.
-  //castWindow.loadURL(url.format({
-  //  pathname: path.join(__dirname, '/cast.html'),
-  //  protocol: 'file:',
-  //  slashes: true
-  //}))
-
   window.open(__dirname + '/cast.html');
-
 }
 
 castBtn.addEventListener('click', () => {
