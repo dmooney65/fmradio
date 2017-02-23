@@ -74,7 +74,11 @@ exports.play = (left, right) => {
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
-var client = new MediaRendererClient('http://192.168.1.76:1110/');
+//var client = new MediaRendererClient('http://192.168.1.76:1110/');
+var client = new MediaRendererClient('http://192.168.1.64:1448/');
+//var client = new MediaRendererClient('http://192.168.1.89:7676/smp_15_');
+//var client = new MediaRendererClient('http://192.168.1.100:1400/xml/device_description.xml');
+
 
 // Load a stream with subtitles and play it immediately 
 var options = {

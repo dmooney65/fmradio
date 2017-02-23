@@ -47,9 +47,11 @@ function Decoder() {
     IN_RATE = sampleRate;
     var data = {};
     var IQ = iqSamplesFromUint8(buffer, IN_RATE);
-    IQ = shiftFrequency(IQ, freqOffset, IN_RATE, cosine, sine);
-    cosine = IQ[2];
-    sine = IQ[3];
+    if (freqOffset > 0) {
+      IQ = shiftFrequency(IQ, freqOffset, IN_RATE, cosine, sine);
+      cosine = IQ[2];
+      sine = IQ[3];
+    }
     var out = demodulator.demodulate(IQ[0], IQ[1], inStereo);
     data['stereo'] = out['stereo'];
     data['signalLevel'] = out['signalLevel'];
@@ -88,7 +90,7 @@ function Decoder() {
 
 var decoder = new Decoder();
 
-onmessage = function(event) {
+onmessage = function (event) {
   switch (event.data[0]) {
     case 1:
       decoder.setMode(event.data[1], event.data[2]);

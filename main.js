@@ -65,14 +65,3 @@ app.on('activate', function () {
   }
 })
 
-let csdrWindow
-exports.openCsdrWindow = () => {
-  csdrWindow = new BrowserWindow({ width: 800, height: 600, webaudio: false })
-
-  // and load the index.html of the app.
-  csdrWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '/csdr/sdrjs-test.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-}

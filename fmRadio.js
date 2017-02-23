@@ -4,17 +4,17 @@ const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
-//const audio = require('./demodulator/audio.js')
+const audio = require('./demodulator/audio.js')
 //const localPlayer = require('./localPlayer.js');
-const upnpPlayer = require('./upnpPlayer.js');
-//let player = audio.Player();
+//const upnpPlayer = require('./upnpPlayer.js');
+let player = audio.Player();
 
 let device;
-let offset = 100000;
-let isStereo = true;
-let gains = []              //usable mono     //best comp//bad    //bad    //bad
-const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2560000, 2700000];
-let sampleRate = sampleRates[5];
+let offset = 0;//250000;
+let isStereo = false;
+let gains = [];
+const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000];
+let sampleRate = sampleRates[0];
 
 const onBtn = document.getElementById('radio-on');
 const offBtn = document.getElementById('radio-off');
@@ -34,6 +34,7 @@ const levelText = document.getElementById('level');
 const stereoText = document.getElementById('isStereo');
 const stereoBtn = document.getElementById('stereo');
 const monoBtn = document.getElementById('mono');
+const castBtn = document.getElementById('cast');
 
 //var renderers = ssdpSearch.getRenderers();
 
@@ -98,7 +99,7 @@ resetDevice = () => {
   if (null != device) {
     device.stop();
     device.close();
-    function start(){
+    function start() {
       device.open();
       setFrequency(parseInt(freqText.value));
       device.start();
@@ -115,7 +116,7 @@ listen = () => {
 
 //var outS = fs.createWriteStream('out.raw');
 
-var event = new Event('change');
+//var event = new Event('change');
 
 //var player = main.getPlayer();
 decoder.addEventListener('message', function (msg) {
@@ -124,10 +125,10 @@ decoder.addEventListener('message', function (msg) {
   var right = new Float32Array(msg.data[1]);
   stereoText.innerText = msg.data[2]['stereo'];
   levelText.innerText = level.toFixed(2);
-  levelText.dispatchEvent(event);
+  //levelText.dispatchEvent(event);
   //localPlayer.play(left, right);
-  upnpPlayer.play(left, right);
-  //player.play(left, right, level, 0.05);
+  //upnpPlayer.play(left, right);
+  player.play(left, right, level, 0.05);
 })
 
 sendData = (data) => {
@@ -269,3 +270,24 @@ freqUp = () => {
 getLevel = () => {
   return parseFloat(levelText.innerText);
 }
+
+//let castWindow
+openCastWindow = () => {
+  //let child = new BrowserWindow({parent: top})
+
+  //castWindow = new BrowserWindow({ parent: mainWindow, width: 400, height: 400, webaudio: false })
+
+  // and load the index.html of the app.
+  //castWindow.loadURL(url.format({
+  //  pathname: path.join(__dirname, '/cast.html'),
+  //  protocol: 'file:',
+  //  slashes: true
+  //}))
+
+  window.open(__dirname + '/cast.html');
+
+}
+
+castBtn.addEventListener('click', () => {
+  openCastWindow();
+})
