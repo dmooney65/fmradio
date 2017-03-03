@@ -6,9 +6,9 @@ const Speaker = require('speaker');
 
 var speaker = new Speaker({
     channels: 2,
-    bitDepth: Speaker.SampleFormat16Bit,
+    bitDepth: Speaker.SampleFormat32Bit,
     sampleRate: 48000,
-    //float: true,
+    float: true,
     //signed: false
 });
 
@@ -43,5 +43,5 @@ var p = new require('stream').PassThrough()
 p.pipe(speaker)
 
 exports.play = (left, right) => {
-    p.write(Buffer.from(writeSamples(left, right).buffer))
+    p.write(Buffer.from(write32bitSamples(left, right).buffer))
 }

@@ -33,7 +33,6 @@ var p = new require('stream').PassThrough()
 var read = new require('stream').PassThrough()
 
 //var rs = fs.createReadStream(path.join(__dirname, './out.raw'))
-//var rs = fs.createReadStream(path.join(__dirname, './out.raw'))
 
 
 var server = require('http')
@@ -74,8 +73,8 @@ exports.play = (left, right) => {
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
-//var client = new MediaRendererClient('http://192.168.1.76:1110/');
-var client = new MediaRendererClient('http://192.168.1.64:1448/');
+var client = new MediaRendererClient('http://192.168.1.76:1110/');
+//var client = new MediaRendererClient('http://192.168.1.64:1448/');
 //var client = new MediaRendererClient('http://192.168.1.89:7676/smp_15_');
 //var client = new MediaRendererClient('http://192.168.1.100:1400/xml/device_description.xml');
 
@@ -88,7 +87,7 @@ var options = {
     artist: 'BBC',
     date: '2017',
     genre: 'Talk',
-    title: 'Radio 4',
+    title: 'Fm Tuner',
     album: 'R4 album',
     track: '1',
     //encoder         : 'Lavf57.63.100',

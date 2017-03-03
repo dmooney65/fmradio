@@ -6,6 +6,7 @@ getRenderers = () => {
     let servers = [];
 
     findRenderers = () => {
+        var parent = document.getElementById('divMain');
         client.on('response', function (headers, statusCode, rinfo) {
             console.log('Got a response to an m-search.');
             var newDiv = document.createElement("div");
@@ -13,13 +14,14 @@ getRenderers = () => {
             newDiv.appendChild(newContent); //add the text node to the newly created div. 
 
             // add the newly created element and its content into the DOM 
-            var currentDiv = document.getElementById("div1");
-            document.body.insertBefore(newDiv, currentDiv);
+            var currentDiv = document.getElementById("divMain");
+            parent.appendChild(newDiv);
             servers.push(headers);
         });
 
         // search for a service type 
-        client.search('urn:schemas-upnp-org:device:MediaRenderer:1');
+        //client.search('urn:schemas-upnp-org:device:MediaRenderer:1');
+        client.search('ssdp:all');
     }
     findRenderers();
 

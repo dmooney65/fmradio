@@ -4,21 +4,21 @@ const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
-const audio = require('./demodulator/audio.js')
-//const localPlayer = require('./localPlayer.js');
+//const audio = require('./demodulator/audio.js')
+const localPlayer = require('./localPlayer.js');
 //const upnpPlayer = require('./upnpPlayer.js');
-let player = audio.Player();
+//let player = audio.Player();
 
 let device;
-let offset = 0;//250000;
-let isStereo = false;
+let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset:0;//250000;
+let stereo = localStorage.stereo ? localStorage.stereo:'false';
 let gains = [];
 const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000];
-let sampleRate = sampleRates[0];
+let sampleRate = localStorage.sampleRate ? localStorage.sampleRate:sampleRates[6];
 
 const onBtn = document.getElementById('radio-on');
 const offBtn = document.getElementById('radio-off');
-const resetBtn = document.getElementById('reset');
+const settingsBtn = document.getElementById('settings');
 const csdrBtn = document.getElementById('open-csdr');
 const startBtn = document.getElementById('start');
 const stopBtn = document.getElementById('stop');
@@ -27,7 +27,7 @@ const freqUpBtn = document.getElementById('freqUp');
 const scanDown = document.getElementById('scanDown');
 const scanUp = document.getElementById('scanUp');
 const freqText = document.getElementById('freq');
-freqText.defaultValue = '91000000';
+freqText.defaultValue = localStorage.lastFequency ? localStorage.lastFequency:'91000000';
 const gainText = document.getElementById('gain');
 gainText.defaultValue = '0';
 const levelText = document.getElementById('level');
@@ -51,9 +51,9 @@ setDeviceParams = () => {
   //captureFreq += edge * sampleRate / 2;
   //device.enableManualTunerGain();
   gains = device.validGains;
-  console.log(gains);
-  device.disableAGC();
-  device.enableManualTunerGain();
+  //console.log(gains);
+  device.enableAGC();
+  device.disableManualTunerGain();
   device.sampleRate = sampleRate;//captureRate
   device.rtlOcillatorFrequency = 28800000;
   //device.centerFrequency = frequency;
@@ -95,19 +95,6 @@ closeDevice = () => {
   }
 }
 
-resetDevice = () => {
-  if (null != device) {
-    device.stop();
-    device.close();
-    function start() {
-      device.open();
-      setFrequency(parseInt(freqText.value));
-      device.start();
-    }
-    setTimeout(start(), 5000);
-  }
-}
-
 listen = () => {
   device.on('data', function (data) {
     sendData(data);
@@ -116,7 +103,7 @@ listen = () => {
 
 //var outS = fs.createWriteStream('out.raw');
 
-//var event = new Event('change');
+var event = new Event('change');
 
 //var player = main.getPlayer();
 decoder.addEventListener('message', function (msg) {
@@ -125,15 +112,15 @@ decoder.addEventListener('message', function (msg) {
   var right = new Float32Array(msg.data[1]);
   stereoText.innerText = msg.data[2]['stereo'];
   levelText.innerText = level.toFixed(2);
-  //levelText.dispatchEvent(event);
-  //localPlayer.play(left, right);
+  levelText.dispatchEvent(event);
+  localPlayer.play(left, right);
   //upnpPlayer.play(left, right);
-  player.play(left, right, level, 0.05);
+  //player.play(left, right, level, 0.05);
 })
 
 sendData = (data) => {
   var send = arraybuffer(data.buffer);
-  decoder.postMessage([0, send, isStereo, offset, sampleRate], [send]);
+  decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
 }
 
 onBtn.addEventListener('click', function (event) {
@@ -162,6 +149,7 @@ offBtn.addEventListener('click', function (event) {
 freqText.addEventListener('change', function (event) {
   levelText.removeEventListener('change', scanDownEvent, true);
   levelText.removeEventListener('change', scanUpEvent, true);
+  localStorage.lastFequency = freqText.value;
   setFrequency(parseInt(freqText.value));
 })
 
@@ -183,11 +171,12 @@ stopBtn.addEventListener('click', function () {
   startBtn.disabled = false;
 })
 
-resetBtn.addEventListener('click', function () {
-  levelText.removeEventListener('change', scanDownEvent, true);
-  levelText.removeEventListener('change', scanUpEvent, true);
-  resetDevice();
-  startBtn.disabled = false;
+openSettingsWindow = () => {
+  window.open(__dirname + '/settings.html');
+}
+
+settingsBtn.addEventListener('click', function () {
+  openSettingsWindow();
 })
 
 freqDownBtn.addEventListener('click', function () {
@@ -203,11 +192,11 @@ freqUpBtn.addEventListener('click', function () {
 })
 
 stereoBtn.addEventListener('click', function () {
-  isStereo = true;
+  stereo = true;
 })
 
 monoBtn.addEventListener('click', function () {
-  isStereo = false;
+  stereo = false;
 })
 
 scanDown.addEventListener('click', function () {

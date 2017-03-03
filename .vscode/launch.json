@@ -9,18 +9,18 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/ipcmain.js",
+            "program": "${workspaceRoot}/cast.js",
             "cwd": "${workspaceRoot}"
         },
         {
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/ipcmain.js",
+            "program": "${workspaceRoot}/main.js",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/electron/cli.js",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
             "runtimeArgs": [
                 ".",
                 "--enable-logging"
@@ -45,7 +45,7 @@
             "--enable-logging",
             "--remote-debugging-port=9222"
             ],
-            "sourceMaps": false
+            "sourceMaps": true
         }
     ]
 }

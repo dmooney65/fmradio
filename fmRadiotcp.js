@@ -12,8 +12,11 @@ const net = require('net');
 
 //let player = audio.Player();
 let device;
-let frequencyOffset = 0;
+let offset = 0;
 let isStereo = false;
+let gains = [];
+const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000];
+let sampleRate = sampleRates[6];
 
 const onBtn = document.getElementById('radio-on')
 const offBtn = document.getElementById('radio-off')
@@ -44,24 +47,6 @@ SET_TUNER_XTAL = '0x0c';
 SET_GAIN_BY_INDEX = '0x0d';
 SET_END = '0xff';
 
-setDeviceParams = (frequency) => {
-    //var captureRate = 1024000
-    var outputSampleRate = 48000;
-    var edge = 0;
-    var postDownSample = 1;
-    var sampleRate = 24000
-    var sampleRate = sampleRate * postDownSample;
-    var downSample = (1000000 / sampleRate) + 1;
-    var captureRate = downSample * sampleRate;
-    var captureFreq = frequency + captureRate / 4;
-    captureFreq += edge * sampleRate / 2;
-    device.sampleRate = 2302000 //captureRate
-    device.rtlOcillatorFrequency = 28800000
-    //device.centerFrequency = frequency;
-    //frequencyOffset = captureFreq - frequency;
-    device.bufferNumber = 5;
-    device.bufferLength = Math.floor(sampleRate / device.bufferNumber);
-}
 
 var client = new net.Socket();
 
@@ -77,8 +62,8 @@ setClientParams = () => {
     tcpCommand(SET_AGC_MODE, 1)
     //tcpCommand(SET_GAIN, 84)
     tcpCommand(SET_DIRECT_SAMPLING, 0)
-    tcpCommand(SET_OFFET_TUNING, 0)
-    tcpCommand(SET_SAMPLERATE, 2400000)
+    tcpCommand(SET_OFFET_TUNING, offset)
+    tcpCommand(SET_SAMPLERATE, sampleRate)
     //tcpCommand(SET_FREQUENCY, 91000000)
     //this.tcpCommand(SET_GAIN_BY_INDEX,5)
 }
@@ -143,37 +128,6 @@ decoder.addEventListener('message', function (msg) {
 
 })
 
-called = 0
-var buffer1;
-var buffer2;
-var buffer3;
-var buffer4;
-doSend = (data) => {
-    //console.log(called)
-    /*if (called == 0) {
-        buffer1 = data
-        called++
-    }
-    else if (called == 1) {
-        buffer2 = data
-        called++
-    } else if (called == 2) {
-        buffer3 = data
-        called++
-    } else if (called == 3) {
-        buffer4 = data
-        called++
-    } else {
-        called = 0;
-        var buf = Buffer.concat([buffer1, buffer2, buffer3, buffer4])*/
-    //var send = arraybuffer(data);
-    var buf = Buffer.from(data)
-    decoder.postMessage([0, buf.buffer, isStereo, 0], [buf.buffer]);
-    //}
-    //
-
-    //called ++
-}
 
 sendData = function (data, offset) {
     // not needed for rtl_tcp
@@ -181,18 +135,18 @@ sendData = function (data, offset) {
     //var send = arraybuffer(data);
     //var buf = Buffer.from(data)
 
-    decoder.postMessage([0, data.buffer, isStereo, offset], [data.buffer]);
+    decoder.postMessage([0, data.buffer, isStereo, offset, sampleRate], [data.buffer]);
 }
 
 onBtn.addEventListener('click', function (event) {
-    client.connect(1234, 'localhost', function () {
+    client.connect(1234, 'radioserver', function () {
         console.log('Connected');
         //client.write('Hello, server! Love, Client.');
     });
     setClientParams()
     setFrequency(91000000)
     listentcp()
-    decoder.postMessage([1, "WBFM"])
+    decoder.postMessage([1, "WBFM", sampleRate])
     //device.start()
 
     /*if (null == device) {

@@ -29,7 +29,11 @@ nbproject
 *.sublime-project
 *.sublime-workspace
 .idea
-.cpuprofile
+*.cpuprofile
+*.raw
+*.wav
+*.flac
+*.mp4
 
 # Komodo
 *.komodoproject
@@ -39,3 +43,4 @@ nbproject
 node_modules
 bower_components
 example-components
+docs
