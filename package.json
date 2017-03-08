@@ -4,7 +4,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "rebuild": "electron-rebuild --version 1.4.15 -f -w fmradio"
+    "rebuild": "electron-rebuild --version 1.6.1 -f -w fmradio"
   },
   "author": "Dominic Mooney",
   "keywords": [
@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "1.4.15",
+    "electron": "1.6.1",
     "electron-rebuild": "1.5.7"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",
     "sdrjs": "^0.0.6",
-    "speaker": "^0.3.0",
+    "audio-speaker": "^1.4.3",
     "to-arraybuffer": "^1.0.1",
     "upnp-mediarenderer-client": "^1.2.4",
     "xml2js": "^0.4.17"

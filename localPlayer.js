@@ -2,13 +2,14 @@ var events = require('events');
 const fs = require('fs');
 const path = require('path');
 //const sox = require('sox-stream');
-const Speaker = require('speaker');
+//const Speaker = require('speaker');
+var Speaker = require('audio-speaker/stream');
 
 var speaker = new Speaker({
     channels: 2,
-    bitDepth: Speaker.SampleFormat32Bit,
+    bitDepth: 16,
     sampleRate: 48000,
-    float: true,
+    //float: true,
     //signed: false
 });
 
@@ -19,7 +20,7 @@ function write32bitSamples(leftSamples, rightSamples) {
         out[i * 2] = leftSamples[i];
         out[i * 2 + 1] = rightSamples[i];
     }
-    return out;
+    return Buffer.from(out.buffer);
 }
 
 function writeSamples(leftSamples, rightSamples) {
@@ -30,7 +31,7 @@ function writeSamples(leftSamples, rightSamples) {
       out[i * 2 + 1] =
         Math.floor(Math.max(-1, Math.min(1, rightSamples[i])) * 32767);
     }
-    return out;
+    return Buffer.from(out.buffer);
   }
 
 
@@ -40,8 +41,8 @@ var p = new require('stream').PassThrough()
 
 //var outS = fs.createWriteStream(path.join(__dirname, '/out32.raw'))
 
-p.pipe(speaker)
+p.pipe(speaker);
 
 exports.play = (left, right) => {
-    p.write(Buffer.from(write32bitSamples(left, right).buffer))
+    p.write(writeSamples(left, right));
 }
