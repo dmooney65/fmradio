@@ -26,14 +26,14 @@
     "electron-rebuild": "1.5.7"
   },
   "dependencies": {
-    "bswap": "^1.1.6",
     "ip": "^1.1.4",
+    "node-flac": "0.0.6",
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",
     "sdrjs": "^0.0.6",
-    "audio-speaker": "^1.4.3",
     "to-arraybuffer": "^1.0.1",
     "upnp-mediarenderer-client": "^1.2.4",
+    "wav": "^1.0.1",
     "xml2js": "^0.4.17"
   }
 }

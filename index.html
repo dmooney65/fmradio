@@ -21,7 +21,7 @@
           <button type="button" , id='settings'>Settings</button>
         </div>
         <div class="pane">
-          <div class="btn-group"> 
+          <div class="btn-group">
             </button>
             <button class="btn btn-large btn-default" id="scanDown">
               <span class="icon icon-to-start"></span>
@@ -40,12 +40,12 @@
             </button>
           </div>
           <div class='pane'>
-            <input type="text" class ="form-group" id="freq"></input>
-            <input type="text" class ="form-group" id="gain"></input>
+            <input type="text" class="form-group" id="freq"></input>
+            <input type="text" class="form-group" id="gain"></input>
             <span class='form-group' id='level'></span>
             <span class='form-group' id='isStereo'></span>
           </div>
-          <div class="btn-group">
+          <div class="btn-group" id="div1">
             <button class="btn btn-large btn-default" id="start">
               <span class="icon icon-play"></span>
             </button>
@@ -62,7 +62,8 @@
               <span class="icon icon-tape"></span>
             </button>
           </div>
-          <h1>FM Electron App</h1>
+          
+          <h1 id="header">FM Electron App</h1>
           <!-- All of the Node.js APIs are available in this renderer process. -->
           We are using Node.js
           <script>
@@ -81,8 +82,9 @@
 
 </body>
 
-<script>     
-  require('./fmRadio.js')
+<script>
+            require('./fmRadio.js')
+
 </script>
 
 </html>

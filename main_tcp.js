@@ -4,10 +4,6 @@ var fork = require('child_process').fork
 var spawn = require('child_process').spawn
 
 
-//var child = spawn(electron, ['electron-script.js'], {
-//  stdio: ['ipc']
-//})
-
 var decoder = fork('electron-script.js', {
     env: { 'DISPLAY': process.env.DISPLAY },
     stdio: ['ipc','pipe','pipe','pipe'] ,

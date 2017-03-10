@@ -4,16 +4,16 @@ const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
-const audio = require('./demodulator/audio.js')
+//const audio = require('./demodulator/audio.js')
 //const localPlayer = require('./localPlayer.js');
-//const upnpPlayer = require('./upnpPlayer.js');
-let player = audio.Player();
+const upnpPlayer = require('./upnpPlayer.js');
+//let player = audio.Player();
 
 let device;
 let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset:0;//250000;
 let stereo = localStorage.stereo ? localStorage.stereo:'false';
 let gains = [];
-const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000];
+const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
 let sampleRate = localStorage.sampleRate ? localStorage.sampleRate:sampleRates[0];
 
 const onBtn = document.getElementById('radio-on');
@@ -117,9 +117,9 @@ decoder.addEventListener('message', function (msg) {
 })
 
 play = (left, right, level, squelch) => {
-  player.play(left, right, level, squelch);
+  //player.play(left, right, level, squelch);
   //localPlayer.play(left, right);
-  //upnpPlayer.play(left, right);
+  upnpPlayer.play(left, right);
 }
 
 sendData = (data) => {
