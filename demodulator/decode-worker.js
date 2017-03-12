@@ -23,7 +23,7 @@ importScripts('demodulator-ssb.js');
 importScripts('demodulator-nbfm.js');
 importScripts('demodulator-wbfm.js');
 
-var IN_RATE = 288000;
+var IN_RATE = 2560000;
 var OUT_RATE = 48000;
 
 /**
