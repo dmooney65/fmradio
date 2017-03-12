@@ -4,6 +4,7 @@ const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
+const decoder1 = new Worker('demodulator/decode-worker.js');
 //const audio = require('./demodulator/audio.js')
 //const localPlayer = require('./localPlayer.js');
 const upnpPlayer = require('./upnpPlayer.js');
@@ -107,6 +108,16 @@ var event = new Event('change');
 
 //var player = main.getPlayer();
 decoder.addEventListener('message', function (msg) {
+  processMessage(msg);
+  console.log('decoder');
+})
+
+decoder1.addEventListener('message', function (msg) {
+  processMessage(msg);
+  console.log('decoder1');
+})
+
+processMessage = (msg) => {
   var level = msg.data[2]['signalLevel'];
   var left = new Float32Array(msg.data[0]);
   var right = new Float32Array(msg.data[1]);
@@ -114,7 +125,7 @@ decoder.addEventListener('message', function (msg) {
   levelText.innerText = level.toFixed(2);
   levelText.dispatchEvent(event);
   play(left, right, level, 0.05);
-})
+}
 
 play = (left, right, level, squelch) => {
   //player.play(left, right, level, squelch);
@@ -122,13 +133,22 @@ play = (left, right, level, squelch) => {
   upnpPlayer.play(left, right);
 }
 
+var dnum = 0;
+
 sendData = (data) => {
   var send = arraybuffer(data.buffer);
-  decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
+  if(dnum == 0){
+    decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
+    dnum = 1;
+  } else {
+    decoder1.postMessage([0, send, stereo, offset, sampleRate], [send]);
+    dnum = 0;
+  }
 }
 
 onBtn.addEventListener('click', function (event) {
   decoder.postMessage([1, "WBFM", sampleRate]);
+  decoder1.postMessage([1, "WBFM", sampleRate]);
   //device.start()
 
   if (null == device) {
