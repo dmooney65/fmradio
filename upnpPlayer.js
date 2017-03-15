@@ -1,9 +1,9 @@
 //const events = require('events');
 //const fs = require('fs');
-var MediaRendererClient = require('upnp-mediarenderer-client');
+const MediaRendererClient = require('upnp-mediarenderer-client');
 const path = require('path');
 //const bswap = require('bswap');
-var ip = require('ip');
+const ip = require('ip');
 //const ssdpSearch = require('./ssdpSearch.js')
 //const Speaker = require('speaker');
 const wav = require('wav');
@@ -19,7 +19,7 @@ const wav = require('wav');
 module.exports.Player = function () {
 
   function writeSamples(leftSamples, rightSamples) {
-    var out = new Int16Array(leftSamples.length * 2);
+    let out = new Int16Array(leftSamples.length * 2);
     for (var i = 0; i < leftSamples.length; ++i) {
       out[i * 2] =
         Math.floor(Math.max(-1, Math.min(1, leftSamples[i])) * 32767);
@@ -31,7 +31,7 @@ module.exports.Player = function () {
     return Buffer.from(out.buffer);
   }
 
-  var writer = new wav.Writer({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
+  let writer = new wav.Writer({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
 
   //var p = new require('stream').PassThrough()
   //var read = new require('stream').PassThrough()
@@ -39,7 +39,7 @@ module.exports.Player = function () {
   //var rs = fs.createReadStream(path.join(__dirname, './out.raw'))
 
 
-  var server = require('http')
+  let server = require('http')
     .createServer(function (req, res) {
       res.writeHead(200, {
         'Content-Type': 'audio/wav;rate=48000;channels=2'
@@ -49,6 +49,7 @@ module.exports.Player = function () {
         return res.end();
       }
       writer.pipe(res);
+      //p.pipe(res)
     })
 
 
@@ -63,38 +64,29 @@ module.exports.Player = function () {
 
   //read.read('http://127.0.0.1:1337/')
 
-
-
-
   play = (left, right) => {
     writer.write(writeSamples(left, right));
-    //p.write(Buffer.from(writeSamples(left, right).buffer))
+    //p.write(writeSamples(left, right));
     //read.read('http://127.0.0.1:1337/')
   }
 
-  var parentDiv = document.getElementById("div1");
-  var audioElement = document.createElement('audio');
+  /*let parentDiv = document.getElementById("div1");
+  let audioElement = document.createElement('audio');
   audioElement.setAttribute('autoplay', 'true');
   audioElement.setAttribute("src", "http://localhost:1337/")
-  parentDiv.appendChild(audioElement);
-  //var newContent = document.createElement('source',['src="http://localhost:1337/"', 'type="audio/wav;rate=48000;channels=2"']); 
-  //newDiv.appendChild(newContent); //add the text node to the newly created div. 
-
-  // add the newly created element and its content into the DOM 
-  //var currentDiv = document.getElementById("div1"); 
-  //document.body.insertBefore(newDiv, currentDiv.nextSibling); 
+  parentDiv.appendChild(audioElement);*/
 
   //var renderer = ssdr.getRenderers(); 
 
-  /*var client = new MediaRendererClient('http://openelec:1110/');
+  //let client = new MediaRendererClient('http://openelec:1110/');
   //var client = new MediaRendererClient('http://192.168.1.73:34732/dev/caf57d19-7042-76f8-ffff-ffffc893b8c3/desc.xml');
   //var client = new MediaRendererClient('http://192.168.1.64:1448/');
-  //var client = new MediaRendererClient('http://192.168.1.69:7676/smp_15_');
-  //var client = new MediaRendererClient('http://192.168.1.100:1400/xml/device_description.xml');
+  //let client = new MediaRendererClient('http://192.168.1.69:7676/smp_15_');
+  let client = new MediaRendererClient('http://192.168.1.71:1400/xml/device_description.xml');
   
   
   // Load a stream with subtitles and play it immediately 
-  var options = {
+  let options = {
     autoplay: true,
     contentType: 'audio/wav;rate=48000;channels=2',
     metadata: {
@@ -145,7 +137,7 @@ module.exports.Player = function () {
     console.log('speedChanged', speed);
   });
   
-  //client.play();*/
+  //client.play();
 
   return {
     play: play//,

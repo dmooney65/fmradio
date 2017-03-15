@@ -23,7 +23,7 @@ importScripts('demodulator-ssb.js');
 importScripts('demodulator-nbfm.js');
 importScripts('demodulator-wbfm.js');
 
-var IN_RATE = 2560000;
+var IN_RATE = 288000;
 var OUT_RATE = 48000;
 
 /**
@@ -80,6 +80,7 @@ function Decoder() {
         demodulator = new Demodulator_WBFM(sampleRate, OUT_RATE);
         break;
     }
+    //postMessage(sampleRate);
   }
 
   return {

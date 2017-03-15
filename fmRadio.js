@@ -3,83 +3,18 @@ const remote = require('electron').remote;
 const main = remote.require('./main.js');
 const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
-//const wCrew = require('./workcrew.js')
-//const decoder = new Worker('demodulator/decode-worker.js');
-WorkCrew = function (filename, count) {
-  this.filename = filename;
-  this.count = count || 4;
-  this.queue = [];
-  this.results = [];
-  this.pool = [];
-  this.working = {};
-  this.uuid = 0;
-  this.fillPool();
-};
+const decoder = new Worker('demodulator/decode-worker.js');
+const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
+let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
 
-WorkCrew.prototype.onfinish = function () { };
-
-WorkCrew.prototype.oncomplete = function (res) {
-  return [res.id, res.result];
-};
-
-WorkCrew.prototype.addWork = function (work) {
-  var id = this.uuid++;
-  this.queue.push({ id: id, work: work });
-  this.processQueue();
-  return id;
-};
-
-WorkCrew.prototype.processQueue = function () {
-  if (this.queue.length == 0 && this.pool.length == this.count) {
-    if (this.onfinish)
-      this.onfinish();
-  } else {
-    while (this.queue.length > 0 && this.pool.length > 0) {
-      var unit = this.queue.shift();
-      var worker = this.pool.shift();
-      worker.id = unit.id;
-      this.working[worker.id] = worker;
-      worker.postMessage(unit.work);
-    }
-  }
-};
-
-WorkCrew.prototype.addWorker = function () {
-  var w = new Worker(this.filename);
-  var self = this;
-  w.onmessage = function (res) {
-    var id = this.id;
-    delete self.working[this.id];
-    this.id = null;
-    self.pool.push(this);
-    try {
-      self.oncomplete({ id: id, result: res });
-    } catch (e) {
-      console.log(e);
-    }
-    self.processQueue();
-  };
-  this.pool.push(w);
-};
-
-WorkCrew.prototype.fillPool = function () {
-  for (var i = 0; i < this.count; i++) {
-    this.addWorker();
-  }
-};
-
-var crew = new WorkCrew('demodulator/decode-worker.js', 3);
-//const audio = require('./demodulator/audio.js')
-//const localPlayer = require('./localPlayer.js');
 const upnp = require('./upnpPlayer.js');
-let player = upnp.Player();
+let player = new upnp.Player();
 
 let device;
 let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 0;//250000;
 let stereo = localStorage.stereo ? localStorage.stereo : 'false';
 let gains = [];
-const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
-let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
+
 
 const onBtn = document.getElementById('radio-on');
 const offBtn = document.getElementById('radio-off');
@@ -170,24 +105,9 @@ listen = () => {
 
 var event = new Event('change');
 
-crew.oncomplete = function (result) {
-  //console.log(result.id);//, result.result);
-  processMessage(result.result);
-};
-// Add some work to the queue.
-// The work unit is postMessaged to one of
-// the workers.
-//var workId = crew.addWork(myWorkUnit);
-// Add an onfinish event handler.
-// Fired when the queue is empty and all workers
-// are free.
-crew.onfinish = function () {
-  console.log('All work in queue finished!');
-};
-
-//decoder.addEventListener('message', function (msg) {
-//  processMessage(msg);
-//})
+decoder.addEventListener('message', function (msg) {
+  processMessage(msg);
+})
 
 processMessage = (msg) => {
   var level = msg.data[2]['signalLevel'];
@@ -200,21 +120,13 @@ processMessage = (msg) => {
   player.play(left, right);
 }
 
-play = (left, right, level, squelch) => {
-  //player.play(left, right, level, squelch);
-  //localPlayer.play(left, right);
-  player.play(left, right);
-}
-
 sendData = (data) => {
   var send = arraybuffer(data.buffer);
-  //decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
-  var workId = crew.addWork([0, send, stereo, offset, sampleRate], [send]);
+  decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
 }
 
 onBtn.addEventListener('click', function (event) {
-  //decoder.postMessage([1, "WBFM", sampleRate]);
-  //var workId = crew.addWork([1, "WBFM", sampleRate]);
+  decoder.postMessage([1, "WBFM", sampleRate]);
   //device.start()
 
   if (null == device) {
