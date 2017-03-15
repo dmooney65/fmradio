@@ -70,11 +70,11 @@ module.exports.Player = function () {
     //read.read('http://127.0.0.1:1337/')
   }
 
-  /*let parentDiv = document.getElementById("div1");
+  let parentDiv = document.getElementById("div1");
   let audioElement = document.createElement('audio');
   audioElement.setAttribute('autoplay', 'true');
   audioElement.setAttribute("src", "http://localhost:1337/")
-  parentDiv.appendChild(audioElement);*/
+  parentDiv.appendChild(audioElement);
 
   //var renderer = ssdr.getRenderers(); 
 
@@ -82,7 +82,7 @@ module.exports.Player = function () {
   //var client = new MediaRendererClient('http://192.168.1.73:34732/dev/caf57d19-7042-76f8-ffff-ffffc893b8c3/desc.xml');
   //var client = new MediaRendererClient('http://192.168.1.64:1448/');
   //let client = new MediaRendererClient('http://192.168.1.69:7676/smp_15_');
-  let client = new MediaRendererClient('http://192.168.1.71:1400/xml/device_description.xml');
+  /*let client = new MediaRendererClient('http://192.168.1.71:1400/xml/device_description.xml');
   
   
   // Load a stream with subtitles and play it immediately 
@@ -137,7 +137,7 @@ module.exports.Player = function () {
     console.log('speedChanged', speed);
   });
   
-  //client.play();
+  //client.play();*/
 
   return {
     play: play//,
