@@ -2,11 +2,12 @@
 //const fs = require('fs');
 const MediaRendererClient = require('upnp-mediarenderer-client');
 const path = require('path');
-//const bswap = require('bswap');
+const bswap = require('bswap');
 const ip = require('ip');
 //const ssdpSearch = require('./ssdpSearch.js')
 //const Speaker = require('speaker');
 const wav = require('wav');
+const flac = require('node-flac');
 
 
 /*var speaker = new Speaker({
@@ -31,7 +32,8 @@ module.exports.Player = function () {
     return Buffer.from(out.buffer);
   }
 
-  let writer = new wav.Writer({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
+  //let writer = new wav.Writer({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
+  let writer = new flac.FlacEncoder({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
 
   //var p = new require('stream').PassThrough()
   //var read = new require('stream').PassThrough()
@@ -42,13 +44,14 @@ module.exports.Player = function () {
   let server = require('http')
     .createServer(function (req, res) {
       res.writeHead(200, {
-        'Content-Type': 'audio/wav;rate=48000;channels=2'
-        //'Content-Type': 'audio/x-wav'
+        'Content-Type': 'audio/x-flac,rate=48000;channels=2',
+        //'Content-Type': 'audio/l16'
+        'Transfer-Encoding': 'chunked'
       });
       if (req.method === 'HEAD') {
         return res.end();
       }
-      writer.pipe(res);
+      //writer.pipe(res);
       //p.pipe(res)
     })
 
@@ -57,12 +60,12 @@ module.exports.Player = function () {
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
   });
 
+  server.on('request', (req, res) => {
+      writer.pipe(res);
+  });
+
   server.listen(1337, '0.0.0.0', 128);
 
-
-  //read.pipe(speaker)
-
-  //read.read('http://127.0.0.1:1337/')
 
   play = (left, right) => {
     writer.write(writeSamples(left, right));
@@ -73,22 +76,25 @@ module.exports.Player = function () {
   let parentDiv = document.getElementById("div1");
   let audioElement = document.createElement('audio');
   audioElement.setAttribute('autoplay', 'true');
+  audioElement.setAttribute('type', 'audio/x-flac');
   audioElement.setAttribute("src", "http://localhost:1337/")
   parentDiv.appendChild(audioElement);
 
   //var renderer = ssdr.getRenderers(); 
 
-  //let client = new MediaRendererClient('http://openelec:1110/');
+  /*let client = new MediaRendererClient('http://libreelec:1110/');
   //var client = new MediaRendererClient('http://192.168.1.73:34732/dev/caf57d19-7042-76f8-ffff-ffffc893b8c3/desc.xml');
   //var client = new MediaRendererClient('http://192.168.1.64:1448/');
+  //var client = new MediaRendererClient('http://192.168.1.64:2007/');
+  //var client = new MediaRendererClient('http://192.168.1.64:1448/');
   //let client = new MediaRendererClient('http://192.168.1.69:7676/smp_15_');
-  /*let client = new MediaRendererClient('http://192.168.1.71:1400/xml/device_description.xml');
+  //let client = new MediaRendererClient('http://192.168.1.71:1400/xml/device_description.xml');
   
   
   // Load a stream with subtitles and play it immediately 
   let options = {
     autoplay: true,
-    contentType: 'audio/wav;rate=48000;channels=2',
+    contentType: 'audio/x-flac;rate=48000;channels=2',
     metadata: {
       artist: 'BBC',
       date: '2017',
@@ -99,7 +105,7 @@ module.exports.Player = function () {
       //encoder         : 'Lavf57.63.100',
   
       type: 'audio', // can be 'video', 'audio' or 'image' 
-      protocolInfo : 'http-get:*:audio/WAV:DLNA.ORG_PN=LPCM'
+      //protocolInfo : 'http-get:*:audio/WAV:DLNA.ORG_PN=LPCM'
       //subtitlesUrl: 'http://url.to.some/subtitles.srt'
     }
   };

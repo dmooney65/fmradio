@@ -1,7 +1,8 @@
 const fs = require('fs');
 const remote = require('electron').remote;
+const RtlDevice = require('./rtldevice.js');
+const TcpDevice = require('./tcpdevice.js');
 const main = remote.require('./main.js');
-const sdrjs = require('sdrjs');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
 const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
@@ -11,7 +12,7 @@ const upnp = require('./upnpPlayer.js');
 let player = new upnp.Player();
 
 let device;
-let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 0;//250000;
+let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 0;// 250000;
 let stereo = localStorage.stereo ? localStorage.stereo : 'false';
 let gains = [];
 
@@ -50,12 +51,13 @@ setDeviceParams = () => {
   //var captureFreq = frequency + captureRate / 4;
   //captureFreq += edge * sampleRate / 2;
   //device.enableManualTunerGain();
-  gains = device.validGains;
+  gains = device.getValidGains();
   //console.log(gains);
-  device.enableAGC();
   device.disableManualTunerGain();
-  device.sampleRate = sampleRate;//captureRate
-  device.rtlOcillatorFrequency = 28800000;
+  device.enableAGC();
+  device.setIFGain(10);
+  device.setSampleRate(sampleRate);//captureRate
+  //device.setOcillatorFrequency(28800000);
   //device.centerFrequency = frequency;
   //frequencyOffset = captureFreq - frequency;
   //device.bufferNumber = 5;
@@ -63,9 +65,13 @@ setDeviceParams = () => {
 }
 
 setGain = (gain) => {
-  device.tunerGain = gains[gain];
-  console.log(device.tunerGain);
-  console.log(device.sampleRate);
+  if (gain == 0) {
+    device.setGainByIndex(0);
+    device.enableAGC();
+  } else {
+    device.setGainByIndex(gains[gain]);
+  }
+  console.log(device.getGain());
 }
 
 getDevices = () => {
@@ -76,7 +82,8 @@ getDevices = () => {
 startDevice = () => {
   if (null != device) {
     setFrequency(parseInt(freqText.value));
-    setGain(parseInt(gainText.value));
+    console.log(device.getGain());
+    console.log(device.getSampleRate());
     device.start();
   }
 }
@@ -96,9 +103,12 @@ closeDevice = () => {
 }
 
 listen = () => {
-  device.on('data', function (data) {
-    sendData(data);
-  })
+  device.get().on('data', function (data) {
+    //console.log(data.length);
+    if (data.length > 12) {
+      sendData(data);
+    }
+  });
 }
 
 //var outS = fs.createWriteStream('out.raw');
@@ -123,6 +133,7 @@ processMessage = (msg) => {
 sendData = (data) => {
   var send = arraybuffer(data.buffer);
   decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
+  //decoder.postMessage([0, data.buffer, stereo, offset, sampleRate], [data.buffer]);
 }
 
 onBtn.addEventListener('click', function (event) {
@@ -130,14 +141,16 @@ onBtn.addEventListener('click', function (event) {
   //device.start()
 
   if (null == device) {
-    devices = getDevices();
-    device = devices[0];
-    device.open();
+    //device = new TcpDevice(0);
+    device = new RtlDevice(0);
+    //devices = getDevices();
+    //device = devices[0];
+    device.openDevice();
     //freqText.value = 91000000;
     setDeviceParams();
     listen();
   } else {
-    device.open();
+    device.openDevice();
   }
   //listen()
 })
@@ -246,7 +259,7 @@ getFrequency = () => {
 }
 
 setFrequency = (frequency) => {
-  device.centerFrequency = frequency + offset;
+  device.setCenterFrequency(frequency + offset);
   freqText.value = frequency;
 }
 
