@@ -3,8 +3,10 @@
   "version": "0.1.2",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "rebuild": "electron-rebuild --version 1.6.1 -f -w fmradio"
+    "start": "electron-forge start",
+    "rebuild": "electron-rebuild --version 1.7.5 -f -w fmradio",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "author": "Dominic Mooney",
   "keywords": [
@@ -22,11 +24,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "1.6.1",
-    "electron-rebuild": "1.5.7"
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^4.0.0",
+    "electron-prebuilt-compile": "1.7.5",
+    "electron-rebuild": "1.6.0"
   },
   "dependencies": {
-    "bswap": "^1.2.0",
+    "electron-compile": "^6.4.1",
     "ip": "^1.1.4",
     "node-flac": "0.0.6",
     "node-ssdp": "^3.2.0",
@@ -36,5 +42,34 @@
     "upnp-mediarenderer-client": "^1.2.4",
     "wav": "^1.0.1",
     "xml2js": "^0.4.17"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {},
+      "electronWinstallerConfig": {
+        "name": ""
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": ""
+      }
+    }
   }
 }

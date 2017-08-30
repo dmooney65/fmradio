@@ -12,7 +12,7 @@ const upnp = require('./upnpPlayer.js');
 let player = new upnp.Player();
 
 let device;
-let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 0;// 250000;
+let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 250000;
 let stereo = localStorage.stereo ? localStorage.stereo : 'false';
 let gains = [];
 
@@ -39,7 +39,7 @@ const castBtn = document.getElementById('cast');
 
 //var renderers = ssdpSearch.getRenderers();
 
-setDeviceParams = () => {
+let setDeviceParams = () => {
   //var captureRate = 1024000
   //var outputSampleRate = 48000;
   //var edge = 0;
@@ -55,7 +55,7 @@ setDeviceParams = () => {
   //console.log(gains);
   device.disableManualTunerGain();
   device.enableAGC();
-  device.setIFGain(10);
+  //device.setIFGain(10);
   device.setSampleRate(sampleRate);//captureRate
   //device.setOcillatorFrequency(28800000);
   //device.centerFrequency = frequency;
@@ -64,8 +64,8 @@ setDeviceParams = () => {
   //device.bufferLength = Math.floor(sampleRate / device.bufferNumber);
 }
 
-setGain = (gain) => {
-  if (gain == 0) {
+let setGain = (gain) => {
+  if (gain == 99) {
     device.setGainByIndex(0);
     device.enableAGC();
   } else {
@@ -74,12 +74,12 @@ setGain = (gain) => {
   console.log(device.getGain());
 }
 
-getDevices = () => {
+let getDevices = () => {
   return sdrjs.getDevices();
 }
 
 
-startDevice = () => {
+let startDevice = () => {
   if (null != device) {
     setFrequency(parseInt(freqText.value));
     console.log(device.getGain());
@@ -88,13 +88,13 @@ startDevice = () => {
   }
 }
 
-stopDevice = () => {
+let stopDevice = () => {
   if (null != device) {
     device.stop();
   }
 }
 
-closeDevice = () => {
+let closeDevice = () => {
   if (null != device) {
     device.stop();
     device.close();
@@ -102,7 +102,7 @@ closeDevice = () => {
   }
 }
 
-listen = () => {
+let listen = () => {
   device.get().on('data', function (data) {
     //console.log(data.length);
     if (data.length > 12) {
@@ -119,7 +119,7 @@ decoder.addEventListener('message', function (msg) {
   processMessage(msg);
 })
 
-processMessage = (msg) => {
+let processMessage = (msg) => {
   var level = msg.data[2]['signalLevel'];
   var left = new Float32Array(msg.data[0]);
   var right = new Float32Array(msg.data[1]);
@@ -130,7 +130,7 @@ processMessage = (msg) => {
   player.play(left, right);
 }
 
-sendData = (data) => {
+let sendData = (data) => {
   var send = arraybuffer(data.buffer);
   decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
   //decoder.postMessage([0, data.buffer, stereo, offset, sampleRate], [data.buffer]);
@@ -186,7 +186,7 @@ stopBtn.addEventListener('click', function () {
   startBtn.disabled = false;
 })
 
-openSettingsWindow = () => {
+let openSettingsWindow = () => {
   window.open(__dirname + '/settings.html');
 }
 
@@ -228,7 +228,7 @@ scanUp.addEventListener('click', function () {
 
 var found = false;
 var count = 0;
-scanDownEvent = (event) => {
+let scanDownEvent = (event) => {
   if (getLevel() < 0.45) {
     if (count < 6) {
       count++;
@@ -241,7 +241,7 @@ scanDownEvent = (event) => {
   found = true;
 }
 
-scanUpEvent = (event) => {
+let scanUpEvent = (event) => {
   if (getLevel() < 0.45) {
     if (count < 6) {
       count++;
@@ -254,28 +254,28 @@ scanUpEvent = (event) => {
   found = true;
 }
 
-getFrequency = () => {
+let getFrequency = () => {
   return parseInt(freqText.value);
 }
 
-setFrequency = (frequency) => {
+let setFrequency = (frequency) => {
   device.setCenterFrequency(frequency + offset);
   freqText.value = frequency;
 }
 
-freqDown = () => {
+let freqDown = () => {
   setFrequency(getFrequency() - 100000);
 }
 
-freqUp = () => {
+let freqUp = () => {
   setFrequency(getFrequency() + 100000);
 }
 
-getLevel = () => {
+let getLevel = () => {
   return parseFloat(levelText.innerText);
 }
 
-openCastWindow = () => {
+let openCastWindow = () => {
   window.open(__dirname + '/cast.html');
 }
 

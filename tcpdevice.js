@@ -1,19 +1,19 @@
 const net = require('net');
 
-SET_FREQUENCY = '0x01';
-SET_SAMPLERATE = '0x02';
-SET_GAINMODE = '0x03';
-SET_GAIN = '0x04';
-SET_PPM = '0x05';
-SET_IF_GAIN = '0x06';
-SET_TEST_MODE = '0x07'
-SET_AGC_MODE = '0x08';
-SET_DIRECT_SAMPLING = '0x09';
-SET_OFFET_TUNING = '0x0a';
-SET_RTL_XTAL = '0x0b';
-SET_TUNER_XTAL = '0x0c';
-SET_GAIN_BY_INDEX = '0x0d';
-SET_END = '0xff';
+const SET_FREQUENCY = '0x01';
+const SET_SAMPLERATE = '0x02';
+const SET_GAINMODE = '0x03';
+const SET_GAIN = '0x04';
+const SET_PPM = '0x05';
+const SET_IF_GAIN = '0x06';
+const SET_TEST_MODE = '0x07'
+const SET_AGC_MODE = '0x08';
+const SET_DIRECT_SAMPLING = '0x09';
+const SET_OFFET_TUNING = '0x0a';
+const SET_RTL_XTAL = '0x0b';
+const SET_TUNER_XTAL = '0x0c';
+const SET_GAIN_BY_INDEX = '0x0d';
+const SET_END = '0xff';
 
 
 function TcpDevice(index) {

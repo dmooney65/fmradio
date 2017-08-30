@@ -1,12 +1,12 @@
 //const events = require('events');
-//const fs = require('fs');
+const fs = require('fs');
 const MediaRendererClient = require('upnp-mediarenderer-client');
 const path = require('path');
-const bswap = require('bswap');
+//const bswap = require('bswap');
 const ip = require('ip');
 //const ssdpSearch = require('./ssdpSearch.js')
 //const Speaker = require('speaker');
-const wav = require('wav');
+//const wav = require('wav');
 const flac = require('node-flac');
 
 
@@ -38,7 +38,7 @@ module.exports.Player = function () {
   //var p = new require('stream').PassThrough()
   //var read = new require('stream').PassThrough()
 
-  //var rs = fs.createReadStream(path.join(__dirname, './out.raw'))
+  //var ws = fs.createWriteStream(path.join(__dirname, './out.flac'))
 
 
   let server = require('http')
@@ -51,8 +51,7 @@ module.exports.Player = function () {
       if (req.method === 'HEAD') {
         return res.end();
       }
-      //writer.pipe(res);
-      //p.pipe(res)
+      
     })
 
 
@@ -61,13 +60,14 @@ module.exports.Player = function () {
   });
 
   server.on('request', (req, res) => {
-      writer.pipe(res);
+    writer.pipe(res);
+    //writer.pipe(ws);
   });
 
   server.listen(1337, '0.0.0.0', 128);
 
 
-  play = (left, right) => {
+  let play = (left, right) => {
     writer.write(writeSamples(left, right));
     //p.write(writeSamples(left, right));
     //read.read('http://127.0.0.1:1337/')
@@ -77,7 +77,7 @@ module.exports.Player = function () {
   let audioElement = document.createElement('audio');
   audioElement.setAttribute('autoplay', 'true');
   audioElement.setAttribute('type', 'audio/x-flac');
-  audioElement.setAttribute("src", "http://localhost:1337/")
+  audioElement.setAttribute("src", "http://"+ip.address()+":1337/")
   parentDiv.appendChild(audioElement);
 
   //var renderer = ssdr.getRenderers(); 

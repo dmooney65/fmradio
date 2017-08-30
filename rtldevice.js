@@ -5,69 +5,69 @@ function RtlDevice(index) {
 
     this.device = sdrjs.getDevices()[index];
 
-    get = () => {
+    let get = () => {
         return this.device;
     }
 
-    openDevice = () => {
+    let openDevice = () => {
         this.device.open();
     }
 
-    close = () => {
+    let close = () => {
         this.device.close();
     }
 
-    start = () => {
+    let start = () => {
         this.device.start();
     }
 
-    stop = () => {
+    let stop = () => {
         this.device.stop();
     }
 
-    setSampleRate = (sampleRate) => {
+    let setSampleRate = (sampleRate) => {
         this.device.sampleRate = sampleRate;
     }
 
-    getSampleRate = () => {
+    let getSampleRate = () => {
         return this.device.sampleRate;
     }
 
-    setCenterFrequency = (centerFrequency) => {
+    let setCenterFrequency = (centerFrequency) => {
         this.device.centerFrequency = centerFrequency;
     }
 
-    getCenterFrequency = () => {
+    let getCenterFrequency = () => {
         return this.device.centerFrequency;
     }
 
-    enableAGC = () => {
+    let enableAGC = () => {
         this.device.tunerGain = 0;
         this.device.enableAGC();
     }
 
-    disableManualTunerGain = () => {
+    let disableManualTunerGain = () => {
         this.device.disableManualTunerGain();
     }
 
-    getValidGains = () => {
+    let getValidGains = () => {
         return this.device.validGains;
     }
 
-    setGainByIndex = (gain) => {
+    let setGainByIndex = (gain) => {
         this.gainIndex = gain;
         this.device.tunerGain = gain;
     }
 
-    getGainByIndex = () => {
+    let getGainByIndex = () => {
         return this.gainIndex;
     }
 
-    getGain = () => {
+    let getGain = () => {
         return this.device.tunerGain;
     }
 
-    setIFGain = (gain) => {
+    let setIFGain = (gain) => {
         this.device.setIntermediateFrequencyGain(gain);
     }
 
