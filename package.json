@@ -1,19 +1,21 @@
 {
   "name": "fmradio",
+  "description": "FM Radio app",
   "version": "0.1.2",
-  "main": "main.js",
+  "main": "app/main.js",
   "scripts": {
     "start": "electron-forge start",
     "rebuild": "electron-rebuild --version 1.7.5 -f -w fmradio",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "lint": "electron-forge lint"
   },
   "author": "Dominic Mooney",
   "keywords": [
     "sdr",
     "electron"
   ],
-  "style": "dist/css/photon.css",
+  "style": "css/photon.css",
   "sass": "sass/photon.scss",
   "repository": {
     "type": "git",
@@ -29,10 +31,14 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^4.0.0",
     "electron-prebuilt-compile": "1.7.5",
-    "electron-rebuild": "1.6.0"
+    "electron-rebuild": "1.6.0",
+    "eslint": "^4.7.2",
+    "grunt": "^1.0.1",
+    "load-grunt-tasks": "^3.5.2",
+    "time-grunt": "^1.4.0"
   },
   "dependencies": {
-    "electron-compile": "^6.4.1",
+    "electron-compile": "^6.4.1",    
     "ip": "^1.1.4",
     "node-flac": "0.0.6",
     "node-ssdp": "^3.2.0",
@@ -57,7 +63,9 @@
           "rpm"
         ]
       },
-      "electronPackagerConfig": {},
+      "electronPackagerConfig": {
+        "name": "fmradio"
+      },
       "electronWinstallerConfig": {
         "name": ""
       },

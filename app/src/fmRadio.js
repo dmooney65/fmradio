@@ -1,14 +1,14 @@
 const fs = require('fs');
 const remote = require('electron').remote;
-const RtlDevice = require('./rtldevice.js');
-const TcpDevice = require('./tcpdevice.js');
-const main = remote.require('./main.js');
+const RtlDevice = require('./device/rtldevice.js');
+const TcpDevice = require('./device/tcpdevice.js');
+//const main = remote.require('../app/main.js');
 const arraybuffer = require('to-arraybuffer');
 const decoder = new Worker('demodulator/decode-worker.js');
 const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
 let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
 
-const upnp = require('./upnpPlayer.js');
+const upnp = require('./audio/upnpPlayer.js');
 let player = new upnp.Player();
 
 let device;
@@ -137,7 +137,7 @@ let sendData = (data) => {
 }
 
 onBtn.addEventListener('click', function (event) {
-  decoder.postMessage([1, "WBFM", sampleRate]);
+  decoder.postMessage([1, 'WBFM', sampleRate]);
   //device.start()
 
   if (null == device) {

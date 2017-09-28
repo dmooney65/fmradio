@@ -20,7 +20,7 @@ const flac = require('node-flac');
 module.exports.Player = function () {
 
   function writeSamples(leftSamples, rightSamples) {
-    let out = new Int16Array(leftSamples.length * 2);
+  let out = new Int16Array(leftSamples.length * 2);
     for (var i = 0; i < leftSamples.length; ++i) {
       out[i * 2] =
         Math.floor(Math.max(-1, Math.min(1, leftSamples[i])) * 32767);
