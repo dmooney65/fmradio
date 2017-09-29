@@ -259,7 +259,9 @@ let getFrequency = () => {
 }
 
 let setFrequency = (frequency) => {
-  device.setCenterFrequency(frequency + offset);
+  if(device){
+    device.setCenterFrequency(frequency + offset);
+  }
   freqText.value = frequency;
 }
 
