@@ -3,7 +3,7 @@ const fs = require('fs');
 const MediaRendererClient = require('upnp-mediarenderer-client');
 const path = require('path');
 //const bswap = require('bswap');
-const ip = require('ip');
+const os = require('os');
 //const ssdpSearch = require('./ssdpSearch.js')
 //const Speaker = require('speaker');
 //const wav = require('wav');
@@ -77,7 +77,7 @@ module.exports.Player = function () {
   let audioElement = document.createElement('audio');
   audioElement.setAttribute('autoplay', 'true');
   audioElement.setAttribute('type', 'audio/x-flac');
-  audioElement.setAttribute("src", "http://"+ip.address()+":1337/")
+  audioElement.setAttribute("src", "http://"+os.hostname()+":1337/")
   parentDiv.appendChild(audioElement);
 
   //var renderer = ssdr.getRenderers(); 
@@ -110,7 +110,7 @@ module.exports.Player = function () {
     }
   };
   
-  client.load('http://'+ip.address()+':1337/', options, function (err, result) {
+  client.load('http://'+os.hostname()+':1337/', options, function (err, result) {
     if (err) throw err;
     console.log('playing ...');
   });

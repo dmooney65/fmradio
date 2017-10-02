@@ -46,6 +46,21 @@
             "--remote-debugging-port=9222"
             ],
             "sourceMaps": true
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Electron Main",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-nix",
+            "windows": {
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron-forge-vscode-win.cmd"
+            },
+            // runtimeArgs will be passed directly to your Electron application
+            "runtimeArgs": [
+              "foo",
+              "bar"
+            ],
+            "cwd": "${workspaceRoot}"
+          }
     ]
 }

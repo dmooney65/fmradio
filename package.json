@@ -38,9 +38,9 @@
     "time-grunt": "^1.4.0"
   },
   "dependencies": {
-    "electron-compile": "^6.4.1",    
-    "ip": "^1.1.4",
-    "node-flac": "0.0.6",
+    "electron-compile": "^6.4.1",
+    "fft-stream": "0.0.0",
+    "node-flac": "^0.0.6",
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",
     "sdrjs": "^0.0.6",
@@ -63,14 +63,17 @@
           "rpm"
         ]
       },
-      "electronPackagerConfig": {
-        "name": "fmradio"
-      },
+      "electronPackagerConfig": {},
       "electronWinstallerConfig": {
-        "name": ""
+        "icon": "icons/tower.ico",
+        "name": "FM Radio"
       },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
+      "electronInstallerDebian": {
+        "icon": "icons/tower.png"
+      },
+      "electronInstallerRedhat": {
+        "icon": "icons/tower.png"
+      },
       "github_repository": {
         "owner": "",
         "name": ""
