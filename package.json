@@ -40,10 +40,10 @@
   "dependencies": {
     "electron-compile": "^6.4.1",
     "fft-stream": "0.0.0",
-    "node-flac": "^0.0.6",
+    "node-flac": "file:../node_modules/node-flac",
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",
-    "sdrjs": "^0.0.6",
+    "sdrjs": "file:../node_modules/sdrjs",
     "to-arraybuffer": "^1.0.1",
     "upnp-mediarenderer-client": "^1.2.4",
     "wav": "^1.0.1",
