@@ -777,6 +777,20 @@ img {
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'power_symbols';
+  src: url('../fonts/Unicode_IEC_symbol.woff2') format('woff2'),
+       url('../fonts/Unicode_IEC_symbol.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.power{
+font-family: 'power_symbols';
+font-style: normal;
+}
+
 .icon:before {
   position: relative;
   display: inline-block;
@@ -2331,3 +2345,4 @@ td:last-child {
   flex: none;
   padding: 3px 10px;
 }
+
