@@ -34,6 +34,7 @@ nbproject
 *.wav
 *.flac
 *.mp4
+package-lock.json
 
 # Komodo
 *.komodoproject
