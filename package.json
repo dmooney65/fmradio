@@ -32,6 +32,7 @@
     "electron-forge": "^4.0.0",
     "electron-prebuilt-compile": "1.7.5",
     "electron-rebuild": "1.6.0",
+    "electron-forge-maker-nsis": "^19.34.0",
     "eslint": "^4.7.2",
     "grunt": "^1.0.1",
     "load-grunt-tasks": "^3.5.2",
@@ -40,10 +41,10 @@
   "dependencies": {
     "electron-compile": "^6.4.1",
     "fft-stream": "0.0.0",
-    "node-flac": "file:../node_modules/node-flac",
+    "node-flac": "dmooney65/node-flac",
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",
-    "sdrjs": "file:../node_modules/sdrjs",
+    "sdrjs": "dmooney65/sdrjs",
     "to-arraybuffer": "^1.0.1",
     "upnp-mediarenderer-client": "^1.2.4",
     "wav": "^1.0.1",
@@ -53,7 +54,8 @@
     "forge": {
       "make_targets": {
         "win32": [
-          "squirrel"
+          "squirrel",
+          "nsis"
         ],
         "darwin": [
           "zip"
@@ -63,11 +65,11 @@
           "rpm"
         ]
       },
+      "postPackage": [
+        "cp -R sdr/ out/"
+      ],
       "electronPackagerConfig": {},
-      "electronWinstallerConfig": {
-        "icon": "icons/tower.ico",
-        "name": "FM Radio"
-      },
+      "electronWinstallerConfig": {},
       "electronInstallerDebian": {
         "icon": "icons/tower.png"
       },
@@ -79,7 +81,7 @@
         "name": ""
       },
       "windowsStoreConfig": {
-        "packageName": ""
+        "packageName": "fmradio"
       }
     }
   }
