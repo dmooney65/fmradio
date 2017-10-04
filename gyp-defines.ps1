@@ -1,0 +1,1 @@
+$env:GYP_DEFINES="rtlsdr_include_dir='C:/Users/domin/rtl-sdr-release/' rtlsdr_lib_dir='C:/Users/domin/rtl-sdr-release/x64/' flac_include_dir='C:/Users/domin/source/repos/flac/include/' flac_lib_dir='C:/Users/domin/source/repos/flac/objs/x64/Release/lib/'"
