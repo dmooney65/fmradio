@@ -2,7 +2,7 @@ const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
-const Tray = electron.Tray;
+//const Tray = electron.Tray;
 
 const BrowserWindow = electron.BrowserWindow;
 
@@ -34,7 +34,7 @@ function createWindow() {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-  const appIcon = new Tray(icon);  
+  //const appIcon = new Tray(icon);  
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
