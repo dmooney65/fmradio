@@ -1,14 +1,14 @@
 {
   "name": "fmradio",
   "description": "FM Radio app",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "app/main.js",
   "scripts": {
     "start": "electron-forge start",
     "rebuild": "electron-rebuild --version 1.7.5 -f -w fmradio",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "lint": "electron-forge lint"
+    "lint": "eslint app/src --color"
   },
   "author": "Dominic Mooney",
   "keywords": [
@@ -65,7 +65,8 @@
       "electronPackagerConfig": {
         "ignore": [
           "build_scripts",
-          "*.js"
+          "devfiles",
+          "vagrant"
         ],
         "afterCopy": [
           "./build_scripts/afterCopy.js"
