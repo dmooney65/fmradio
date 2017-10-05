@@ -16,13 +16,12 @@
     "electron"
   ],
   "style": "css/photon.css",
-  "sass": "sass/photon.scss",
   "repository": {
     "type": "git",
-    "url": "https://github.com/connors/photon.git"
+    "url": "https://github.com/dmooney65/fmradio.git"
   },
   "bugs": {
-    "url": "https://github.com/connors/photon/issues"
+    "url": "https://github.com/dmooney65/fmradio/issues"
   },
   "license": "MIT",
   "devDependencies": {
@@ -30,13 +29,11 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^4.0.0",
+    "electron-forge-maker-nsis": "^19.34.0",
+    "electron-installer-flatpak": "^0.6.0",
     "electron-prebuilt-compile": "1.7.5",
     "electron-rebuild": "1.6.0",
-    "electron-forge-maker-nsis": "^19.34.0",
-    "eslint": "^4.7.2",
-    "grunt": "^1.0.1",
-    "load-grunt-tasks": "^3.5.2",
-    "time-grunt": "^1.4.0"
+    "eslint": "^4.7.2"
   },
   "dependencies": {
     "electron-compile": "^6.4.1",
@@ -62,8 +59,7 @@
         ],
         "linux": [
           "deb",
-          "rpm"
-        ]
+          "rpm"        ]
       },
       "postPackage": [
         "cp -R sdr/ out/"
@@ -74,6 +70,9 @@
         "icon": "icons/tower.png"
       },
       "electronInstallerRedhat": {
+        "icon": "icons/tower.png"
+      },
+      "electronInstallerFlatpak": {
         "icon": "icons/tower.png"
       },
       "github_repository": {
