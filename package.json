@@ -59,12 +59,21 @@
         ],
         "linux": [
           "deb",
-          "rpm"        ]
+          "rpm"
+        ]
       },
-      "postPackage": [
-        "cp -R sdr/ out/"
-      ],
-      "electronPackagerConfig": {},
+      "electronPackagerConfig": {
+        "ignore": [
+          "build_scripts",
+          "*.js"
+        ],
+        "afterCopy": [
+          "./build_scripts/afterCopy.js"
+        ],
+        "afterExtract": [
+          "./build_scripts/afterExtract.js"
+        ]
+      },
       "electronWinstallerConfig": {},
       "electronInstallerDebian": {
         "icon": "icons/tower.png"
