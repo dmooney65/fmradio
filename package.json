@@ -30,7 +30,6 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^4.0.0",
     "electron-forge-maker-nsis": "^19.34.0",
-    "electron-installer-flatpak": "^0.6.0",
     "electron-prebuilt-compile": "1.7.5",
     "electron-rebuild": "1.6.0",
     "eslint": "^4.7.2"
