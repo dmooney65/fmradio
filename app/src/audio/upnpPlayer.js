@@ -8,6 +8,7 @@ const os = require('os');
 //const Speaker = require('speaker');
 //const wav = require('wav');
 const flac = require('node-flac');
+const httpServer = require('./server.js');
 
 
 /*var speaker = new Speaker({
@@ -17,7 +18,7 @@ const flac = require('node-flac');
   //float: true,
   //signed: false
 });*/
-module.exports.Player = function () {
+module.exports.Player = () => {
 
     function writeSamples(leftSamples, rightSamples) {
         let out = new Int16Array(leftSamples.length * 2);
@@ -40,45 +41,54 @@ module.exports.Player = function () {
 
     //var ws = fs.createWriteStream(path.join(__dirname, './out.flac'))
 
+    let server = httpServer.Server(1337,writer);
 
-    let server = require('http')
-        .createServer(function (req, res) {
-            res.writeHead(200, {
-                'Content-Type': 'audio/x-flac,rate=48000;channels=2',
-                //'Content-Type': 'audio/l16'
-                'Transfer-Encoding': 'chunked'
-            });
-            if (req.method === 'HEAD') {
-                return res.end();
-            }
+    let started = false;
 
-        });
+    let startServer = () => {
+        server.start();
+        started = true;
+    };
 
+    let stopServer = () => {
+        server.stop();
+    };
 
-    server.on('clientError', (err, socket) => {
-        socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
-    });
-
-    server.on('request', (req, res) => {
-        writer.pipe(res);
-        //writer.pipe(ws);
-    });
-
-    server.listen(1337, '0.0.0.0', 128);
-
-
+    let audioElement = null;
     let play = (left, right) => {
+        if(!started){
+            console.log('starting server');
+            startServer();
+        }
+        if(audioElement == null){
+            console.log('creating audio element');
+            createAudioElement();
+        }
         writer.write(writeSamples(left, right));
         //p.write(writeSamples(left, right));
         //read.read('http://127.0.0.1:1337/')
     };
 
-    let parentDiv = document.getElementById('div1');
-    let audioElement = document.createElement('audio');
-    audioElement.setAttribute('autoplay', 'true');
-    audioElement.setAttribute('type', 'audio/x-flac');
-    audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
-    parentDiv.appendChild(audioElement);
+    let pause = () => {
+        console.log('stopping server');
+        stopServer();
+        started = false;
+        //var el = document.getElementById('player');
+        //el.parentNode.removeChild(el);
+        //audioElement = null;
+    };
+
+    let createAudioElement = () => {
+        const parentDiv = document.getElementById('div1');
+        audioElement = document.createElement('audio');
+        audioElement.setAttribute('id', 'player');
+        audioElement.setAttribute('autoplay', 'false');
+        audioElement.setAttribute('type', 'audio/x-flac');
+        audioElement.setAttribute('controls', false);
+        audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
+        parentDiv.appendChild(audioElement);
+    };
+
 
     //var renderer = ssdr.getRenderers(); 
 
@@ -146,7 +156,8 @@ module.exports.Player = function () {
     //client.play();*/
 
     return {
-        play: play//,
+        play: play,
+        pause: pause//,
         //setVolume: setVolume,
         //startWriting: startWriting,
         //stopWriting: stopWriting,

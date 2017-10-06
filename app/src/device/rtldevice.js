@@ -1,74 +1,74 @@
 const sdrjs = require('sdrjs');
 
 
-function RtlDevice(index) {
+module.exports.RtlDevice = (index) => {
 
-    this.device = sdrjs.getDevices()[index];
+    let device = sdrjs.getDevices()[index];
 
     let get = () => {
-        return this.device;
+        return device;
     };
 
     let openDevice = () => {
-        this.device.open();
+        device.open();
     };
 
     let close = () => {
-        this.device.close();
+        device.close();
     };
 
     let start = () => {
-        this.device.start();
+        device.start();
     };
 
     let stop = () => {
-        this.device.stop();
+        device.stop();
     };
 
     let setSampleRate = (sampleRate) => {
-        this.device.sampleRate = sampleRate;
+        device.sampleRate = sampleRate;
     };
 
     let getSampleRate = () => {
-        return this.device.sampleRate;
+        return device.sampleRate;
     };
 
     let setCenterFrequency = (centerFrequency) => {
-        this.device.centerFrequency = centerFrequency;
+        device.centerFrequency = centerFrequency;
     };
 
     let getCenterFrequency = () => {
-        return this.device.centerFrequency;
+        return device.centerFrequency;
     };
 
     let enableAGC = () => {
-        this.device.tunerGain = 0;
-        this.device.enableAGC();
+        device.tunerGain = 0;
+        device.enableAGC();
     };
 
     let disableManualTunerGain = () => {
-        this.device.disableManualTunerGain();
+        device.disableManualTunerGain();
     };
 
     let getValidGains = () => {
-        return this.device.validGains;
+        return device.validGains;
     };
 
     let setGainByIndex = (gain) => {
-        this.gainIndex = gain;
-        this.device.tunerGain = gain;
+        //let gainIndex = gain;
+        device.tunerGain = gain;
     };
 
     let getGainByIndex = () => {
-        return this.gainIndex;
+        return device.getGainByIndex;
     };
 
     let getGain = () => {
-        return this.device.tunerGain;
+        return device.tunerGain;
     };
 
     let setIFGain = (gain) => {
-        this.device.setIntermediateFrequencyGain(gain);
+        device.setIntermediateFrequencyGain(gain);
     };
 
     return {
@@ -89,6 +89,6 @@ function RtlDevice(index) {
         setIFGain: setIFGain,
         get: get
     };
-}
+};
 
-module.exports = RtlDevice;
+//module.exports = RtlDevice;

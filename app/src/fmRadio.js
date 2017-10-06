@@ -1,6 +1,6 @@
 //const fs = require('fs');
 //const remote = require('electron').remote;
-const RtlDevice = require('./device/rtldevice.js');
+const RtlDevice = require('./device/rtldevice.js').RtlDevice;
 //const TcpDevice = require('./device/tcpdevice.js');
 //const main = remote.require('../app/main.js');
 const arraybuffer = require('to-arraybuffer');
@@ -9,7 +9,7 @@ const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000
 let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
 
 const upnp = require('./audio/upnpPlayer.js');
-let player = new upnp.Player();
+let player = upnp.Player();
 
 let device;
 let offset = localStorage.frequencyOffset ? localStorage.frequencyOffset : 250000;
@@ -142,7 +142,7 @@ onBtn.addEventListener('click', function (event) {
 
     if (null == device) {
         //device = new TcpDevice(0);
-        device = new RtlDevice(0);
+        device = RtlDevice(0);
         //devices = getDevices();
         //device = devices[0];
         device.openDevice();
@@ -182,6 +182,7 @@ startBtn.addEventListener('click', function () {
 stopBtn.addEventListener('click', function () {
     levelText.removeEventListener('change', scanDownEvent, true);
     levelText.removeEventListener('change', scanUpEvent, true);
+    player.pause();
     stopDevice();
     startBtn.disabled = false;
 });

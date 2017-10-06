@@ -66,7 +66,8 @@
           "devfiles",
           "vagrant",
           "dll_bundle",
-          ".vscode"
+          ".vscode",
+          ".npmrc"
         ],
         "afterCopy": [
           "./build_scripts/afterCopy.js"
