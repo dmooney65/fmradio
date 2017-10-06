@@ -1,26 +1,21 @@
-//const path = require('path');
 
 module.exports = function (extractPath, electronVersion, platform, arch, done) {
-    //const file_system = require('fs');
-    console.log(" +++++Extract path is " + extractPath);
-    console.log(" +++++Platform is " + platform);
-    //const archiver = require('archiver');
+    const fs = require('fs');
+    console.log('+++++Extract path is ' + extractPath);
+    
+    if (platform == 'linux') {
+        console.log('+++++Platform is ' + platform);        
+        //console.log(archive.pointer() + ' total bytes');
+        //console.log('archiver has been finalized and the output file descriptor has closed.');
+        fs.createReadStream('./build_scripts/afterCopy.js').pipe(fs.createWriteStream(extractPath + '/afterCopy.js'));
+    }
 
-    //const output = file_system.createWriteStream('my-files.zip');
-    //const archive = archiver('zip');
+    if (platform == 'win32') {
+        console.log('+++++Platform is ' + platform);        
+        //console.log(archive.pointer() + ' total bytes');
+        //console.log('archiver has been finalized and the output file descriptor has closed.');
+        fs.createReadStream('./build_scripts/gyp-defines.ps1').pipe(fs.createWriteStream(extractPath + '/gyp-defines.ps1'));
+    }
 
-    //output.on('close', function () {
-    //console.log(archive.pointer() + ' total bytes');
-    //console.log('archiver has been finalized and the output file descriptor has closed.');
-
-    //});
-
-    //archive.on('error', function (err) {
-    //  throw err;
-    //});
-
-    //archive.pipe(output);
-    //archive.directory('external_files/');
-    //archive.finalize();
     done();
 };
