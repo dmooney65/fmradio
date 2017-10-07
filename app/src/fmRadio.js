@@ -1,10 +1,10 @@
 //const fs = require('fs');
 //const remote = require('electron').remote;
 const RtlDevice = require('./device/rtldevice.js').RtlDevice;
-//const TcpDevice = require('./device/tcpdevice.js');
+//const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
 const arraybuffer = require('to-arraybuffer');
-const decoder = new Worker('demodulator/decode-worker.js');
+let decoder;// = new Worker('demodulator/decode-worker.js');
 const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
 let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
 
@@ -81,6 +81,7 @@ let setGain = (gain) => {
 
 let startDevice = () => {
     if (null != device) {
+        //listen();
         setFrequency(parseInt(freqText.value));
         console.log(device.getGain());
         console.log(device.getSampleRate());
@@ -100,6 +101,7 @@ let closeDevice = () => {
         device.close();
         device = null;
     }
+    decoder.terminate();
 };
 
 let listen = () => {
@@ -115,9 +117,9 @@ let listen = () => {
 
 var event = new Event('change');
 
-decoder.addEventListener('message', function (msg) {
-    processMessage(msg);
-});
+//decoder.addEventListener('message', function (msg) {
+//    processMessage(msg);
+//});
 
 let processMessage = (msg) => {
     var level = msg.data[2]['signalLevel'];
@@ -131,17 +133,20 @@ let processMessage = (msg) => {
 };
 
 let sendData = (data) => {
-    var send = arraybuffer(data.buffer);
-    decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
-    //decoder.postMessage([0, data.buffer, stereo, offset, sampleRate], [data.buffer]);
+    //var send = arraybuffer(data.buffer);
+    //decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
+    decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
 onBtn.addEventListener('click', function (event) {
+    decoder = new Worker('demodulator/decode-worker.js');
+    decoder.addEventListener('message', function (msg) {
+        processMessage(msg);
+    });
     decoder.postMessage([1, 'WBFM', sampleRate]);
-    //device.start()
 
     if (null == device) {
-        //device = new TcpDevice(0);
+        //device = TcpDevice();
         device = RtlDevice(0);
         //devices = getDevices();
         //device = devices[0];
@@ -152,7 +157,6 @@ onBtn.addEventListener('click', function (event) {
     } else {
         device.openDevice();
     }
-    //listen()
 });
 
 offBtn.addEventListener('click', function (event) {

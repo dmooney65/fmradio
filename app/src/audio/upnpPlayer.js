@@ -82,9 +82,13 @@ module.exports.Player = () => {
         const parentDiv = document.getElementById('div1');
         audioElement = document.createElement('audio');
         audioElement.setAttribute('id', 'player');
-        audioElement.setAttribute('autoplay', 'false');
+        audioElement.autoplay = true;
+        audioElement.controls = true;
+        //audioElement.controlsList = ('nodownload');
+        //audioElement.setAttribute('autoplay', 'true');
+        //audioElement.setAttribute('controlsList','nodownload');
         audioElement.setAttribute('type', 'audio/x-flac');
-        audioElement.setAttribute('controls', false);
+        //audioElement.setAttribute('controls',true);
         audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
         parentDiv.appendChild(audioElement);
     };

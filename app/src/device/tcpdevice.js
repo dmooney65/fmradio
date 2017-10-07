@@ -16,58 +16,60 @@ const SET_GAIN_BY_INDEX = '0x0d';
 //const SET_END = '0xff';
 
 
-function TcpDevice() {
+module.exports.TcpDevice = () => {
 
-    this.client = new net.Socket();
-    this.validGains = [0, 9, 14, 27, 37, 77, 87, 125, 144, 157, 166, 197, 207, 229, 254, 280, 297, 328, 338, 364, 372, 386, 402, 421, 434, 439, 445, 480, 496];
+    let client = new net.Socket();
+    let sampleRate;
+    let centerFrequency;
+    const validGains = [0, 9, 14, 27, 37, 77, 87, 125, 144, 157, 166, 197, 207, 229, 254, 280, 297, 328, 338, 364, 372, 386, 402, 421, 434, 439, 445, 480, 496];
 
     let tcpCommand = (command, value) => {
         var buffer = new Buffer.alloc(5);
-        buffer.writeUInt8(command, 0, noAssert = false);
-        buffer.writeUInt32BE(parseInt(value), 1, noAssert = false);
-        var answer = this.client.write(buffer);
+        buffer.writeUInt8(command, 0, false);
+        buffer.writeUInt32BE(parseInt(value), 1, false);
+        var answer = client.write(buffer);
         console.log('answer ', answer);
     };
 
     let get = () => {
-        return this.client;
+        return client;
     };
 
     let open = () => {
-        this.client.connect(1234, 'localhost', function () {
+        client.connect(1234, 'localhost', function () {
             console.log('Connected');
             //client.write('Hello, server! Love, Client.');
         });
     };
 
     let close = () => {
-        this.client.destroy();
+        client.destroy();
     };
 
     let start = () => {
-        //this.device.start();
+        //device.start();
     };
 
     let stop = () => {
-        //this.client.destroy();
+        //client.destroy();
     };
 
-    let setSampleRate = (sampleRate) => {
-        this.sampleRate = sampleRate;
+    let setSampleRate = (sample) => {
+        sampleRate = sample;
         tcpCommand(SET_SAMPLERATE, sampleRate);
     };
 
     let getSampleRate = () => {
-        return this.sampleRate;
+        return sampleRate;
     };
 
-    let setCenterFrequency = (centerFrequency) => {
-        this.centerFrequency = centerFrequency;
+    let setCenterFrequency = (frequency) => {
+        centerFrequency = frequency;
         tcpCommand(SET_FREQUENCY, centerFrequency);
     };
 
     let getCenterFrequency = () => {
-        return this.centerFrequency;
+        return centerFrequency;
     };
 
     let enableAGC = () => {
@@ -79,7 +81,7 @@ function TcpDevice() {
     };
 
     let getValidGains = () => {
-        return this.validGains;
+        return validGains;
     };
 
     let setGainByIndex = (gain) => {
@@ -87,7 +89,7 @@ function TcpDevice() {
     };
 
     return {
-        open: open,
+        openDevice: open,
         close: close,
         start: start,
         stop: stop,
@@ -101,6 +103,4 @@ function TcpDevice() {
         setGainByIndex: setGainByIndex,
         get: get
     };
-}
-
-module.exports = TcpDevice;
+};
