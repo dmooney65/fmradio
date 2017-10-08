@@ -29,7 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^4.0.0",
     "electron-forge-maker-nsis": "^19.34.0",
-    "electron-prebuilt-compile": "1.8.1",
+    "electron-prebuilt-compile": "1.6.14",
     "eslint": "^4.7.2"
   },
   "dependencies": {
