@@ -2,91 +2,99 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>FM Radio</title>
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" href="../css/photon.css">
+    <meta charset="UTF-8">
+    <title>FM Radio</title>
+    <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/custom.css">
+    <!--script>
+        window.$ = window.jQuery = require('jquery');
+    </script-->
+    <!--link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css"-->
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script-->
 </head>
 
 <body>
-  <div class="window">
-    <!--<header class="toolbar toolbar-header">
-      <h1 class="title">FM Radio</h1>
-    </header>-->
-    <div class="window-content">
-      <div class="pane-group">
-        <div class="pane-mini sidebar">
-            
-          <button type="button" , id='radio-on'>
-              <span class="power">&#x23FB;</span>Power</button>
-          <button type="button" , id='radio-off'>Radio off</button>
-          <button type="button" , id='settings'>Settings</button>
-        </div>
-        <div class="pane">
-          <div class="btn-group">
-            </button>
-            <button class="btn btn-large btn-default" id="scanDown">
-              <span class="icon icon-to-start"></span>
-              scan-
-            </button>
-            <button class="btn btn-large btn-default" id="freqDown">
-              <span class="icon icon-fast-backward"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="freqUp">
-              <span class="icon icon-fast-forward"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="scanUp">
-              <span class="icon icon-to-end"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="cast">
-              <span class="icon icon-signal"></span>
-            </button>
-          </div>
-          <div class='pane'>
-            <input type="text" class="form-group" id="freq"></input>
-            <input type="text" class="form-group" id="gain"></input>
-            <span class='form-group' id='level'></span>
-            <span class='form-group' id='isStereo'></span>
-          </div>
-          <div class="btn-group" id="div1">
-            <button class="btn btn-large btn-default" id="start">
-              <span class="icon icon-play"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="stop">
-              <span class="icon icon-pause"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="mono">
-              <span class="icon icon-note"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="stereo">
-              <span class="icon icon-note-beamed"></span>
-            </button>
-            <button class="btn btn-large btn-default" id="record">
-              <span class="icon icon-tape"></span>
-            </button>
-          </div>
-          
-          <h1 id="header">FM Electron App</h1>
-          <!-- All of the Node.js APIs are available in this renderer process. -->
-          We are using Node.js
-          <script>
-            document.write(process.versions.node)
-          </script>, Chromium
-          <script>
-            document.write(process.versions.chrome)
-          </script>, and Electron
-          <script>
-            document.write(process.versions.electron)
-          </script>.
-        </div>
-      </div>
+    <div class="container-fixed text-center">
+        <h1 class="title">Electron FM Radio</h1>
     </div>
-  </div>
+    <div class="container-fixed" id="bootstraqp-overrides">
+        <!--div class="container"-->
+        <button type="btn" , id='radio-on'>
+            <span class="icon-off"></span>Power</button>
+        <button type="btn" , id='radio-off'>Radio off</button>
+        <button type="btn" , id='settings'>Settings</button>
+        <div class="btn-group btn-group-justified">
+            <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
+                <span class="glyphicon glyphicon-fast-backward" aria-hidden="true">
+                    <p class="small">Scan-</p>
+                </span>
+            </a>
+            <a class="btn btn-default" id="freqDown">
+                <i class="glyphicon glyphicon-backward">
+                    <p class="small">Freq-</p>
+                </i>
+            </a>
+            <a class="btn btn-default" id="freqUp">
+                <span class="glyphicon glyphicon-forward"></span>
+            </a>
+            <a class="btn btn-default" id="scanUp">
+                <span class="glyphicon glyphicon-fast-forward"></span> Scan+
+            </a>
+            <a class="btn btn-default" id="cast">
+                <span class="glyphicon glyphicon-share-alt"></span> Cast
+            </a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="frequencyDisplay">
+                    <input type="text" id="freq" class="frequencyInput"></input>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="gain"></input>
+                    <span id='level'></span>
+                    <span id='isStereo'></span>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group btn-group-justified">
+            <a class="btn btn-default" id="start">
+                <span class="glyphicon glyphicon-play"></span>
+            </a>
+            <a class="btn btn-default" id="stop">
+                <span class="glyphicon glyphicon-pause"></span>
+            </a>
+            <a class="btn btn-default" id="mono">
+                <span class="glyphicon glyphicon-note"></span>
+            </a>
+            <a class="btn btn-default" id="stereo">
+                <span class="glyphicon glyphicon-music"></span>
+            </a>
+            <a class="btn btn-default" id="record">
+                <span class="glyphicon glyphicon-download-alt"></span>
+            </a>
+        </div>
+        <div class="container" id="div1"></div>
 
+        <h1 id="header">FM Electron App</h1>
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        We are using Node.js
+        <script>
+            document.write(process.versions.node)
+        </script>, Chromium
+        <script>
+            document.write(process.versions.chrome)
+        </script>, and Electron
+        <script>
+            document.write(process.versions.electron)
+        </script>.
+    </div>
 </body>
 
 <script>
-            require('./src/fmRadio.js')
+            require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
 
 </script>
 

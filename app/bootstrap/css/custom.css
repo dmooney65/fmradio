@@ -1,0 +1,27 @@
+.container-fixed {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 450px;
+  }
+
+.frequencyDisplay, .frequencyInput {
+    left: 5px;
+    width: 320px;
+    font-size: 60px;
+    text-align: right;
+  }
+  
+  .frequencyDisplay {
+    top: 5px;
+    cursor: text;
+  }
+  
+  .frequencyInput {
+    top: 4px;
+    background: transparent;
+    border: none;
+    font-family: sans-serif;
+    color: #ffa;
+  }

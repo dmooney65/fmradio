@@ -12,11 +12,11 @@ const httpServer = require('./server.js');
 
 
 /*var speaker = new Speaker({
-  channels: 2,
-  bitDepth: Speaker.SampleFormat16Bit,
-  sampleRate: 48000,
-  //float: true,
-  //signed: false
+    channels: 2,
+    bitDepth: Speaker.SampleFormat24Bit,
+    sampleRate: 48000,
+    float: true,
+    //signed: false
 });*/
 module.exports.Player = () => {
 
@@ -33,15 +33,35 @@ module.exports.Player = () => {
         return Buffer.from(out.buffer);
     }
 
-    //let writer = new wav.Writer({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
-    let writer = new flac.FlacEncoder({ sampleRate: 48000, float: false, bitDepth: 16, signed: true });
+    function write32bitSamples(leftSamples, rightSamples) {
+        let out = new Int32Array(leftSamples.length * 2);
+        for (var i = 0; i < leftSamples.length; ++i) {
+            out[i * 2] = Math.floor(Math.max(-1, Math.min(1, leftSamples[i])) * 2147483648);
+            out[i * 2 + 1] = Math.floor(Math.max(-1, Math.min(1, rightSamples[i])) * 2147483648);
+        }
+        //bswap(out)
+
+        return Buffer.from(out.buffer);
+    }
+
+    function write24bitSamples(leftSamples, rightSamples) {
+        let out = new Int32Array(leftSamples.length * 2);
+        for (var i = 0; i < leftSamples.length; ++i) {
+            out[i * 2] = Math.floor(Math.max(-1, Math.min(1, leftSamples[i])) * 128);
+            out[i * 2 + 1] = Math.floor(Math.max(-1, Math.min(1, rightSamples[i])) * 128);
+        }
+        //bswap(out)
+
+        return Buffer.from(out.buffer);
+    }
+
+    //let writer = new wav.Writer({ sampleRate: 48000, bitDepth: 32});
+    let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });//, float: false, signed: true });
 
     //var p = new require('stream').PassThrough()
     //var read = new require('stream').PassThrough()
 
-    //var ws = fs.createWriteStream(path.join(__dirname, './out.flac'))
-
-    let server = httpServer.Server(1337,writer);
+    let server = httpServer.Server(1337, writer);
 
     let started = false;
 
@@ -56,16 +76,16 @@ module.exports.Player = () => {
 
     let audioElement = null;
     let play = (left, right) => {
-        if(!started){
+        if (!started) {
             console.log('starting server');
             startServer();
         }
-        if(audioElement == null){
+        if (audioElement == null) {
             console.log('creating audio element');
             createAudioElement();
         }
         writer.write(writeSamples(left, right));
-        //p.write(writeSamples(left, right));
+        //speaker.write(write32bitSamples(left,right));
         //read.read('http://127.0.0.1:1337/')
     };
 

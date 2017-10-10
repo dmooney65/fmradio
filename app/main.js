@@ -3,6 +3,7 @@ const electron = require('electron');
 const app = electron.app;
 // Module to create native browser window.
 //const Tray = electron.Tray;
+//let $ = require('jquery');
 
 const BrowserWindow = electron.BrowserWindow;
 
@@ -20,11 +21,12 @@ let device;
 let mainWindow;
 
 function createWindow() {
-    const icon = path.join(__dirname, '../icons/tower.png')
+    const icon = path.join(__dirname, '../icons/tower.png');
 
     // Create the browser window.
     mainWindow = new BrowserWindow({ width: 800, height: 600, icon: icon });
-
+    //mainWindow.$ = $;
+    
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
@@ -68,5 +70,9 @@ app.on('activate', function () {
     if (mainWindow === null) {
         createWindow();
     }
+
+    //$(document).ready(function(){
+    //    $('[data-toggle="tooltip"]').tooltip(); 
+    //});
 });
 

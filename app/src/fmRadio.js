@@ -1,9 +1,11 @@
 //const fs = require('fs');
 //const remote = require('electron').remote;
-const RtlDevice = require('./device/rtldevice.js').RtlDevice;
+const RtlDevice = require('./device/rtldevice.js');
 //const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
+const freqDisplay = require('./frequencies.js')();
 const arraybuffer = require('to-arraybuffer');
+const $ = require('jquery');
 let decoder;// = new Worker('demodulator/decode-worker.js');
 const sampleRates = [288000, 960000, 1200000, 1440000, 2048000, 2400000, 2560000, 2700000, 2880000];
 let sampleRate = localStorage.sampleRate ? localStorage.sampleRate : sampleRates[6];
@@ -17,8 +19,8 @@ let stereo = localStorage.stereo ? localStorage.stereo : 'false';
 let gains = [];
 
 
-const onBtn = document.getElementById('radio-on');
-const offBtn = document.getElementById('radio-off');
+//const onBtn = document.getElementById('radio-on');
+//const offBtn = document.getElementById('radio-off');
 const settingsBtn = document.getElementById('settings');
 //const csdrBtn = document.getElementById('open-csdr');
 const startBtn = document.getElementById('start');
@@ -28,7 +30,6 @@ const freqUpBtn = document.getElementById('freqUp');
 const scanDown = document.getElementById('scanDown');
 const scanUp = document.getElementById('scanUp');
 const freqText = document.getElementById('freq');
-freqText.defaultValue = localStorage.lastFequency ? localStorage.lastFequency : '91000000';
 const gainText = document.getElementById('gain');
 gainText.defaultValue = '0';
 const levelText = document.getElementById('level');
@@ -74,15 +75,34 @@ let setGain = (gain) => {
     console.log(device.getGain());
 };
 
+let setFrequency = (frequency) => {
+    //console.log('freq to set = ' + frequency);
+    if (device) {
+        console.log('device setting to ' + frequency);
+        device.setCenterFrequency(frequency + offset);
+    }
+    freqText.value = freqDisplay.humanReadable(frequency, true, 2);
+    localStorage.lastFequency = frequency;
+};
+
 //let getDevices = () => {
 //    return sdrjs.getDevices();
 //};
 
+if (localStorage.lastFrequency) {
+    console.log('localStorahe has ' + localStorage.lastFrequency);
+    setFrequency(localStorage.lastFrequency);
+} else {
+    console.log('no localStorage value');
+    setFrequency(parseInt('91000000'));
+}
+//freqText.defaultValue = localStorage.lastFequency ? localStorage.lastFequency : '91000000';
 
 let startDevice = () => {
+
     if (null != device) {
         //listen();
-        setFrequency(parseInt(freqText.value));
+        setFrequency(getFrequency());
         console.log(device.getGain());
         console.log(device.getSampleRate());
         device.start();
@@ -138,38 +158,45 @@ let sendData = (data) => {
     decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
-onBtn.addEventListener('click', function (event) {
-    decoder = new Worker('demodulator/decode-worker.js');
-    decoder.addEventListener('message', function (msg) {
-        processMessage(msg);
+document.addEventListener('DOMContentLoaded', function () {
+
+    initListeners(); // add listers
+
+});
+
+let initListeners = () =>{
+    $('#radio-on').click(function () {
+        decoder = new Worker('demodulator/decode-worker.js');
+        decoder.addEventListener('message', function (msg) {
+            processMessage(msg);
+        });
+        decoder.postMessage([1, 'WBFM', sampleRate]);
+    
+        if (null == device) {
+            //device = TcpDevice();
+            device = RtlDevice(0);
+            //devices = getDevices();
+            //device = devices[0];
+            device.openDevice();
+            //freqText.value = 91000000;
+            setDeviceParams();
+            listen();
+        } else {
+            device.openDevice();
+        }
     });
-    decoder.postMessage([1, 'WBFM', sampleRate]);
+    
+    $('#radio-off').click(function(){
+        closeDevice();
+    });
+};
 
-    if (null == device) {
-        //device = TcpDevice();
-        device = RtlDevice(0);
-        //devices = getDevices();
-        //device = devices[0];
-        device.openDevice();
-        //freqText.value = 91000000;
-        setDeviceParams();
-        listen();
-    } else {
-        device.openDevice();
-    }
-});
-
-offBtn.addEventListener('click', function (event) {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
-    closeDevice();
-});
 
 freqText.addEventListener('change', function (event) {
     levelText.removeEventListener('change', scanDownEvent, true);
     levelText.removeEventListener('change', scanUpEvent, true);
     localStorage.lastFequency = freqText.value;
-    setFrequency(parseInt(freqText.value));
+    setFrequency(freqDisplay.parseReadableInput(freqText.value));
 });
 
 gainText.addEventListener('change', function (event) {
@@ -260,15 +287,12 @@ let scanUpEvent = (event) => {
 };
 
 let getFrequency = () => {
-    return parseInt(freqText.value);
+    var freq = parseInt(freqDisplay.parseReadableInput(freqText.value));
+    console.log('freq got = ' + freq);
+    return freq;
 };
 
-let setFrequency = (frequency) => {
-    if (device) {
-        device.setCenterFrequency(frequency + offset);
-    }
-    freqText.value = frequency;
-};
+
 
 let freqDown = () => {
     setFrequency(getFrequency() - 100000);

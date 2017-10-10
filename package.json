@@ -35,6 +35,7 @@
   "dependencies": {
     "electron-compile": "^6.4.1",
     "fft-stream": "0.0.0",
+    "jquery": "^3.2.1",
     "node-flac": "dmooney65/node-flac",
     "node-ssdp": "^3.2.0",
     "node-upnp-utils": "0.0.4",

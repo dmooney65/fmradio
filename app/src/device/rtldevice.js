@@ -1,7 +1,7 @@
 const sdrjs = require('sdrjs');
 
 
-module.exports.RtlDevice = (index) => {
+module.exports = (index) => {
 
     let device = sdrjs.getDevices()[index];
 

@@ -1,11 +1,14 @@
 const os = require('os');
 const http = require('http');
+//const fs = require('fs');
+//const path = require('path');
 
 module.exports.Server = (port, writer) => {
     //this.port = port;
     //this.writer = writer;
     let server;
-
+    //var ws = fs.createWriteStream(path.join(__dirname, './out.wav'));
+    
     let createServer = () => {
         server = http.createServer(function (req, res) {
             res.writeHead(200, {
