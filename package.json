@@ -33,7 +33,9 @@
     "eslint": "^4.7.2"
   },
   "dependencies": {
+    "bootstrap-material-design-icons": "^2.2.0",
     "electron-compile": "^6.4.1",
+    "electron-settings": "^3.1.2",
     "fft-stream": "0.0.0",
     "jquery": "^3.2.1",
     "node-flac": "dmooney65/node-flac",
@@ -42,7 +44,6 @@
     "sdrjs": "dmooney65/sdrjs",
     "to-arraybuffer": "^1.0.1",
     "upnp-mediarenderer-client": "^1.2.4",
-    "wav": "^1.0.1",
     "xml2js": "^0.4.17"
   },
   "config": {

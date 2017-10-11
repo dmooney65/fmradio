@@ -8,7 +8,7 @@ module.exports.Server = (port, writer) => {
     //this.writer = writer;
     let server;
     //var ws = fs.createWriteStream(path.join(__dirname, './out.wav'));
-    
+
     let createServer = () => {
         server = http.createServer(function (req, res) {
             res.writeHead(200, {
@@ -36,15 +36,18 @@ module.exports.Server = (port, writer) => {
     //createServer();
 
     let start = () => {
-        createServer();
-        server.listen(port, os.hostname, 32);
+        if (!server) {
+            createServer();
+            server.listen(port, os.hostname, 32);
+        }
         //console.log('Server is ' + started);
     };
 
     let stop = () => {
-        //this.server.end();
-        server.close();
-        server = null;
+        if (server) {
+            server.close();
+            //server = null;
+        }
     };
 
     return {

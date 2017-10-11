@@ -20,7 +20,7 @@
 /**
  * Functions to convert frequencies to human-readable strings.
  */
-module.exports = function () {
+module.exports.Frequencies = function () {
 
     /**
      * Converts a frequency to a human-readable format.
