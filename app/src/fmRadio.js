@@ -25,15 +25,15 @@ const settingsBtn = document.getElementById('settings');
 //const csdrBtn = document.getElementById('open-csdr');
 const startBtn = document.getElementById('start');
 const stopBtn = document.getElementById('stop');
-const freqDownBtn = document.getElementById('freqDown');
-const freqUpBtn = document.getElementById('freqUp');
-const scanDown = document.getElementById('scanDown');
-const scanUp = document.getElementById('scanUp');
-const freqText = document.getElementById('freq');
-const gainText = document.getElementById('gain');
-gainText.defaultValue = '0';
-const levelText = document.getElementById('level');
-const stereoText = document.getElementById('isStereo');
+const freqDownBtn = $('#freqDown');
+const freqUpBtn = $('#freqUp');
+const scanDown = $('#scanDown');
+const scanUp = $('#scanUp');
+const freqText = $('#freq');
+const gainText = $('#gain');
+gainText.val('0');
+const levelText = $('#level');
+const stereoText = $('#isStereo');
 const stereoBtn = document.getElementById('stereo');
 const monoBtn = document.getElementById('mono');
 const castBtn = document.getElementById('cast');
@@ -66,7 +66,7 @@ let setDeviceParams = () => {
 };
 
 let setGain = (gain) => {
-    if (gain == 99) {
+    if (gain == 0) {
         device.setGainByIndex(0);
         device.enableAGC();
     } else {
@@ -76,18 +76,12 @@ let setGain = (gain) => {
 };
 
 let setFrequency = (frequency) => {
-    //console.log('freq to set = ' + frequency);
     if (device) {
-        console.log('device setting to ' + frequency);
         device.setCenterFrequency(frequency + offset);
     }
-    freqText.value = freqDisplay.humanReadable(frequency, true, 2);
+    freqText.val(freqDisplay.humanReadable(frequency, true, 2));
     localStorage.lastFequency = frequency;
 };
-
-//let getDevices = () => {
-//    return sdrjs.getDevices();
-//};
 
 if (localStorage.lastFrequency) {
     console.log('localStorahe has ' + localStorage.lastFrequency);
@@ -96,10 +90,8 @@ if (localStorage.lastFrequency) {
     console.log('no localStorage value');
     setFrequency(parseInt('91000000'));
 }
-//freqText.defaultValue = localStorage.lastFequency ? localStorage.lastFequency : '91000000';
 
 let startDevice = () => {
-
     if (null != device) {
         //listen();
         setFrequency(getFrequency());
@@ -133,28 +125,19 @@ let listen = () => {
     });
 };
 
-//var outS = fs.createWriteStream('out.raw');
-
-var event = new Event('change');
-
-//decoder.addEventListener('message', function (msg) {
-//    processMessage(msg);
-//});
-
 let processMessage = (msg) => {
     var level = msg.data[2]['signalLevel'];
     var left = new Float32Array(msg.data[0]);
     var right = new Float32Array(msg.data[1]);
-    stereoText.innerText = msg.data[2]['stereo'];
-    levelText.innerText = level.toFixed(2);
-    levelText.dispatchEvent(event);
-    //play(left, right, level, 0.05);
+    stereoText.text(msg.data[2]['stereo']);
+    levelText.text(level.toFixed(2));
+    levelText.change();
     player.play(left, right);
 };
 
 let sendData = (data) => {
-    //var send = arraybuffer(data.buffer);
-    //decoder.postMessage([0, send, stereo, offset, sampleRate], [send]);
+    //First for TcpDevice
+    //decoder.postMessage([0, data.buffer, stereo, offset, sampleRate], [data.buffer]);
     decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
@@ -164,14 +147,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-let initListeners = () =>{
+let initListeners = () => {
     $('#radio-on').click(function () {
         decoder = new Worker('demodulator/decode-worker.js');
         decoder.addEventListener('message', function (msg) {
             processMessage(msg);
         });
         decoder.postMessage([1, 'WBFM', sampleRate]);
-    
+
         if (null == device) {
             //device = TcpDevice();
             device = RtlDevice(0);
@@ -185,34 +168,86 @@ let initListeners = () =>{
             device.openDevice();
         }
     });
-    
-    $('#radio-off').click(function(){
+
+    $('#radio-off').click(function () {
         closeDevice();
+    });
+
+    freqText.change(function () {
+        localStorage.lastFequency = freqText.val();
+        setFrequency(freqDisplay.parseReadableInput(freqText.val()));
+    });
+
+    gainText.change(function () {
+        setGain(parseInt(gainText.val()));
+    });
+
+    freqDownBtn.click(function () {
+        freqDown();
+    })
+    freqUpBtn.click(function () {
+        freqUp();
+    })
+
+
+    scanDown.click(function () {
+        var found = false;
+        var weak = 0;
+        var strong = 0;
+        freqDown();
+        levelText.on('change', function (event) {
+            if (getLevel() < 0.45) {
+                weak++;
+                if (weak >= 10) {
+                    freqDown();
+                    weak = 0;
+                    strong = 0;
+                }
+            } else {
+                strong++;
+                if (strong >= 4) {
+                    found = true;
+                    $(this).off(event);
+                }
+            }
+        });
+    });
+
+    scanUp.click(function () {
+        var found = false;
+        var weak = 0;
+        var strong = 0;
+        freqUp();
+        levelText.on('change', function (event) {
+            if (getLevel() < 0.45) {
+                weak++;
+                if (weak >= 10) {
+                    freqUp();
+                    weak = 0;
+                    strong = 0;
+                }
+            } else {
+                strong++;
+                if (strong >= 4) {
+                    found = true;
+                    $(this).off(event);
+                }
+            }
+        });
     });
 };
 
 
-freqText.addEventListener('change', function (event) {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
-    localStorage.lastFequency = freqText.value;
-    setFrequency(freqDisplay.parseReadableInput(freqText.value));
-});
-
-gainText.addEventListener('change', function (event) {
-    setGain(parseInt(gainText.value));
-});
-
 startBtn.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
+    //levelText.removeEventListener('change', scanDownEvent, true);
+    //levelText.removeEventListener('change', scanUpEvent, true);
     startDevice();
     startBtn.disabled = true;
 });
 
 stopBtn.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
+    //levelText.removeEventListener('change', scanDownEvent, true);
+    //levelText.removeEventListener('change', scanUpEvent, true);
     player.pause();
     stopDevice();
     startBtn.disabled = false;
@@ -226,17 +261,7 @@ settingsBtn.addEventListener('click', function () {
     openSettingsWindow();
 });
 
-freqDownBtn.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
-    freqDown();
-});
 
-freqUpBtn.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    levelText.removeEventListener('change', scanUpEvent, true);
-    freqUp();
-});
 
 stereoBtn.addEventListener('click', function () {
     stereo = true;
@@ -246,53 +271,10 @@ monoBtn.addEventListener('click', function () {
     stereo = false;
 });
 
-scanDown.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanUpEvent, true);
-    freqDown();
-    levelText.addEventListener('change', scanDownEvent, true);
-});
-
-scanUp.addEventListener('click', function () {
-    levelText.removeEventListener('change', scanDownEvent, true);
-    freqUp();
-    levelText.addEventListener('change', scanUpEvent, true);
-});
-
-let found;
-var count = 0;
-let scanDownEvent = (event) => {
-    if (getLevel() < 0.45) {
-        if (count < 6) {
-            count++;
-            //console.log(count)
-        } else {
-            freqDown();
-            count = 0;
-        }
-    }
-    found = true;
-};
-
-let scanUpEvent = (event) => {
-    if (getLevel() < 0.45) {
-        if (count < 6) {
-            count++;
-            //console.log(count)
-        } else {
-            freqUp();
-            count = 0;
-        }
-    }
-    found = true;
-};
-
 let getFrequency = () => {
-    var freq = parseInt(freqDisplay.parseReadableInput(freqText.value));
-    console.log('freq got = ' + freq);
+    var freq = parseInt(freqDisplay.parseReadableInput(freqText.val()));
     return freq;
 };
-
-
 
 let freqDown = () => {
     setFrequency(getFrequency() - 100000);
@@ -303,7 +285,7 @@ let freqUp = () => {
 };
 
 let getLevel = () => {
-    return parseFloat(levelText.innerText);
+    return parseFloat(levelText.text());
 };
 
 let openCastWindow = () => {
