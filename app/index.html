@@ -53,37 +53,28 @@
                     <div class="row">
                         <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency"></input>
                         <div class="btn-group btn-group-vertical pull-left">
-                            <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency"></span>
-                            <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status if stereo decoding from current frequency"></span>
+                            <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">-</span>
+                            <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
                         </div>
                         <div class "row">
                             <div class="btn-group btn-group-vertical pull-right">
-                                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="presets">
+                                <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="presets">
                                     Presets
                                     <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#">R4</a>
-                                    </li>
+                                <ul class="dropdown-menu scrollable-menu" id="presetList">
                                 </ul>
                             </div>
                             <div class="btn-group btn-group-vertical pull-right">
-                                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
-                                    Gain
+                                <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
+                                    Gain     
                                     <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#">Auto</a>
-                                    </li>
+                                <ul class="dropdown-menu scrollable-menu" id="gainsList">
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <input type="text" id="gain" data-toggle="tooltip" data-placement="left" title="Modify tuner gain. Default is auto"></input>
                 </div>
             </div>
 

@@ -42,8 +42,15 @@ module.exports = (index) => {
     };
 
     let enableAGC = () => {
-        device.tunerGain = 0;
         device.enableAGC();
+    };
+
+    let disableAGC = () => {
+        device.disableAGC();
+    };
+
+    let enableManualTunerGain = () => {
+        device.enableManualTunerGain();
     };
 
     let disableManualTunerGain = () => {
@@ -54,8 +61,7 @@ module.exports = (index) => {
         return device.validGains;
     };
 
-    let setGainByIndex = (gain) => {
-        //let gainIndex = gain;
+    let setGain = (gain) => {
         device.tunerGain = gain;
     };
 
@@ -81,9 +87,11 @@ module.exports = (index) => {
         setCenterFrequency: setCenterFrequency,
         getCenterFrequency: getCenterFrequency,
         enableAGC: enableAGC,
+        disableAGC: disableAGC,
+        enableManualTunerGain: enableManualTunerGain,
         disableManualTunerGain: disableManualTunerGain,
         getValidGains: getValidGains,
-        setGainByIndex: setGainByIndex,
+        setGain: setGain,
         getGainByIndex: getGainByIndex,
         getGain: getGain,
         setIFGain: setIFGain,

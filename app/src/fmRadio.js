@@ -15,7 +15,6 @@ let player = upnp.Player();
 let device;
 let offset;
 let stereo;
-let gains = [];
 
 
 //const onBtn = document.getElementById('radio-on');
@@ -50,11 +49,9 @@ let setDeviceParams = () => {
     //var captureRate = downSample * sampleRate;
     //var captureFreq = frequency + captureRate / 4;
     //captureFreq += edge * sampleRate / 2;
-    //device.enableManualTunerGain();
-    gains = device.getValidGains();
-    //console.log(gains);
-    device.disableManualTunerGain();
     device.enableAGC();
+    device.disableManualTunerGain();
+    device.setGain(0);
     //device.setIFGain(10);
     device.setSampleRate(sampleRate);//captureRate
     //device.setOcillatorFrequency(28800000);
@@ -65,12 +62,14 @@ let setDeviceParams = () => {
 };
 
 let setGain = (gain) => {
-    if (gain == 99) {
+    if (gain == 'auto') {
         device.disableManualTunerGain();
-        //device.setGainByIndex(0);
         device.enableAGC();
+        device.setGain(0);
     } else {
-        device.setGainByIndex(gains[gain]);
+        device.enableManualTunerGain();
+        device.disableAGC();
+        device.setGain(parseInt(gain));
     }
     console.log(device.getGain());
 };
@@ -135,6 +134,17 @@ let sendData = (data) => {
     decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
+let addPreset = (name, freq) => {
+    console.log('add clicked');
+    var presets = userSettings.getPresets();
+    //var len = presets.length;
+    presets.push({name:name,freq:freq});    
+    presets.forEach(function (item, index, array) {
+        console.log(item.freq, index);
+    });
+};
+
+
 let sampleRate;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -161,8 +171,23 @@ let initListeners = () => {
     });
     decoder.postMessage([1, 'WBFM', sampleRate]);
 
-    setFrequency(userSettings.get('lastFrequency'));        
-    
+    setFrequency(userSettings.get('lastFrequency'));
+
+    var presets = $('#presetList');
+
+    var li = document.createElement('li');
+    var link = document.createElement('a');
+    link.setAttribute('id', 'preset-add');
+    link.appendChild(document.createTextNode('Add'));
+    link.href = '#';
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+        addPreset();
+    });
+
+    li.appendChild(link);
+    presets.append(li);
+
 
     $('#radio-on').click(function () {
 
@@ -177,6 +202,31 @@ let initListeners = () => {
             listen();
         } else {
             device.openDevice();
+        }
+        var gains = device.getValidGains();
+        $('#auto').click(function (e) {
+            e.preventDefault();
+            setGain('auto');
+        });
+        var list = document.getElementById('gainsList');
+        for (var i = 0; i < gains.length; i++) {
+            var li = document.createElement('li');
+            var link = document.createElement('a');
+            if (i == 0) {
+                link.setAttribute('id', 'gain-auto');
+                link.appendChild(document.createTextNode('Auto'));
+            } else {
+                link.setAttribute('id', 'gain-' + gains[i]);
+                link.appendChild(document.createTextNode(gains[i]));
+            }
+            link.href = '#';
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                setGain(this.getAttribute('id').split('-')[1]);
+            });
+
+            li.appendChild(link);
+            list.appendChild(li);
         }
     });
 
@@ -196,10 +246,6 @@ let initListeners = () => {
 
     freqText.change(function () {
         setFrequency(freqDisplay.parseReadableInput(freqText.val()));
-    });
-
-    gainText.change(function () {
-        setGain(parseInt(gainText.val()));
     });
 
     freqDownBtn.click(function () {
@@ -266,6 +312,8 @@ let initListeners = () => {
     castBtn.click(function () {
         window.open(__dirname + '/cast.html');
     });
+
+
 };
 
 
