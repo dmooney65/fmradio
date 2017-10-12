@@ -65,7 +65,7 @@ let setDeviceParams = () => {
 };
 
 let setGain = (gain) => {
-    if (gain == 0) {
+    if (gain == 99) {
         device.setGainByIndex(0);
         device.enableAGC();
     } else {
