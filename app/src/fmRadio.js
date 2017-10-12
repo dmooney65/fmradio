@@ -66,7 +66,8 @@ let setDeviceParams = () => {
 
 let setGain = (gain) => {
     if (gain == 99) {
-        device.setGainByIndex(0);
+        device.disableManualTunerGain();
+        //device.setGainByIndex(0);
         device.enableAGC();
     } else {
         device.setGainByIndex(gains[gain]);

@@ -3,25 +3,17 @@
     margin-left: auto;
     padding-left: 15px;
     padding-right: 15px;
-    width: 450px;
+    width: 480px;
   }
 
-.frequencyDisplay, .frequencyInput {
+.frequencyInput {
     left: 5px;
-    width: 320px;
-    font-size: 60px;
+    width: 300px;
+    font-size: 55px;
     text-align: right;
-  }
-  
-  .frequencyDisplay {
-    top: 5px;
-    cursor: text;
-  }
-  
-  .frequencyInput {
     top: 4px;
     background: transparent;
     border: none;
     font-family: sans-serif;
-    color: rgb(145, 185, 81);
+    color: rgb(182, 189, 172);
   }
