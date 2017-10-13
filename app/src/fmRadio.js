@@ -3,7 +3,10 @@
 const RtlDevice = require('./device/rtldevice.js');
 //const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
-const freqDisplay = require('./frequencies.js').Frequencies();
+let frequencies = require('./frequencies.js')();              
+
+let device;
+let offset;
 const arraybuffer = require('to-arraybuffer');
 const $ = require('jquery');
 const userSettings = require('./settings/settings.js')();
@@ -12,8 +15,6 @@ let decoder;// = new Worker('demodulator/decode-worker.js');
 const upnp = require('./audio/upnpPlayer.js');
 let player = upnp.Player();
 
-let device;
-let offset;
 let stereo;
 
 
@@ -74,20 +75,12 @@ let setGain = (gain) => {
     console.log(device.getGain());
 };
 
-let setFrequency = (frequency) => {
-    if (device) {
-        device.setCenterFrequency(frequency + offset);
-    }
-    if (userSettings.get('lastTuned')) {
-        userSettings.set('lastFrequency', frequency);
-    }
-    freqText.val(freqDisplay.humanReadable(frequency, true, 2));
-};
+
 
 
 let startDevice = () => {
     if (null != device) {
-        setFrequency(getFrequency());
+        frequencies.setFrequency(frequencies.getFrequency());
         console.log(device.getGain());
         console.log(device.getSampleRate());
         device.start();
@@ -134,16 +127,6 @@ let sendData = (data) => {
     decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
-let addPreset = (name, freq) => {
-    console.log('add clicked');
-    var presets = userSettings.getPresets();
-    //var len = presets.length;
-    presets.push({name:name,freq:freq});    
-    presets.forEach(function (item, index, array) {
-        console.log(item.freq, index);
-    });
-};
-
 
 let sampleRate;
 
@@ -170,39 +153,24 @@ let initListeners = () => {
         processMessage(msg);
     });
     decoder.postMessage([1, 'WBFM', sampleRate]);
-
-    setFrequency(userSettings.get('lastFrequency'));
-
-    var presets = $('#presetList');
-
-    var li = document.createElement('li');
-    var link = document.createElement('a');
-    link.setAttribute('id', 'preset-add');
-    link.appendChild(document.createTextNode('Add'));
-    link.href = '#';
-    link.addEventListener('click', function (e) {
-        e.preventDefault();
-        addPreset();
-    });
-
-    li.appendChild(link);
-    presets.append(li);
-
-
+    frequencies.setFrequency(userSettings.get('lastFrequency'));        
+    
+    const presetManager = require('./presetManager.js')(device,offset);
+    presetManager.rebuild();
+    
     $('#radio-on').click(function () {
-
         if (null == device) {
             //device = TcpDevice();
             device = RtlDevice(0);
             //devices = getDevices();
             //device = devices[0];
             device.openDevice();
-            device.setCenterFrequency(getFrequency());
             setDeviceParams();
             listen();
         } else {
             device.openDevice();
         }
+        device.setCenterFrequency(frequencies.getFrequency());        
         var gains = device.getValidGains();
         $('#auto').click(function (e) {
             e.preventDefault();
@@ -245,7 +213,7 @@ let initListeners = () => {
     });
 
     freqText.change(function () {
-        setFrequency(freqDisplay.parseReadableInput(freqText.val()));
+        frequencies.setFrequency(frequencies.parseReadableInput(freqText.val()));
     });
 
     freqDownBtn.click(function () {
@@ -317,22 +285,20 @@ let initListeners = () => {
 };
 
 
-
-let getFrequency = () => {
-    var freq = parseInt(freqDisplay.parseReadableInput(freqText.val()));
-    return freq;
-};
-
 let freqDown = () => {
-    setFrequency(getFrequency() - 100000);
+    frequencies.setFrequency(frequencies.getFrequency() - 100000);
 };
 
 let freqUp = () => {
-    setFrequency(getFrequency() + 100000);
+    frequencies.setFrequency(frequencies.getFrequency() + 100000);
 };
 
 let getLevel = () => {
     return parseFloat(levelText.text());
+};
+
+module.exports.getDevice = () => {
+    return device;
 };
 
 

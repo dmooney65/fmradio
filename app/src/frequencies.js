@@ -1,27 +1,14 @@
-// Copyright 2014 Google Inc. All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+const userSettings = require('./settings/settings.js')();
+const $ = require('jquery');
 
-/**
- * @fileoverview Functions and objects to manipulate single frequencies and
- *     bands of frequencies.
- */
 
-/**
- * Functions to convert frequencies to human-readable strings.
- */
-module.exports.Frequencies = function () {
-
+module.exports = function () {
+    let offset;
+    if (userSettings.get('offsetTuning')) {
+        offset = 250000;
+    } else {
+        offset = 0;
+    }
     /**
      * Converts a frequency to a human-readable format.
      * @param {number} frequency The frequency to convert.
@@ -81,10 +68,26 @@ module.exports.Frequencies = function () {
         }
         return Math.floor(mul * Number(frequency));
     }
+    let setFrequency = (frequency) => {
+        let device = require('./fmRadio.js').getDevice();        
+        if (device) {
+            device.setCenterFrequency(frequency + offset);
+        }
+        if (userSettings.get('lastTuned')) {
+            userSettings.set('lastFrequency', frequency);
+        }
+        $('#freq').val(humanReadable(frequency, true, 2));
+    };
 
+    let getFrequency = () => {
+        var freq = parseInt(parseReadableInput($('#freq').val()));
+        return freq;
+    };
     return {
         humanReadable: humanReadable,
-        parseReadableInput: parseReadableInput
+        parseReadableInput: parseReadableInput,
+        setFrequency: setFrequency,
+        getFrequency: getFrequency
     };
 
 };
@@ -118,7 +121,9 @@ var DefaultModes = {
  * Known frequency bands.
  */
 var Bands = (function () {
-    var WBFM = { modulation: 'WBFM' };
+    var WBFM = {
+        modulation: 'WBFM'
+    };
 
     function fmDisplay(freq, opt_full) {
         return Frequencies.humanReadable(freq, false, 2) + (opt_full ? ' FM' : '');
@@ -212,13 +217,22 @@ function Band(bandName, minF, maxF, stepF, mode, opt_displayFn, opt_inputFn) {
     }
 
     return {
-        getName: function () { return name; },
-        getMin: function () { return min; },
-        getMax: function () { return max; },
-        getStep: function () { return step; },
-        getMode: function () { return mode; },
+        getName: function () {
+            return name;
+        },
+        getMin: function () {
+            return min;
+        },
+        getMax: function () {
+            return max;
+        },
+        getStep: function () {
+            return step;
+        },
+        getMode: function () {
+            return mode;
+        },
         toDisplayName: opt_displayFn || freeDisplayFn,
         fromDisplayName: opt_inputFn || freeInputFn
     };
 }
-

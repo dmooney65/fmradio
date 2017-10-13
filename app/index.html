@@ -17,15 +17,11 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
-<!--i class="mdi mdi-cast-connected"></i-->
-<!--i class="mdi mdi-cast"></i-->
-
 <body>
     <div class="container-fixed text-center">
         <h1 class="title">Electron FM Radio</h1>
     </div>
     <div class="container-fixed" id="bootstraqp-overrides">
-        <!--div class="container"-->
         <button type="button" class="btn btn-default" , id='radio-on'>
             <span class="glyphicon glyphicon-off"></span>Power</button>
         <button type="button" class="btn btn-default" , id='radio-off'>Radio off</button>
@@ -47,37 +43,30 @@
                 <i class="mdi mdi-cast mdi-lg"></i>
             </a>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10">
-                    <div class="row">
-                        <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency"></input>
-                        <div class="btn-group btn-group-vertical pull-left">
-                            <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">-</span>
-                            <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
-                        </div>
-                        <div class "row">
-                            <div class="btn-group btn-group-vertical pull-right">
-                                <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="presets">
-                                    Presets
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu scrollable-menu" id="presetList">
-                                </ul>
-                            </div>
-                            <div class="btn-group btn-group-vertical pull-right">
-                                <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
-                                    Gain     
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu scrollable-menu" id="gainsList">
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container-freq">
+            <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency"></input>
+            <div class="btn-group btn-group-vertical pull-left">
+                <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">-</span>
+                <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
+            </div>
+            <div class "row">
+                <div class="btn-group btn-group-vertical pull-right">
+                    <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="presets">
+                        Presets
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu scrollable-menu" id="presetList">
+                    </ul>
+                </div>
+                <div class="btn-group btn-group-vertical pull-right">
+                    <a href="#" class="btn btn-default dropdown-toggle text-left" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
+                    Gain
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu scrollable-menu" id="gainsList">
+                    </ul>
                 </div>
             </div>
-
         </div>
         <div class="btn-group btn-group-justified">
             <a class="btn btn-default" id="start" data-toggle="tooltip" data-placement="left" title="Start audio">
@@ -99,7 +88,6 @@
         <div class="container" id="audioParent"></div>
 
         <h1 id="header">FM Electron App</h1>
-        <!-- All of the Node.js APIs are available in this renderer process. -->
         We are using Node.js
         <script>
             document.write(process.versions.node)
@@ -110,6 +98,32 @@
         <script>
             document.write(process.versions.electron)
         </script>.
+    </div>
+
+
+    <div class="modal fade" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New preset</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="preset-name" class="form-control-label">Station name:</label>
+                            <input type="text" class="form-control" id="presetName">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addPreset">Add preset</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
