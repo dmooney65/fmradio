@@ -6,6 +6,7 @@ const lastTuned = $('#lastTuned');
 const stereo = $('#stereo');
 const localPlayer = $('#localPlayer');
 const serverPort = $('#serverPort');
+const ppmError = $('#ppmError');
 const remote = require('electron').remote;
 
 //const recordingsPath = $('#recordingsPath');
@@ -23,15 +24,10 @@ let initListeners = () => {
     stereo.prop('checked', userSettings.get('stereo'));
     localPlayer.prop('checked', userSettings.get('localPlayer'));
     serverPort.val(userSettings.get('serverPort'));
+    ppmError.val(userSettings.get('ppm'));
 
     $(':reset').click(function () {
-        sampleRate.val(userSettings.get('sampleRate'));
-        offsetTuning.prop('checked', userSettings.get('offsetTuning'));
-        lastTuned.prop('checked', userSettings.get('lastTuned'));
-        stereo.prop('checked', userSettings.get('stereo'));
-        localPlayer.prop('checked', userSettings.get('localPlayer'));
-        serverPort.val(userSettings.get('serverPort'));
-        console.log('reset clicked');
+        window.close();        
     });
     $('#cpu').click(function(){
         sampleRate.val(1024000);
@@ -55,6 +51,7 @@ let initListeners = () => {
         userSettings.set('stereo', stereo.prop('checked'));
         userSettings.set('localPlayer', localPlayer.prop('checked'));
         userSettings.set('serverPort', serverPort.val());
+        userSettings.set('ppm', ppmError.val());
         remote.app.relaunch();
         remote.app.quit();
         console.log('form submitted');

@@ -8,7 +8,8 @@ module.exports = () => {
         settings.set('lastTuned', true);
         settings.set('localPlayer', true);
         settings.set('serverPort', 1337);
-        settings.set('lastFrequency', '91000000');
+        settings.set('lastFrequency', '93200000');
+        settings.set('ppm',0);
         //var R4.set('name','BBC R4').set('freq',91000000)
         //console.log(settings.get('presets').length);
         settings = settings.set('offsetTuning', true);

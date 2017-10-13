@@ -77,6 +77,14 @@ module.exports = (index) => {
         device.setIntermediateFrequencyGain(gain);
     };
 
+    let setFrequencyCorrection = (ppm) => {
+        device.setFrequencyCorrection = ppm;
+    };
+
+    let setOffsetTuning = (isOffset) => {
+        device.offsetTuning = isOffset;
+    };
+
     return {
         openDevice: openDevice,
         close: close,
@@ -95,7 +103,9 @@ module.exports = (index) => {
         getGainByIndex: getGainByIndex,
         getGain: getGain,
         setIFGain: setIFGain,
-        get: get
+        get: get,
+        setFrequencyCorrection: setFrequencyCorrection,
+        setOffsetTuning: setOffsetTuning
     };
 };
 

@@ -53,8 +53,10 @@ let setDeviceParams = () => {
     device.enableAGC();
     device.disableManualTunerGain();
     device.setGain(0);
-    //device.setIFGain(10);
+    //device.setIFGain(-12);
     device.setSampleRate(sampleRate);//captureRate
+    device.setFrequencyCorrection(userSettings.get('ppm'));
+    //device.setOffsetTuning(true);
     //device.setOcillatorFrequency(28800000);
     //device.centerFrequency = frequency;
     //frequencyOffset = captureFreq - frequency;
@@ -172,21 +174,24 @@ let initListeners = () => {
         }
         device.setCenterFrequency(frequencies.getFrequency());        
         var gains = device.getValidGains();
-        $('#auto').click(function (e) {
+        var list = document.getElementById('gainsList');        
+        var li = document.createElement('li');
+        var link = document.createElement('a');
+        link.setAttribute('id', 'gain-auto');
+        link.appendChild(document.createTextNode('Auto'));
+        link.href = '#';
+        li.appendChild(link);
+        list.appendChild(li);
+        $('#gain-auto').click(function (e) {
             e.preventDefault();
             setGain('auto');
         });
-        var list = document.getElementById('gainsList');
         for (var i = 0; i < gains.length; i++) {
-            var li = document.createElement('li');
-            var link = document.createElement('a');
-            if (i == 0) {
-                link.setAttribute('id', 'gain-auto');
-                link.appendChild(document.createTextNode('Auto'));
-            } else {
-                link.setAttribute('id', 'gain-' + gains[i]);
-                link.appendChild(document.createTextNode(gains[i]));
-            }
+            li = document.createElement('li');
+            link = document.createElement('a');
+            link.setAttribute('id', 'gain-' + gains[i]);
+            link.appendChild(document.createTextNode(gains[i]));
+            
             link.href = '#';
             link.addEventListener('click', function (e) {
                 e.preventDefault();
