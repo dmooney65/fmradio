@@ -5,6 +5,22 @@ const frequencies = require('./frequencies.js')();
 
 
 module.exports = () => {
+    
+    $('#addPreset').click(function () {
+        addPreset($('#presetName').val(), frequencies.getFrequency());
+    });
+
+    $('#presetModal').on('show.bs.modal', function () {
+        $('#presetName').focus();
+        //var button = $(event.relatedTarget) // Button that triggered the modal
+        //var newPreset = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        //var modal = $(this)
+        //modal.find('.modal-title').text('New message to ' + recipient)
+        //modal.find('.modal-body input').val(recipient)
+        //addPreset(modal.find('.modal-body input').val(), getFrequency());
+    });
 
     let addPreset = (stationName, frequency) => {
         console.log('preset ' + stationName + ' freq ' + frequency);
@@ -40,9 +56,7 @@ module.exports = () => {
             $('#presetModal').modal();
         });
 
-        $('#addPreset').click(function () {
-            addPreset($('#presetName').val(), frequencies.getFrequency());
-        });
+        
         li.appendChild(link);
         presetList.append(li);
 
@@ -67,18 +81,6 @@ module.exports = () => {
             });
         }
     };
-
-
-    /*$('#presetModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        //var newPreset = button.data('whatever') // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        //modal.find('.modal-title').text('New message to ' + recipient)
-        //modal.find('.modal-body input').val(recipient)
-        addPreset(modal.find('.modal-body input').val(), getFrequency());
-    })*/
 
     return {
         rebuild: rebuild

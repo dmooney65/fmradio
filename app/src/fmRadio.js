@@ -301,4 +301,8 @@ module.exports.getDevice = () => {
     return device;
 };
 
+module.exports.getOffset = () => {
+    return offset;
+};
+
 

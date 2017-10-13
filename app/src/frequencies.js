@@ -3,12 +3,8 @@ const $ = require('jquery');
 
 
 module.exports = function () {
-    let offset;
-    if (userSettings.get('offsetTuning')) {
-        offset = 250000;
-    } else {
-        offset = 0;
-    }
+    
+
     /**
      * Converts a frequency to a human-readable format.
      * @param {number} frequency The frequency to convert.
@@ -69,7 +65,9 @@ module.exports = function () {
         return Math.floor(mul * Number(frequency));
     }
     let setFrequency = (frequency) => {
-        let device = require('./fmRadio.js').getDevice();        
+        let device = require('./fmRadio.js').getDevice();  
+        let offset = require('./fmRadio.js').getOffset();        
+        
         if (device) {
             device.setCenterFrequency(frequency + offset);
         }
