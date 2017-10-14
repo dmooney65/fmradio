@@ -38,8 +38,9 @@ module.exports.Server = (port, writer) => {
     let start = () => {
         if (!server) {
             createServer();
-            server.listen(port, os.hostname, 32);
         }
+        server.timeout = 0;
+        server.listen(port, os.hostname, 32);        
         //console.log('Server is ' + started);
     };
 

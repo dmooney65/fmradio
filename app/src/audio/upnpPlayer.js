@@ -1,4 +1,4 @@
-//const fs = require('fs');
+const fs = require('fs');
 //const MediaRendererClient = require('upnp-mediarenderer-client');
 //const path = require('path');
 const os = require('os');
@@ -53,10 +53,12 @@ module.exports.Player = function () {
 
     //let writer = new wav.Writer({ sampleRate: 48000, bitDepth: 32});
     let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
+    let fileWriter;// = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
 
     //var p = new require('stream').PassThrough()
     //var read = new require('stream').PassThrough()
     let audioElement;
+    let recording = false;
     let server = httpServer.Server(1337, writer);
     const pause = () => {
         console.log('stopping server');
@@ -69,29 +71,45 @@ module.exports.Player = function () {
         //var el = document.getElementById('player');
         //el.parentNode.removeChild(el);
         //audioElement = null;
+        //removeAudioElement();
     };
 
     const start = () => {
         console.log('starting server');
         server.start();
-        if(userSettings.get('localPlayer')){
+        if (userSettings.get('localPlayer')) {
             if (!audioElement) {
-                createAudioElement();                    
-                //$('#audioParent').append(audioElement);  
-                audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');                
+                createAudioElement();
+                $('#audioParent').append(audioElement);
+                audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
                 console.log('creating audio element');
             } else {
                 audioElement.play();
             }
-        } else{
-            removeAudioElement();
+        } else {
+            //removeAudioElement();
         }
         //audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');        
         //audioElement.play();
     };
 
+    const record = () => {
+        if (!recording) {
+            fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });            
+            recording = true;
+            fileWriter.pipe(fs.createWriteStream('output.flac'));
+        } else {
+            recording = false;
+            fileWriter.end();
+        }
+    };
+
     const play = (left, right) => {
-        writer.write(writeSamples(left, right));
+        var data = writeSamples(left, right);
+        writer.write(data);
+        if (recording) {
+            fileWriter.write(data);
+        }
         //speaker.write(writeSamples(left,right));
     };
 
@@ -101,7 +119,7 @@ module.exports.Player = function () {
         audioElement = document.createElement('audio');
         audioElement.setAttribute('id', 'player');
         audioElement.autoplay = true;
-        audioElement.controls = false;
+        audioElement.controls = true;
         //audioElement.controlsList = ('nodownload');
         //audioElement.setAttribute('autoplay', 'true');
         //audioElement.setAttribute('controlsList','nodownload');
@@ -110,7 +128,8 @@ module.exports.Player = function () {
     };
 
     let removeAudioElement = () => {
-        $('#audioParent audio').remove();
+        $('#audioParent').empty();
+        audioElement = null;
     };
 
     //var renderer = ssdr.getRenderers(); 
@@ -181,7 +200,8 @@ module.exports.Player = function () {
     return {
         play: play,
         pause: pause,
-        start: start
+        start: start,
+        record: record
         //setVolume: setVolume,
         //startWriting: startWriting,
         //stopWriting: stopWriting,

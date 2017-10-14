@@ -3,7 +3,7 @@
 const RtlDevice = require('./device/rtldevice.js');
 //const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
-let frequencies = require('./frequencies.js')();              
+let frequencies = require('./frequencies.js')();
 
 let device;
 let offset;
@@ -36,6 +36,7 @@ const stereoText = $('#isStereo');
 const stereoBtn = $('#stereo');
 const monoBtn = $('#mono');
 const castBtn = $('#cast');
+const recordBtn = $('#record');
 
 //var renderers = ssdpSearch.getRenderers();
 
@@ -102,6 +103,7 @@ let closeDevice = () => {
         device = null;
     }
     decoder.terminate();
+    decoder = null;
 };
 
 let listen = () => {
@@ -150,16 +152,16 @@ let initListeners = () => {
     }
     stereo = userSettings.get('stereo');
     sampleRate = parseInt(userSettings.get('sampleRate'));
-    decoder = new Worker('demodulator/decode-worker.js');
+    /*decoder = new Worker('demodulator/decode-worker.js');
     decoder.addEventListener('message', function (msg) {
         processMessage(msg);
     });
-    decoder.postMessage([1, 'WBFM', sampleRate]);
-    frequencies.setFrequency(userSettings.get('lastFrequency'));        
-    
-    const presetManager = require('./presetManager.js')(device,offset);
+    decoder.postMessage([1, 'WBFM', sampleRate]);*/
+    frequencies.setFrequency(userSettings.get('lastFrequency'));
+
+    const presetManager = require('./presetManager.js')(device, offset);
     presetManager.rebuild();
-    
+
     $('#radio-on').click(function () {
         if (null == device) {
             //device = TcpDevice();
@@ -172,9 +174,9 @@ let initListeners = () => {
         } else {
             device.openDevice();
         }
-        device.setCenterFrequency(frequencies.getFrequency());        
+        device.setCenterFrequency(frequencies.getFrequency());
         var gains = device.getValidGains();
-        var list = document.getElementById('gainsList');        
+        var list = document.getElementById('gainsList');
         var li = document.createElement('li');
         var link = document.createElement('a');
         link.setAttribute('id', 'gain-auto');
@@ -191,7 +193,7 @@ let initListeners = () => {
             link = document.createElement('a');
             link.setAttribute('id', 'gain-' + gains[i]);
             link.appendChild(document.createTextNode(gains[i]));
-            
+
             link.href = '#';
             link.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -208,8 +210,17 @@ let initListeners = () => {
     });
 
     startBtn.click(function () {
-        player.start();
+        console.log('decoder state '+decoder);
+        if (!decoder) {
+            decoder = new Worker('demodulator/decode-worker.js');
+            decoder.addEventListener('message', function (msg) {
+                processMessage(msg);
+            });
+            decoder.postMessage([1, 'WBFM', sampleRate]);
+        }
+        //listen();
         startDevice();
+        player.start();
     });
 
     stopBtn.click(function () {
@@ -286,6 +297,15 @@ let initListeners = () => {
         window.open(__dirname + '/cast.html');
     });
 
+    recordBtn.click(function() {
+        var btn = $(this);
+        if(!btn.hasClass('text-success')){
+            btn.addClass('text-success');
+        } else {
+            btn.removeClass('text-success');
+        }
+        player.record();
+    });
 
 };
 

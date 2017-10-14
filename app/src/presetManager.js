@@ -23,7 +23,6 @@ module.exports = () => {
     });
 
     let addPreset = (stationName, frequency) => {
-        console.log('preset ' + stationName + ' freq ' + frequency);
         let presets;
         if (!userSettings.get('presets')) {
             presets = [{
@@ -63,8 +62,7 @@ module.exports = () => {
         var presets;
         if (userSettings.get('presets')) {
             presets = userSettings.get('presets');
-            presets.forEach(function (item, index) {
-                console.log(item.freq, item.name, index);
+            presets.forEach(function (item) {
                 var li = document.createElement('li');
                 var link = document.createElement('a');
                 link.setAttribute('id', 'preset-' + item.freq);
