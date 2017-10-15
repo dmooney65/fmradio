@@ -37,6 +37,7 @@
     "electron-compile": "^6.4.1",
     "electron-settings": "^3.1.2",
     "fft-stream": "0.0.0",
+    "flac-bindings": "^1.2.1",
     "flac-metadata": "^0.1.1",
     "jquery": "^3.2.1",
     "node-flac": "dmooney65/node-flac",
