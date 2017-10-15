@@ -8,6 +8,7 @@ const $ = require('jquery');
 const flac = require('node-flac');
 const httpServer = require('./server.js');
 const userSettings = require('../settings/settings.js')();
+var meta = require("flac-metadata");
 
 
 /*var speaker = new Speaker({
@@ -95,9 +96,10 @@ module.exports.Player = function () {
 
     const record = () => {
         if (!recording) {
+            var processor = new meta.Processor();            
             fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });            
             recording = true;
-            fileWriter.pipe(fs.createWriteStream('output.flac'));
+            fileWriter.pipe(processor).pipe(fs.createWriteStream('output.flac'));
         } else {
             recording = false;
             fileWriter.end();
