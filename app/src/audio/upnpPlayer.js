@@ -8,7 +8,7 @@ const $ = require('jquery');
 const flac = require('node-flac');
 const httpServer = require('./server.js');
 const userSettings = require('../settings/settings.js')();
-var meta = require("flac-metadata");
+var meta = require('flac-metadata');
 
 
 /*var speaker = new Speaker({
@@ -55,7 +55,8 @@ module.exports.Player = function () {
     //let writer = new wav.Writer({ sampleRate: 48000, bitDepth: 32});
     let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
     let fileWriter;// = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
-
+    var processor;// = new meta.Processor({ parseMetaDataBlocks: true });                
+    
     //var p = new require('stream').PassThrough()
     //var read = new require('stream').PassThrough()
     let audioElement;
@@ -96,10 +97,18 @@ module.exports.Player = function () {
 
     const record = () => {
         if (!recording) {
-            var processor = new meta.Processor();            
-            fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });            
+            processor = new meta.Processor({ parseMetaDataBlocks: true });
+            fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
             recording = true;
             fileWriter.pipe(processor).pipe(fs.createWriteStream('output.flac'));
+            processor.on('postprocess', function(mdb) {
+                console.log('postprocess called');
+                console.log(mdb.toString());
+            });
+            /*processor.on('preprocess', function(mdb) {
+                console.log('preprocess called');
+                console.log(mdb.toString());
+            });*/
         } else {
             recording = false;
             fileWriter.end();
