@@ -138,11 +138,6 @@ module.exports.Player = function () {
         //audioElement.setAttribute('controls',true);
     };
 
-    let removeAudioElement = () => {
-        $('#audioParent').empty();
-        audioElement = null;
-    };
-
     //var renderer = ssdr.getRenderers(); 
 
     /*let client = new MediaRendererClient('http://libreelec:1110/');
@@ -169,6 +164,7 @@ module.exports.Player = function () {
 
             type: 'audio', // can be 'video', 'audio' or 'image' 
             //protocolInfo : 'http-get:*:audio/WAV:DLNA.ORG_PN=LPCM'
+            protocolInfo : 'http-get:*:audio/flac:DLNA.ORG_PN=FLAC;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=81500000000000000000000000000000'
             //subtitlesUrl: 'http://url.to.some/subtitles.srt'
         }
     };
