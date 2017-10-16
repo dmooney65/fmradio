@@ -109,8 +109,8 @@ let closeDevice = () => {
 };
 
 let listen = () => {
+    console.log('listen called');    
     device.get().on('data', function (data) {
-        //console.log(data.length);
         if (data.length > 12) {
             sendData(data);
         }
