@@ -86,7 +86,7 @@ let startDevice = () => {
         frequencies.setFrequency(frequencies.getFrequency());
         console.log(device.getGain());
         console.log(device.getSampleRate());
-                
+
         //console.log(userDataPath);
         device.start();
     }
@@ -147,13 +147,17 @@ let initListeners = () => {
     if (!userSettings.get('sampleRate')) {
         userSettings.generateDefault();
     }
+    stereo = userSettings.get('stereo');
+    sampleRate = parseInt(userSettings.get('sampleRate'));
     if (userSettings.get('offsetTuning')) {
-        offset = 250000;
+        if (sampleRate < 900000) {
+            offset = 25000;
+        } else {
+            offset = 250000;
+        }
     } else {
         offset = 0;
     }
-    stereo = userSettings.get('stereo');
-    sampleRate = parseInt(userSettings.get('sampleRate'));
     /*decoder = new Worker('demodulator/decode-worker.js');
     decoder.addEventListener('message', function (msg) {
         processMessage(msg);
@@ -212,7 +216,7 @@ let initListeners = () => {
     });
 
     startBtn.click(function () {
-        console.log('decoder state '+decoder);
+        console.log('decoder state ' + decoder);
         if (!decoder) {
             decoder = new Worker('demodulator/decode-worker.js');
             decoder.addEventListener('message', function (msg) {
@@ -299,9 +303,9 @@ let initListeners = () => {
         window.open(__dirname + '/cast.html');
     });
 
-    recordBtn.click(function() {
+    recordBtn.click(function () {
         var btn = $(this);
-        if(!btn.hasClass('text-success')){
+        if (!btn.hasClass('text-success')) {
             btn.addClass('text-success');
         } else {
             btn.removeClass('text-success');

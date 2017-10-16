@@ -31,10 +31,9 @@ let initListeners = () => {
         window.close();        
     });
     $('#cpu').click(function(){
-        sampleRate.val(1024000);
+        sampleRate.val(240000);
         offsetTuning.prop('checked',false);
         stereo.prop('checked',false);
-        console.log('low cpu clicked');
     });
     $('#audio').click(function(){
         if(sampleRate.val() < 2560000){
@@ -42,7 +41,6 @@ let initListeners = () => {
         }
         offsetTuning.prop('checked',true);
         stereo.prop('checked',true);
-        console.log('audio clicked');
     });
     recordingsPath.click(function(event){
         event.preventDefault();
