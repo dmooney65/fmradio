@@ -1,11 +1,11 @@
-const electron = require('electron');
+const {app} = require('electron');
 // Module to control application life.
-const app = electron.app;
+//const app = electron.app;
 // Module to create native browser window.
 //const Tray = electron.Tray;
 //let $ = require('jquery');
 
-const BrowserWindow = electron.BrowserWindow;
+const {BrowserWindow} = require('electron');
 
 const path = require('path');
 const url = require('url');

@@ -1,6 +1,7 @@
 const fs = require('fs');
 //const MediaRendererClient = require('upnp-mediarenderer-client');
-//const path = require('path');
+const path = require('path');
+
 const os = require('os');
 const $ = require('jquery');
 //const ssdpSearch = require('./ssdpSearch.js')
@@ -56,14 +57,14 @@ module.exports.Player = function () {
     let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
     let fileWriter;// = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
     var processor;// = new meta.Processor({ parseMetaDataBlocks: true });                
-    
+
     //var p = new require('stream').PassThrough()
     //var read = new require('stream').PassThrough()
     let audioElement;
     let recording = false;
     let server = httpServer.Server(1337, writer);
     const pause = () => {
-        console.log('stopping server');
+        //console.log('stopping server');
         server.stop();
         if (userSettings.get('localPlayer')) {
             audioElement.pause();
@@ -77,7 +78,7 @@ module.exports.Player = function () {
     };
 
     const start = () => {
-        console.log('starting server');
+        //console.log('starting server');
         server.start();
         if (userSettings.get('localPlayer')) {
             if (!audioElement) {
@@ -96,11 +97,12 @@ module.exports.Player = function () {
     };
 
     const record = () => {
+        let recordingsPath = userSettings.get('recordingsPath');
         if (!recording) {
             processor = new meta.Processor({ parseMetaDataBlocks: true });
             fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
             recording = true;
-            fileWriter.pipe(processor).pipe(fs.createWriteStream('output.flac'));
+            fileWriter.pipe(processor).pipe(fs.createWriteStream(path.join(recordingsPath, 'output.flac')));
             processor.on('postprocess', function(mdb) {
                 console.log('postprocess called');
                 console.log(mdb.toString());

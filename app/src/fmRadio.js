@@ -1,5 +1,5 @@
 //const fs = require('fs');
-//const remote = require('electron').remote;
+//const { app } = require('electron').remote;
 const RtlDevice = require('./device/rtldevice.js');
 //const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
@@ -86,6 +86,8 @@ let startDevice = () => {
         frequencies.setFrequency(frequencies.getFrequency());
         console.log(device.getGain());
         console.log(device.getSampleRate());
+                
+        //console.log(userDataPath);
         device.start();
     }
 };

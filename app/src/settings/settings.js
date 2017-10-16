@@ -1,4 +1,6 @@
 let settings = require('electron-settings');
+const { app } = require('electron').remote;
+
 
 module.exports = () => {
     //console.log(presets.length);*/
@@ -10,6 +12,7 @@ module.exports = () => {
         settings.set('serverPort', 1337);
         settings.set('lastFrequency', '93200000');
         settings.set('ppm',0);
+        settings.set('recordingsPath', app.getPath('music'));
         //var R4.set('name','BBC R4').set('freq',91000000)
         //console.log(settings.get('presets').length);
         settings = settings.set('offsetTuning', true);

@@ -7,9 +7,9 @@ const stereo = $('#stereo');
 const localPlayer = $('#localPlayer');
 const serverPort = $('#serverPort');
 const ppmError = $('#ppmError');
-const remote = require('electron').remote;
-
-//const recordingsPath = $('#recordingsPath');
+const recordingsPath = $('#recordingsPath');
+const {app} = require('electron').remote;
+const {dialog} = require('electron').remote;
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -25,6 +25,7 @@ let initListeners = () => {
     localPlayer.prop('checked', userSettings.get('localPlayer'));
     serverPort.val(userSettings.get('serverPort'));
     ppmError.val(userSettings.get('ppm'));
+    recordingsPath.val(userSettings.get('recordingsPath'));
 
     $(':reset').click(function () {
         window.close();        
@@ -43,6 +44,15 @@ let initListeners = () => {
         stereo.prop('checked',true);
         console.log('audio clicked');
     });
+    recordingsPath.click(function(event){
+        event.preventDefault();
+        var dirVal = dialog.showOpenDialog({options :{defaultPath: $(this).val()}, properties: ['openDirectory']});
+        console.log(dirVal[0]);
+        if(dirVal){
+            $(this).val(dirVal[0]);
+        }
+        console.log(dialog);        
+    });
     $('form').submit(function(event){
         event.preventDefault();
         userSettings.set('sampleRate', sampleRate.val());
@@ -51,9 +61,10 @@ let initListeners = () => {
         userSettings.set('stereo', stereo.prop('checked'));
         userSettings.set('localPlayer', localPlayer.prop('checked'));
         userSettings.set('serverPort', serverPort.val());
+        userSettings.set('recordingsPath', recordingsPath.val());        
         userSettings.set('ppm', ppmError.val());
-        remote.app.relaunch();
-        remote.app.quit();
+        app.relaunch();
+        app.quit();
         console.log('form submitted');
         window.close();
     });
