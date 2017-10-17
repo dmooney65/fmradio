@@ -18,10 +18,10 @@
 </head>
 
 <body>
-    <div class="container-full">
-        <div class="container-middle">
+    <div class="jumbotron">
+        <div class="container">
     <div class="container-fixed">
-        <h3>FM Radio Tuner<small> v<script>document.write(require('../package').version)</script></small></h3>
+        <h2>FM Radio Tuner<small> v<script>document.write(require('../package').version)</script></small></h2>
         <div class="btn-group btn-group-justified">
             <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
                 <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
@@ -46,7 +46,7 @@
                 <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
             </div>
             <div class "row">
-                <div class="btn-group btn-group-vertical pull-right">
+                <div class="btn-group btn-group-vertical pull-right dropup">
                     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="presets">
                         Presets
                         <span class="caret"></span>
@@ -54,7 +54,7 @@
                     <ul class="dropdown-menu scrollable-menu" id="presetList">
                     </ul>
                 </div>
-                <div class="btn-group btn-group-vertical pull-right">
+                <div class="btn-group btn-group-vertical pull-right dropup">
                     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
                     Gain
                         <span class="caret"></span>
@@ -80,7 +80,7 @@
             <a class="btn btn-default disabled" id="record" data-toggle="tooltip" data-placement="left" title="Record audio">
                 <span class="glyphicon glyphicon-record"></span>
             </a>
-        </div>
+        </div class=contaoner>
             <small>Powered by Electron v<script>document.write(process.versions.electron)</script></small>
         </div>                    
     </div>

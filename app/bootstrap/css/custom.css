@@ -8,17 +8,19 @@ html, body {
     padding-left: 15px;
     padding-right: 15px;
     width: 510px;
-  }
-  .container-freq {
+}
+
+.container-freq {
     margin-right: auto;
     margin-left: auto;
     padding-left: 5px;
     padding-right: 5px;
     width: 480px;
-  }
+}
+
 .scrollable-menu {
     height: auto;
-    max-height: 160px;
+    max-height: 140px;
     overflow-x: hidden;    
 }
 
@@ -53,5 +55,5 @@ html, body {
   }
   .container-middle {
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: bottom;
   }
