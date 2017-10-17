@@ -155,7 +155,7 @@ module.exports.Player = function () {
         audioElement = document.createElement('audio');
         audioElement.setAttribute('id', 'player');
         audioElement.autoplay = true;
-        audioElement.controls = true;
+        //audioElement.controls = true;
         //audioElement.controlsList = ('nodownload');
         //audioElement.setAttribute('autoplay', 'true');
         //audioElement.setAttribute('controlsList','nodownload');

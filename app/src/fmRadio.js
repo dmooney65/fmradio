@@ -319,7 +319,7 @@ let initListeners = () => {
         });
     });
     settingsBtn.click(function () {
-        window.open(__dirname + '/settings/settings.html', '', 'width=450, height=640, top=15, left=15, , toolbar=0, menubar=0, scrollbars=1, resizable=1, copyhistory=0, location=0, directories=0, status=1, titlebar=1, personalbar=0');
+        window.open(__dirname + '/settings/settings.html', '', 'width=460, height=665, top=15, left=15, , toolbar=0, menubar=0, scrollbars=1, resizable=1, copyhistory=0, location=0, directories=0, status=1, titlebar=1, personalbar=0');
     });
 
     stereo = userSettings.get('stereo');

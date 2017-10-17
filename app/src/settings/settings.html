@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <form class="form-horizontal">
             <fieldset>
@@ -35,33 +34,28 @@
                             <option>2880000</option>
                             <option>3200000</option>
                         </select>
+                        <label class="control-label" for="ppmError">PPM error</label>                        
+                        <input type="text" class="form-control" id="ppmError">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="offsetTuning"> Offset tuning
                             </label>
                         </div>
-                        <label class="control-label" for="ppmError">PPM error</label>                        
-                        <input type="text" class="form-control" id="ppmError">                        
-                    </div>
-                </div>
-                <legend>UI settings</legend>
-                <div class="form-group">
-                    <div class="col-lg-10">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="lastTuned"> Save last tuned frequency
                             </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="stereo"> Default to stereo
-                            </label>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
                 <legend>Audio settings</legend>
                 <div class="form-group">
                     <div class="col-lg-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="stereo"> Default to stereo
+                            </label>
+                        </div>
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="localPlayer"> Play locally

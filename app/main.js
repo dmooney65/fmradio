@@ -19,7 +19,7 @@ function createWindow() {
     const icon = path.join(__dirname, '../icons/tower.png');
 
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600, icon: icon });
+    mainWindow = new BrowserWindow({ width: 610, height: 290, icon: icon, resizable: true });
     //mainWindow.$ = $;
     
     // and load the index.html of the app.
@@ -30,7 +30,7 @@ function createWindow() {
     }));
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools({mode:'detach'});
     //const appIcon = new Tray(icon);  
 
     // Emitted when the window is closed.

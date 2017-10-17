@@ -18,11 +18,10 @@
 </head>
 
 <body>
-    <div class="container-fixed text-center">
-        <h1 class="title"></h1>
-    </div>
-    <div class="container-fixed" id="bootstraqp-overrides">
-        <!--button type="button" class="btn btn-default" , id='settings'>Settings</button-->
+    <div class="container-full">
+        <div class="container-middle">
+    <div class="container-fixed">
+        <h3>FM Radio Tuner<small> v<script>document.write(require('../package').version)</script></small></h3>
         <div class="btn-group btn-group-justified">
             <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
                 <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
@@ -41,7 +40,7 @@
             </a>
         </div>
         <div class="container-freq">
-            <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency"></input>
+            <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency">
             <div class="btn-group btn-group-vertical pull-left">
                 <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">-</span>
                 <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
@@ -82,13 +81,12 @@
                 <span class="glyphicon glyphicon-record"></span>
             </a>
         </div>
-        <div class="container-fixed" id="audioParent">
-        <h5>Powered by Electron v<script>document.write(process.versions.electron)</script>.</h5>                
-        </div>
-
+            <small>Powered by Electron v<script>document.write(process.versions.electron)</script></small>
+        </div>                    
     </div>
-
-
+    <div id="audioParent"></div>    
+</div>
+</div>
     <div class="modal fade" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
