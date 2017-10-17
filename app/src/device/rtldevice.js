@@ -1,9 +1,19 @@
 const sdrjs = require('sdrjs');
 
+module.exports = () => {
+    let getDevices = () => {
+        return sdrjs.getDevices();
+    };
+    return {
+        getDevices: getDevices,
+    };
+};
 
-module.exports = (index) => {
+module.exports.Device = (index) => {
 
     let device = sdrjs.getDevices()[index];
+
+
 
     let get = () => {
         return device;

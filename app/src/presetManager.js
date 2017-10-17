@@ -5,21 +5,16 @@ const frequencies = require('./frequencies.js')();
 
 
 module.exports = () => {
-    
+
     $('#addPreset').click(function () {
         addPreset($('#presetName').val(), frequencies.getFrequency());
+        $('#presetModal').modal('hide');
     });
 
     $('#presetModal').on('show.bs.modal', function () {
-        $('#presetName').focus();
-        //var button = $(event.relatedTarget) // Button that triggered the modal
-        //var newPreset = button.data('whatever') // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        //var modal = $(this)
-        //modal.find('.modal-title').text('New message to ' + recipient)
-        //modal.find('.modal-body input').val(recipient)
-        //addPreset(modal.find('.modal-body input').val(), getFrequency());
+        setTimeout(function () {
+            $('#presetName').focus();
+        }, 800);
     });
 
     let addPreset = (stationName, frequency) => {
@@ -38,6 +33,7 @@ module.exports = () => {
         }
         userSettings.set('presets', presets);
         rebuild();
+
     };
 
 
@@ -52,10 +48,10 @@ module.exports = () => {
         link.href = '#';
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            $('#presetModal').modal();
+            $('#presetModal').modal('show');
         });
 
-        
+
         li.appendChild(link);
         presetList.append(li);
 

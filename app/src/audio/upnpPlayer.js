@@ -64,7 +64,6 @@ module.exports.Player = function () {
     let recording = false;
     let server = httpServer.Server(1337, writer);
     const pause = () => {
-        //console.log('stopping server');
         server.stop();
         if (userSettings.get('localPlayer')) {
             audioElement.pause();
@@ -78,14 +77,12 @@ module.exports.Player = function () {
     };
 
     const start = () => {
-        //console.log('starting server');
         server.start();
         if (userSettings.get('localPlayer')) {
             if (!audioElement) {
                 createAudioElement();
                 $('#audioParent').append(audioElement);
                 audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
-                console.log('creating audio element');
             } else {
                 audioElement.play();
             }
@@ -96,25 +93,51 @@ module.exports.Player = function () {
         //audioElement.play();
     };
 
+    const formatField = (val) => {
+        return (0 + val.toString()).slice(-2);
+    };
+
+    const getDateStr = () => {
+        var date = new Date();
+        var y = date.getFullYear().toString();
+        var m = formatField(date.getMonth()+1);
+        var d = formatField(date.getDate());
+        var hh = formatField(date.getHours());
+        var mm = formatField(date.getMinutes());
+        var ss = formatField(date.getSeconds());
+        return y+m+d+hh+mm+ss;
+    };
+
     const record = () => {
         let recordingsPath = userSettings.get('recordingsPath');
         if (!recording) {
+            let freqText = require('../fmRadio.js').getFreqText();
             processor = new meta.Processor({ parseMetaDataBlocks: true });
             fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
             recording = true;
-            fileWriter.pipe(processor).pipe(fs.createWriteStream(path.join(recordingsPath, 'output.flac')));
+            fileWriter.pipe(processor).pipe(fs.createWriteStream(
+                path.join(recordingsPath, freqText.replace(' ','')+'_'+getDateStr()+'_recording.flac'))
+            );
             processor.on('postprocess', function(mdb) {
-                console.log('postprocess called');
-                console.log(mdb.toString());
+                //console.log('postprocess called');
+                //console.log(mdb.toString());
             });
             /*processor.on('preprocess', function(mdb) {
                 console.log('preprocess called');
                 console.log(mdb.toString());
             });*/
         } else {
-            recording = false;
-            fileWriter.end();
+            stopRecording();
         }
+    };
+
+    const stopRecording = () => {
+        recording = false;
+        fileWriter.end();
+    };
+
+    const isRecording = () => {
+        return recording;
     };
 
     const play = (left, right) => {
@@ -210,7 +233,9 @@ module.exports.Player = function () {
         play: play,
         pause: pause,
         start: start,
-        record: record
+        record: record,
+        stopRecording: stopRecording,
+        isRecording: isRecording
         //setVolume: setVolume,
         //startWriting: startWriting,
         //stopWriting: stopWriting,

@@ -1,5 +1,5 @@
 //const fs = require('fs');
-//const { app } = require('electron').remote;
+const { dialog } = require('electron').remote;
 const RtlDevice = require('./device/rtldevice.js');
 //const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
 //const main = remote.require('../app/main.js');
@@ -22,8 +22,8 @@ let stereo;
 //const offBtn = document.getElementById('radio-off');
 const settingsBtn = $('#settings');
 //const csdrBtn = document.getElementById('open-csdr');
-const startBtn = $('#start');
-const stopBtn = $('#stop');
+const playPauseBtn = $('#play-pause');
+//const stopBtn = $('#stop');
 const freqDownBtn = $('#freqDown');
 const freqUpBtn = $('#freqUp');
 const scanDown = $('#scanDown');
@@ -75,7 +75,6 @@ let setGain = (gain) => {
         device.disableAGC();
         device.setGain(parseInt(gain));
     }
-    console.log(device.getGain());
 };
 
 
@@ -86,8 +85,6 @@ let startDevice = () => {
         frequencies.setFrequency(frequencies.getFrequency());
         console.log(device.getGain());
         console.log(device.getSampleRate());
-
-        //console.log(userDataPath);
         device.start();
     }
 };
@@ -109,7 +106,6 @@ let closeDevice = () => {
 };
 
 let listen = () => {
-    console.log('listen called');    
     device.get().on('data', function (data) {
         if (data.length > 12) {
             sendData(data);
@@ -133,6 +129,58 @@ let sendData = (data) => {
     decoder.postMessage([0, arraybuffer(data.buffer), stereo, offset, sampleRate], [arraybuffer(data.buffer)]);
 };
 
+let setupDevice = () => {
+    if (null == device) {
+        //device = TcpDevice();
+        device = RtlDevice.Device(0);
+        //devices = getDevices();
+        //device = devices[0];
+        device.openDevice();
+        setDeviceParams();
+        listen();
+    } else {
+        device.openDevice();
+    }
+    device.setCenterFrequency(frequencies.getFrequency());
+    var gains = device.getValidGains();
+    var list = document.getElementById('gainsList');
+    var li = document.createElement('li');
+    var link = document.createElement('a');
+    link.setAttribute('id', 'gain-auto');
+    link.appendChild(document.createTextNode('Auto'));
+    link.href = '#';
+    li.appendChild(link);
+    list.appendChild(li);
+    $('#gain-auto').click(function (e) {
+        e.preventDefault();
+        setGain('auto');
+    });
+    for (var i = 0; i < gains.length; i++) {
+        li = document.createElement('li');
+        link = document.createElement('a');
+        link.setAttribute('id', 'gain-' + gains[i]);
+        link.appendChild(document.createTextNode(gains[i]));
+
+        link.href = '#';
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            setGain(this.getAttribute('id').split('-')[1]);
+        });
+
+        li.appendChild(link);
+        list.appendChild(li);
+    }
+};
+
+let isPlaying = false;
+let setPlaying = (playing) => {
+    if (!playing) {
+        $('#play-pause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
+    } else {
+        $('#play-pause').find('span').removeClass('glyphicon-play').addClass('glyphicon-pause');        
+    }
+    isPlaying = playing;
+};
 
 let sampleRate;
 
@@ -147,7 +195,6 @@ let initListeners = () => {
     if (!userSettings.get('sampleRate')) {
         userSettings.generateDefault();
     }
-    stereo = userSettings.get('stereo');
     sampleRate = parseInt(userSettings.get('sampleRate'));
     if (userSettings.get('offsetTuning')) {
         if (sampleRate < 900000) {
@@ -158,81 +205,65 @@ let initListeners = () => {
     } else {
         offset = 0;
     }
-    /*decoder = new Worker('demodulator/decode-worker.js');
-    decoder.addEventListener('message', function (msg) {
-        processMessage(msg);
-    });
-    decoder.postMessage([1, 'WBFM', sampleRate]);*/
+    
     frequencies.setFrequency(userSettings.get('lastFrequency'));
 
     const presetManager = require('./presetManager.js')(device, offset);
     presetManager.rebuild();
-
-    $('#radio-on').click(function () {
-        if (null == device) {
-            //device = TcpDevice();
-            device = RtlDevice(0);
-            //devices = getDevices();
-            //device = devices[0];
-            device.openDevice();
-            setDeviceParams();
-            listen();
+    let poweredOn = false;
+    $('#power').click(function () {
+        if (!poweredOn) {
+            if (RtlDevice().getDevices().length > 0) {
+                setupDevice();
+                playPauseBtn.removeClass('disabled');
+                recordBtn.removeClass('disabled');
+                $(this).removeClass('text-danger').addClass('text-success');
+                poweredOn = true;
+            } else {
+                dialog.showErrorBox('Cound not find compatible RTL2832U device.', 'Please make sure your device is attached to a USB port and correctly configured');
+                $(this).addClass('text-danger');
+            }
         } else {
-            device.openDevice();
+            player.pause();
+            if(player.isRecording()){
+                player.stopRecording();
+            }
+            closeDevice();
+            playPauseBtn.addClass('disabled');
+            recordBtn.addClass('disabled').removeClass('text-success');
+            $(this).removeClass('text-success');
+            poweredOn = false;
         }
-        device.setCenterFrequency(frequencies.getFrequency());
-        var gains = device.getValidGains();
-        var list = document.getElementById('gainsList');
-        var li = document.createElement('li');
-        var link = document.createElement('a');
-        link.setAttribute('id', 'gain-auto');
-        link.appendChild(document.createTextNode('Auto'));
-        link.href = '#';
-        li.appendChild(link);
-        list.appendChild(li);
-        $('#gain-auto').click(function (e) {
-            e.preventDefault();
-            setGain('auto');
-        });
-        for (var i = 0; i < gains.length; i++) {
-            li = document.createElement('li');
-            link = document.createElement('a');
-            link.setAttribute('id', 'gain-' + gains[i]);
-            link.appendChild(document.createTextNode(gains[i]));
-
-            link.href = '#';
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                setGain(this.getAttribute('id').split('-')[1]);
-            });
-
-            li.appendChild(link);
-            list.appendChild(li);
-        }
+        setPlaying(false);
     });
 
     $('#radio-off').click(function () {
-        closeDevice();
     });
+    playPauseBtn.click(function () {
+        if (!isPlaying) {
+            if (!decoder) {
+                decoder = new Worker('demodulator/decode-worker.js');
+                decoder.addEventListener('message', function (msg) {
+                    processMessage(msg);
+                });
+                decoder.postMessage([1, 'WBFM', sampleRate]);
+            }
+            //listen();
+            startDevice();
+            player.start();
+            //isPlaying = true;
+            setPlaying(true);
 
-    startBtn.click(function () {
-        console.log('decoder state ' + decoder);
-        if (!decoder) {
-            decoder = new Worker('demodulator/decode-worker.js');
-            decoder.addEventListener('message', function (msg) {
-                processMessage(msg);
-            });
-            decoder.postMessage([1, 'WBFM', sampleRate]);
+        } else {
+            player.pause();
+            stopDevice();
+            //isPlaying = false;
+            setPlaying(false);
+            //$(this)..removeClass('glyphicon-pause');
+            //$(this).addClass('glyphicon-play');            
         }
-        //listen();
-        startDevice();
-        player.start();
     });
 
-    stopBtn.click(function () {
-        player.pause();
-        stopDevice();
-    });
 
     freqText.change(function () {
         frequencies.setFrequency(frequencies.parseReadableInput(freqText.val()));
@@ -291,8 +322,19 @@ let initListeners = () => {
         window.open(__dirname + '/settings/settings.html', '', 'width=450, height=640, top=15, left=15, , toolbar=0, menubar=0, scrollbars=1, resizable=1, copyhistory=0, location=0, directories=0, status=1, titlebar=1, personalbar=0');
     });
 
+    stereo = userSettings.get('stereo');
+    if(stereo){
+        stereoBtn.addClass('text-success');
+    }
+    
     stereoBtn.click(function () {
-        stereo = true;
+        if(!stereoBtn.hasClass('text-success')){
+            stereoBtn.addClass('text-success');
+            stereo = true;
+        } else {
+            stereoBtn.removeClass('text-success');
+            stereo = false;
+        }
     });
 
     monoBtn.click(function () {
@@ -336,4 +378,7 @@ module.exports.getOffset = () => {
     return offset;
 };
 
+module.exports.getFreqText = () => {
+    return freqText.val();
+};
 

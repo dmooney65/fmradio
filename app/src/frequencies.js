@@ -64,12 +64,14 @@ module.exports = function () {
         }
         return Math.floor(mul * Number(frequency));
     }
+
     let setFrequency = (frequency) => {
         let device = require('./fmRadio.js').getDevice();  
         let offset = require('./fmRadio.js').getOffset();        
         
         if (device) {
             device.setCenterFrequency(frequency + offset);
+            //console.log(device.getCenterFrequency());
         }
         if (userSettings.get('lastTuned')) {
             userSettings.set('lastFrequency', frequency);

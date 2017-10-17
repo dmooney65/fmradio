@@ -19,13 +19,10 @@
 
 <body>
     <div class="container-fixed text-center">
-        <h1 class="title">Electron FM Radio</h1>
+        <h1 class="title"></h1>
     </div>
     <div class="container-fixed" id="bootstraqp-overrides">
-        <button type="button" class="btn btn-default" , id='radio-on'>
-            <span class="glyphicon glyphicon-off"></span>Power</button>
-        <button type="button" class="btn btn-default" , id='radio-off'>Radio off</button>
-        <button type="button" class="btn btn-default" , id='settings'>Settings</button>
+        <!--button type="button" class="btn btn-default" , id='settings'>Settings</button-->
         <div class="btn-group btn-group-justified">
             <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
                 <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
@@ -69,35 +66,26 @@
             </div>
         </div>
         <div class="btn-group btn-group-justified">
-            <a class="btn btn-default" id="start" data-toggle="tooltip" data-placement="left" title="Start audio">
+            <a class="btn btn-primary" id="power" data-toggle="tooltip" data-placement="left" title="Power on/off">
+                <span class="mdi mdi-power-settings-new mdi-lg"></span>
+            </a>
+            <a class="btn btn-default disabled" id="play-pause" data-toggle="tooltip" data-placement="left" title="Play/pause audio">
                 <span class="glyphicon glyphicon-play"></span>
             </a>
-            <a class="btn btn-default" id="stop" data-toggle="tooltip" data-placement="left" title="Stop audio">
-                <span class="glyphicon glyphicon-pause"></span>
+            <a class="btn btn-default" id="settings" data-toggle="tooltip" data-placement="left" title="Open settings window">
+                <span class="mdi mdi-settings mdi-lg"></span>
             </a>
-            <a class="btn btn-default" id="mono" data-toggle="tooltip" data-placement="left" title="Disable stereo decoding">
-                <span class="icon icon-note"></span>
-            </a>
-            <a class="btn btn-default" id="stereo" data-toggle="tooltip" data-placement="left" title="Attempt stereo decoding">
+            <a class="btn btn-default" id="stereo" data-toggle="tooltip" data-placement="left" title="Toggle stereo decoding">
                 <span class="glyphicon glyphicon-music"></span>
             </a>
-            <a class="btn btn-default" id="record" data-toggle="tooltip" data-placement="left" title="Record audio">
+            <a class="btn btn-default disabled" id="record" data-toggle="tooltip" data-placement="left" title="Record audio">
                 <span class="glyphicon glyphicon-record"></span>
             </a>
         </div>
-        <div class="container" id="audioParent"></div>
+        <div class="container-fixed" id="audioParent">
+        <h5>Powered by Electron v<script>document.write(process.versions.electron)</script>.</h5>                
+        </div>
 
-        <h1 id="header">FM Electron App</h1>
-        We are using Node.js
-        <script>
-            document.write(process.versions.node)
-        </script>, Chromium
-        <script>
-            document.write(process.versions.chrome)
-        </script>, and Electron
-        <script>
-            document.write(process.versions.electron)
-        </script>.
     </div>
 
 
