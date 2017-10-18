@@ -1,8 +1,5 @@
-//const fs = require('fs');
 const { dialog } = require('electron').remote;
 const RtlDevice = require('./device/rtldevice.js');
-//const TcpDevice = require('./device/tcpdevice.js').TcpDevice;
-//const main = remote.require('../app/main.js');
 let frequencies = require('./frequencies.js')();
 
 let device;
@@ -10,7 +7,7 @@ let offset;
 const arraybuffer = require('to-arraybuffer');
 const $ = require('jquery');
 const userSettings = require('./settings/settings.js')();
-let decoder;// = new Worker('demodulator/decode-worker.js');
+let decoder;
 
 const upnp = require('./audio/upnpPlayer.js');
 let player = upnp.Player();
@@ -18,19 +15,14 @@ let player = upnp.Player();
 let stereo;
 
 
-//const onBtn = document.getElementById('radio-on');
-//const offBtn = document.getElementById('radio-off');
+const powerBtn = $('#power');
 const settingsBtn = $('#settings');
-//const csdrBtn = document.getElementById('open-csdr');
 const playPauseBtn = $('#play-pause');
-//const stopBtn = $('#stop');
 const freqDownBtn = $('#freqDown');
 const freqUpBtn = $('#freqUp');
 const scanDown = $('#scanDown');
 const scanUp = $('#scanUp');
 const freqText = $('#freq');
-const gainText = $('#gain');
-gainText.val('0');
 const levelText = $('#level');
 const stereoText = $('#isStereo');
 const stereoBtn = $('#stereo');
@@ -38,31 +30,13 @@ const monoBtn = $('#mono');
 const castBtn = $('#cast');
 const recordBtn = $('#record');
 
-//var renderers = ssdpSearch.getRenderers();
 
 let setDeviceParams = () => {
-    //var captureRate = 1024000
-    //var outputSampleRate = 48000;
-    //var edge = 0;
-    //var postDownSample = 1;
-    //var sampleRate = 24000
-    //var sampleRate = sampleRate * postDownSample;
-    //var downSample = (1000000 / sampleRate) + 1;
-    //var captureRate = downSample * sampleRate;
-    //var captureFreq = frequency + captureRate / 4;
-    //captureFreq += edge * sampleRate / 2;
     device.enableAGC();
     device.disableManualTunerGain();
     device.setGain(0);
-    //device.setIFGain(-12);
-    device.setSampleRate(sampleRate);//captureRate
+    device.setSampleRate(sampleRate);
     device.setFrequencyCorrection(userSettings.get('ppm'));
-    //device.setOffsetTuning(true);
-    //device.setOcillatorFrequency(28800000);
-    //device.centerFrequency = frequency;
-    //frequencyOffset = captureFreq - frequency;
-    //device.bufferNumber = 5;
-    //device.bufferLength = Math.floor(sampleRate / device.bufferNumber);
 };
 
 let setGain = (gain) => {
@@ -83,8 +57,8 @@ let setGain = (gain) => {
 let startDevice = () => {
     if (null != device) {
         frequencies.setFrequency(frequencies.getFrequency());
-        console.log(device.getGain());
-        console.log(device.getSampleRate());
+        //console.log(device.getGain());
+        //console.log(device.getSampleRate());
         device.start();
     }
 };
@@ -101,8 +75,10 @@ let closeDevice = () => {
         device.close();
         device = null;
     }
-    decoder.terminate();
-    decoder = null;
+    if (decoder) {
+        decoder.terminate();
+        decoder = null;
+    }
 };
 
 let listen = () => {
@@ -133,8 +109,6 @@ let setupDevice = () => {
     if (null == device) {
         //device = TcpDevice();
         device = RtlDevice.Device(0);
-        //devices = getDevices();
-        //device = devices[0];
         device.openDevice();
         setDeviceParams();
         listen();
@@ -154,6 +128,7 @@ let setupDevice = () => {
     $('#gain-auto').click(function (e) {
         e.preventDefault();
         setGain('auto');
+        //$('#gainText').text('Auto');        
     });
     for (var i = 0; i < gains.length; i++) {
         li = document.createElement('li');
@@ -164,7 +139,9 @@ let setupDevice = () => {
         link.href = '#';
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            setGain(this.getAttribute('id').split('-')[1]);
+            var value = this.getAttribute('id').split('-')[1];
+            setGain(value);
+            //$('#gainText').text(value);
         });
 
         li.appendChild(link);
@@ -177,7 +154,7 @@ let setPlaying = (playing) => {
     if (!playing) {
         $('#play-pause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
     } else {
-        $('#play-pause').find('span').removeClass('glyphicon-play').addClass('glyphicon-pause');        
+        $('#play-pause').find('span').removeClass('glyphicon-play').addClass('glyphicon-pause');
     }
     isPlaying = playing;
 };
@@ -205,13 +182,13 @@ let initListeners = () => {
     } else {
         offset = 0;
     }
-    
+
     frequencies.setFrequency(userSettings.get('lastFrequency'));
 
     const presetManager = require('./presetManager.js')(device, offset);
     presetManager.rebuild();
     let poweredOn = false;
-    $('#power').click(function () {
+    powerBtn.click(function () {
         if (!poweredOn) {
             if (RtlDevice().getDevices().length > 0) {
                 setupDevice();
@@ -225,7 +202,7 @@ let initListeners = () => {
             }
         } else {
             player.pause();
-            if(player.isRecording()){
+            if (player.isRecording()) {
                 player.stopRecording();
             }
             closeDevice();
@@ -237,8 +214,6 @@ let initListeners = () => {
         setPlaying(false);
     });
 
-    $('#radio-off').click(function () {
-    });
     playPauseBtn.click(function () {
         if (!isPlaying) {
             if (!decoder) {
@@ -248,19 +223,14 @@ let initListeners = () => {
                 });
                 decoder.postMessage([1, 'WBFM', sampleRate]);
             }
-            //listen();
             startDevice();
             player.start();
-            //isPlaying = true;
             setPlaying(true);
 
         } else {
             player.pause();
             stopDevice();
-            //isPlaying = false;
             setPlaying(false);
-            //$(this)..removeClass('glyphicon-pause');
-            //$(this).addClass('glyphicon-play');            
         }
     });
 
@@ -324,12 +294,12 @@ let initListeners = () => {
     });
 
     stereo = userSettings.get('stereo');
-    if(stereo){
+    if (stereo) {
         stereoBtn.addClass('text-success');
     }
-    
+
     stereoBtn.click(function () {
-        if(!stereoBtn.hasClass('text-success')){
+        if (!stereoBtn.hasClass('text-success')) {
             stereoBtn.addClass('text-success');
             stereo = true;
         } else {
@@ -356,15 +326,13 @@ let initListeners = () => {
         player.record();
     });
 
-    $('.dropup').on( 'click', '.dropdown-menu li a', function() {
-        var target = $(this).html();
-        console.log('clicked');
+    $('.dropdown').on('click', '.dropdown-menu li a', function () {
         //Adds active class to selected item
         $(this).parents('.dropdown-menu').find('li').removeClass('active');
         $(this).parent('li').addClass('active');
 
         //Displays selected text on dropdown-toggle button
-        $(this).parents('.dropdown').find('.dropdown-toggle').html(target + ' <span class="caret"></span>');
+        $(this).parents('.dropdown').find('.dropdown-toggle span.text-muted').text($(this).text());
     });
 };
 

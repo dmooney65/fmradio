@@ -7,14 +7,15 @@ const frequencies = require('./frequencies.js')();
 module.exports = () => {
 
     $('#addPreset').click(function () {
-        addPreset($('#presetName').val(), frequencies.getFrequency());
-        $('#presetModal').modal('hide');
+        var name = $('#presetName').val();
+        if (name != '') {
+            addPreset(name , frequencies.getFrequency());
+            $('#presetModal').modal('hide');
+        }
     });
 
-    $('#presetModal').on('show.bs.modal', function () {
-        setTimeout(function () {
-            $('#presetName').focus();
-        }, 800);
+    $('#presetModal').on('shown.bs.modal', function () {
+        $('#presetName').focus();
     });
 
     let addPreset = (stationName, frequency) => {

@@ -13,9 +13,9 @@ module.exports = function () {
      * @return {string} The converted frequency.
      */
     function humanReadable(frequency, showUnits, opt_digits) {
-        var units;
-        var suffix;
-        if (frequency < 2e3) {
+        var units = 1e6;
+        var suffix = 'M';
+        /*if (frequency < 2e3) {
             units = 1;
             suffix = '';
         } else if (frequency < 2e6) {
@@ -27,7 +27,7 @@ module.exports = function () {
         } else {
             units = 1e9;
             suffix = 'G';
-        }
+        }*/
         if (opt_digits) {
             var number = (frequency / units).toFixed(opt_digits);
         } else {
@@ -46,9 +46,9 @@ module.exports = function () {
      * @return {number} The converted frequency.
      */
     function parseReadableInput(frequency) {
-        var mul = 1;
-        frequency = frequency.toLowerCase().trim();
-        if (frequency.substr(-2) == "hz") {
+        //var mul = 1;
+        frequency = frequency.split(' ')[0];
+        /*if (frequency.substr(-2) == "hz") {
             frequency = frequency.substr(0, frequency.length - 2).trim();
         }
         var suffix = frequency.substr(-1);
@@ -61,8 +61,8 @@ module.exports = function () {
         }
         if (mul != 1) {
             frequency = frequency.substr(0, frequency.length - 1).trim();
-        }
-        return Math.floor(mul * Number(frequency));
+        }*/
+        return Math.floor(1e6 * Number(frequency));
     }
 
     let setFrequency = (frequency) => {

@@ -19,7 +19,7 @@ function createWindow() {
     const icon = path.join(__dirname, '../icons/tower.png');
 
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 610, height: 330, icon: icon, resizable: true });
+    mainWindow = new BrowserWindow({ width: 640, height: 360, icon: icon, resizable: true });
     //mainWindow.$ = $;
     
     // and load the index.html of the app.

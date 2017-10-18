@@ -65,7 +65,7 @@ module.exports.Player = function () {
     let server = httpServer.Server(1337, writer);
     const pause = () => {
         server.stop();
-        if (userSettings.get('localPlayer')) {
+        if (userSettings.get('localPlayer') && audioElement) {
             audioElement.pause();
         }
         //audioElement.removeAttribute('src');        

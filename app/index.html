@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>FM Radio</title>
-    <!--meta name="viewport" content="width=device-width, initial-scale=1"-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"-->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap/css/custom.css">
     <link rel="stylesheet" href="../node_modules/bootstrap-material-design-icons/css/material-icons.css">
@@ -17,12 +17,14 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
-<body>
-    <div class="jumbotron">
-        <div class="container">
-    <div class="container-fixed">
-        <h2>FM Radio Tuner<small> v<script>document.write(require('../package').version)</script></small></h2>
-        <div class="btn-group btn-group-justified">
+<body style="min-height:330px">
+    <div class="container">
+        <h1 class="text-center">FM Radio Tuner
+            <small> v<script>document.write(require('../package').version)</script></small>
+        </h1>
+    </div>
+    <div class="container" style="min-width:600px">
+        <div class="btn-group btn-group-justified btn-group-lg">
             <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
                 <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
             </a>
@@ -35,60 +37,80 @@
             <a class="btn btn-default" id="scanUp" data-toggle="tooltip" data-placement="left" title="Scan for stations above current frequency">
                 <i class="glyphicon glyphicon-fast-forward"></i>
             </a>
-            <a class="btn btn-default" id="cast" data-toggle="tooltip" data-placement="left" title="Cast audio to Upnp MediaRenderer (e.g. Kodi)">
-                <i class="mdi mdi-cast mdi-lg"></i>
+            <a class="btn btn-default" id="settings" data-toggle="tooltip" data-placement="left" title="Open settings window">
+                <span class="mdi mdi-settings mdi-lg"></span>
             </a>
         </div>
-        <div class="container-freq">
-            <input type="text" id="freq" class="frequencyInput pull-left" data-toggle="tooltip" data-placement="left" title="Input FM frequency">
-            <div class="btn-group btn-group-vertical pull-left">
-                <span class="btn" id='level' data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">-</span>
-                <span class="btn" id='isStereo' data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">-</span>
+        <div class="row">
+            <div class="col-xs-6">
+                <div>
+                    <input type="text" id="freq" tabindex="1" class="frequencyInput" data-toggle="tooltip" data-placement="left" title="Input FM frequency">
+                </div>
             </div>
-            <div class "row">
-                <div class="btn-group btn-group-vertical pull-right dropup">
-                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="presets">
-                        Presets
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu scrollable-menu" id="presetList">
-                    </ul>
-                </div>
-                <div class="btn-group btn-group-vertical pull-right dropup">
-                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
-                    Gain
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu scrollable-menu" id="gainsList">
-                    </ul>
-                </div>
+            <div class="col-xs-1">
+                <ul class="nav nav-pills nav-stacked text-left text-muted small">
+                    <li>
+                        <span></span>
+                    </li>
+                    <li data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">Signal:
+                        <span id="level">0.0</span>
+                    </li>
+                    <li data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">Stereo:
+                        <span id="isStereo">false</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-5">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" tabindex="2" data-toggle="dropdown" aria-expanded="false" id="presets">
+                            Presets
+                            <span class="caret"></span>
+                            <span class="text-muted pull-right" id="presetText"></span>
+                        </a>
+                        <ul class="dropdown-menu scrollable-menu" id="presetList">
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" tabindex="3" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
+                            Gain
+                            <span class="caret"></span>
+                            <span class="text-muted pull-right" id="gainText">Auto</span>
+                        </a>
+                        <ul class="dropdown-menu scrollable-menu" id="gainsList">
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="btn-group btn-group-justified">
+        <div class="btn-group btn-group-justified btn-group-lg">
             <a class="btn btn-primary" id="power" data-toggle="tooltip" data-placement="left" title="Power on/off">
                 <span class="mdi mdi-power-settings-new mdi-lg"></span>
             </a>
             <a class="btn btn-default disabled" id="play-pause" data-toggle="tooltip" data-placement="left" title="Play/pause audio">
                 <span class="glyphicon glyphicon-play"></span>
             </a>
-            <a class="btn btn-default" id="settings" data-toggle="tooltip" data-placement="left" title="Open settings window">
-                <span class="mdi mdi-settings mdi-lg"></span>
-            </a>
             <a class="btn btn-default" id="stereo" data-toggle="tooltip" data-placement="left" title="Toggle stereo decoding">
-                <span class="glyphicon glyphicon-music"></span>
+                <span class="glyphicon glyphicon-sound-stereo glyphicon-lg"></span>
             </a>
             <a class="btn btn-default disabled" id="record" data-toggle="tooltip" data-placement="left" title="Record audio">
                 <span class="glyphicon glyphicon-record"></span>
             </a>
-        </div class=contaoner>
-            <small>Powered by Electron v<script>document.write(process.versions.electron)</script></small>
-        </div>                    
+            <a class="btn btn-default disabled" id="cast" data-toggle="tooltip" data-placement="left" title="Cast audio to Upnp MediaRenderer (e.g. Kodi)">
+                <i class="mdi mdi-cast mdi-lg"></i>
+            </a>
+        </div>
+        <div id="audioParent"></div>
     </div>
-    <div id="audioParent"></div>    
-</div>
-</div>
-    <div class="modal fade" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">Powered by Electron v<script>document.write(process.versions.electron)</script>
+            </span>
+        </div>
+    </footer>
+
+    <div class="modal fade bs-example-modal-sm" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">New preset</h5>
@@ -111,10 +133,11 @@
             </div>
         </div>
     </div>
+
 </body>
 
 <script>
-            require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
+                        require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
 
 </script>
 
