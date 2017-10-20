@@ -26,7 +26,6 @@ const freqText = $('#freq');
 const levelText = $('#level');
 const stereoText = $('#isStereo');
 const stereoBtn = $('#stereo');
-const monoBtn = $('#mono');
 const muteBtn = $('#mute');
 const recordBtn = $('#record');
 
@@ -220,7 +219,7 @@ let initListeners = () => {
         levelText.off();
         if (!isPlaying) {
             if (!decoder) {
-                decoder = new Worker('demodulator/decode-worker.js');
+                decoder = new Worker('../demodulator/decode-worker.js');
                 decoder.addEventListener('message', function (msg) {
                     processMessage(msg);
                 });
