@@ -27,6 +27,8 @@ let initListeners = () => {
     ppmError.val(userSettings.get('ppm'));
     recordingsPath.val(userSettings.get('recordingsPath'));
 
+    $('#file').text(userSettings.file());
+
     $(':reset').click(function () {
         window.close();        
     });

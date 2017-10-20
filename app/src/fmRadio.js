@@ -9,8 +9,8 @@ const $ = require('jquery');
 const userSettings = require('./settings/settings.js')();
 let decoder;
 
-const upnp = require('./audio/upnpPlayer.js');
-let player = upnp.Player();
+const audio = require('./audio/player.js');
+let player = audio.Player();
 
 let stereo;
 
@@ -27,7 +27,7 @@ const levelText = $('#level');
 const stereoText = $('#isStereo');
 const stereoBtn = $('#stereo');
 const monoBtn = $('#mono');
-const castBtn = $('#cast');
+const muteBtn = $('#mute');
 const recordBtn = $('#record');
 
 
@@ -188,7 +188,9 @@ let initListeners = () => {
     const presetManager = require('./presetManager.js')(device, offset);
     presetManager.rebuild();
     let poweredOn = false;
+    
     powerBtn.click(function () {
+        levelText.off();
         if (!poweredOn) {
             if (RtlDevice().getDevices().length > 0) {
                 setupDevice();
@@ -215,6 +217,7 @@ let initListeners = () => {
     });
 
     playPauseBtn.click(function () {
+        levelText.off();
         if (!isPlaying) {
             if (!decoder) {
                 decoder = new Worker('demodulator/decode-worker.js');
@@ -236,26 +239,29 @@ let initListeners = () => {
 
 
     freqText.change(function () {
+        levelText.off();
         frequencies.setFrequency(frequencies.parseReadableInput(freqText.val()));
     });
 
     freqDownBtn.click(function () {
+        levelText.off();
         freqDown();
     });
     freqUpBtn.click(function () {
+        levelText.off();
         freqUp();
     });
-
-
-    scanDown.click(function () {
+    
+    let scan = (freqFn) => {
+        levelText.off();
         var weak = 0;
         var strong = 0;
-        freqDown();
+        freqFn();
         levelText.on('change', function (event) {
-            if (getLevel() < 0.45) {
+            if (Number(levelText.text()) < 0.65) {
                 weak++;
                 if (weak >= 10) {
-                    freqDown();
+                    freqFn();
                     weak = 0;
                     strong = 0;
                 }
@@ -266,27 +272,14 @@ let initListeners = () => {
                 }
             }
         });
+    };
+
+    scanDown.click(function () {
+        scan(freqDown);
     });
 
     scanUp.click(function () {
-        var weak = 0;
-        var strong = 0;
-        freqUp();
-        levelText.on('change', function (event) {
-            if (getLevel() < 0.45) {
-                weak++;
-                if (weak >= 10) {
-                    freqUp();
-                    weak = 0;
-                    strong = 0;
-                }
-            } else {
-                strong++;
-                if (strong >= 4) {
-                    $(this).off(event);
-                }
-            }
-        });
+        scan(freqUp);
     });
     settingsBtn.click(function () {
         window.open(__dirname +
@@ -308,12 +301,14 @@ let initListeners = () => {
         }
     });
 
-    monoBtn.click(function () {
-        stereo = false;
-    });
-
-    castBtn.click(function () {
-        window.open(__dirname + '/cast.html');
+    muteBtn.click(function () {
+        if (!muteBtn.hasClass('text-success')) {
+            muteBtn.addClass('text-success');
+            player.mute();
+        } else {
+            muteBtn.removeClass('text-success');
+            player.unMute();
+        }
     });
 
     recordBtn.click(function () {
@@ -343,10 +338,6 @@ let freqDown = () => {
 
 let freqUp = () => {
     frequencies.setFrequency(frequencies.getFrequency() + 100000);
-};
-
-let getLevel = () => {
-    return parseFloat(levelText.text());
 };
 
 module.exports.getDevice = () => {

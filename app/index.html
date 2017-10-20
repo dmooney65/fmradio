@@ -62,18 +62,18 @@
             </div>
             <div class="col-xs-5">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="dropdown">
+                    <li class="dropdown" data-toggle="tooltip" data-placement="left" title="Select station preset, or add new preset">
                         <a href="#" class="dropdown-toggle" tabindex="2" data-toggle="dropdown" aria-expanded="false" id="presets">
-                            Presets
+                            Station Presets
                             <span class="caret"></span>
                             <span class="text-muted pull-right" id="presetText"></span>
                         </a>
                         <ul class="dropdown-menu scrollable-menu" id="presetList">
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown" data-toggle="tooltip" data-placement="left" title="Adjust tuner gain">
                         <a href="#" class="dropdown-toggle" tabindex="3" data-toggle="dropdown" aria-expanded="false" id="gainDrop">
-                            Gain
+                            Tuner Gain
                             <span class="caret"></span>
                             <span class="text-muted pull-right" id="gainText">Auto</span>
                         </a>
@@ -96,8 +96,8 @@
             <a class="btn btn-default disabled" id="record" data-toggle="tooltip" data-placement="left" title="Record audio">
                 <span class="glyphicon glyphicon-record"></span>
             </a>
-            <a class="btn btn-default disabled" id="cast" data-toggle="tooltip" data-placement="left" title="Cast audio to Upnp MediaRenderer (e.g. Kodi)">
-                <i class="mdi mdi-cast mdi-lg"></i>
+            <a class="btn btn-default" id="mute" data-toggle="tooltip" data-placement="left" title="Mute/unmute audio (local only)">
+                <i class="mdi mdi-volume-off mdi-lg"></i>
             </a>
         </div>
         <div id="audioParent"></div>

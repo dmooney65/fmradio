@@ -9,7 +9,7 @@ const $ = require('jquery');
 const flac = require('node-flac');
 const httpServer = require('./server.js');
 const userSettings = require('../settings/settings.js')();
-var meta = require('flac-metadata');
+const flac1 = require('flac-bindings');
 
 
 /*var speaker = new Speaker({
@@ -54,9 +54,9 @@ module.exports.Player = function () {
     }*/
 
     //let writer = new wav.Writer({ sampleRate: 48000, bitDepth: 32});
-    let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
+    let writer = new flac1.StreamEncoder({samplerate: 48000, bitsPerSample: 16});
+    //let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
     let fileWriter;// = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
-    var processor;// = new meta.Processor({ parseMetaDataBlocks: true });                
 
     //var p = new require('stream').PassThrough()
     //var read = new require('stream').PassThrough()
@@ -100,28 +100,26 @@ module.exports.Player = function () {
     const getDateStr = () => {
         var date = new Date();
         var y = date.getFullYear().toString();
-        var m = formatField(date.getMonth()+1);
+        var m = formatField(date.getMonth() + 1);
         var d = formatField(date.getDate());
         var hh = formatField(date.getHours());
         var mm = formatField(date.getMinutes());
         var ss = formatField(date.getSeconds());
-        return y+m+d+hh+mm+ss;
+        return y + m + d + hh + mm + ss;
     };
 
     const record = () => {
         let recordingsPath = userSettings.get('recordingsPath');
         if (!recording) {
             let freqText = require('../fmRadio.js').getFreqText();
-            processor = new meta.Processor({ parseMetaDataBlocks: true });
-            fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
+            //processor = new meta.Processor({ parseMetaDataBlocks: true });
+            fileWriter = new flac1.FileEncoder({ samplerate: 48000, bitsPerSample: 16, file: path.join(recordingsPath, freqText.replace(' ', '') + '_' + getDateStr() + '_recording.flac')});
+            //fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
             recording = true;
-            fileWriter.pipe(processor).pipe(fs.createWriteStream(
-                path.join(recordingsPath, freqText.replace(' ','')+'_'+getDateStr()+'_recording.flac'))
-            );
-            processor.on('postprocess', function(mdb) {
-                //console.log('postprocess called');
-                //console.log(mdb.toString());
-            });
+            //fileWriter.pipe(fs.createWriteStream(
+            //    path.join(recordingsPath, freqText.replace(' ', '') + '_' + getDateStr() + '_recording.flac'))
+            //);
+            
             /*processor.on('preprocess', function(mdb) {
                 console.log('preprocess called');
                 console.log(mdb.toString());
@@ -159,7 +157,7 @@ module.exports.Player = function () {
         //audioElement.controlsList = ('nodownload');
         //audioElement.setAttribute('autoplay', 'true');
         //audioElement.setAttribute('controlsList','nodownload');
-        audioElement.setAttribute('type', 'audio/x-flac');
+        audioElement.setAttribute('type', 'audio/flac');
         //audioElement.setAttribute('controls',true);
     };
 

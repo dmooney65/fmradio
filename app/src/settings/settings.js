@@ -5,7 +5,7 @@ const { app } = require('electron').remote;
 module.exports = () => {
     //console.log(presets.length);*/
     let generateDefaultSettings = () => {
-        settings.set('sampleRate', 2560000);
+        settings.set('sampleRate', 1140000);
         settings.set('stereo', true);
         settings.set('lastTuned', true);
         settings.set('localPlayer', true);

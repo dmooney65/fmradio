@@ -1,11 +1,5 @@
-const {app} = require('electron');
-// Module to control application life.
-//const app = electron.app;
-// Module to create native browser window.
-//const Tray = electron.Tray;
-//let $ = require('jquery');
+const { app, BrowserWindow, globalShortcut } = require('electron');
 
-const {BrowserWindow} = require('electron');
 
 const path = require('path');
 const url = require('url');
@@ -19,9 +13,9 @@ function createWindow() {
     const icon = path.join(__dirname, '../icons/tower.png');
 
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 640, height: 360, icon: icon, resizable: true });
+    mainWindow = new BrowserWindow({ width: 660, height: 380, icon: icon, resizable: true });
     //mainWindow.$ = $;
-    
+
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
@@ -29,8 +23,6 @@ function createWindow() {
         slashes: true
     }));
 
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools({mode:'detach'});
     //const appIcon = new Tray(icon);  
 
     // Emitted when the window is closed.
@@ -45,7 +37,18 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', function () {
+    createWindow();
+    //Relaunch app
+    globalShortcut.register('CommandOrControl+Shift+R', () => {
+        app.relaunch();
+        app.quit();
+    });
+    //Open dev tools
+    globalShortcut.register('CommandOrControl+Shift+D', () => {
+        mainWindow.webContents.openDevTools({ mode: 'detach' });        
+    });
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
