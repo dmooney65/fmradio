@@ -59,8 +59,6 @@
       "electronPackagerConfig": {
         "ignore": [
           "build_scripts",
-          "devfiles",
-          "vagrant",
           "dll_bundle",
           ".vscode",
           ".npmrc"
