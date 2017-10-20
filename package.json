@@ -7,6 +7,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "publish": "electron-forge publish",
     "lint": "eslint app/src --color"
   },
   "author": "Dominic Mooney",
@@ -60,6 +61,7 @@
         "ignore": [
           "build_scripts",
           "dll_bundle",
+          "screens",
           ".vscode",
           ".npmrc"
         ],
@@ -78,8 +80,8 @@
         "icon": "icons/tower.png"
       },
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "dmooney65",
+        "name": "fmradio"
       },
       "windowsStoreConfig": {
         "packageName": "fmradio"
