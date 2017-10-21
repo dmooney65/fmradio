@@ -37,8 +37,8 @@
     "bootstrap-material-design-icons": "^2.2.0",
     "electron-compile": "^6.4.1",
     "electron-settings": "^3.1.2",
+    "flac-bindings": "^1.2.2",
     "jquery": "^3.2.1",
-    "node-flac": "dmooney65/node-flac",
     "sdrjs": "dmooney65/sdrjs",
     "to-arraybuffer": "^1.0.1"
   },

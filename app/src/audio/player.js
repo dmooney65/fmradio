@@ -3,7 +3,7 @@ const path = require('path');
 
 const os = require('os');
 const $ = require('jquery');
-const flac = require('node-flac');
+const flac = require('flac-bindings');
 const httpServer = require('./server.js');
 const userSettings = require('../settings/settings.js')();
 
@@ -22,7 +22,7 @@ module.exports.Player = function () {
         return Buffer.from(out.buffer);
     }
 
-    let writer = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
+    let writer = new flac.StreamEncoder({ samplerate: 48000, bitsPerSample: 16, compressionLevel: 0 });
     let fileWriter;
 
     let audioElement;
@@ -69,12 +69,10 @@ module.exports.Player = function () {
         let recordingsPath = userSettings.get('recordingsPath');
         if (!recording) {
             let freqText = require('../fmRadio.js').getFreqText();
-            fileWriter = new flac.FlacEncoder({ sampleRate: 48000, bitDepth: 16, float: false, signed: true });
+            fileWriter = new flac.FileEncoder({
+                samplerate: 48000, bitsPerSample: 16, compressionLevel: 6, file: path.join(recordingsPath, freqText.replace(' ', '') + '_' + getDateStr() + '_recording.flac')
+            });
             recording = true;
-            fileWriter.pipe(fs.createWriteStream(
-                path.join(recordingsPath, freqText.replace(' ', '') + '_' + getDateStr() + '_recording.flac'))
-            );
-
         } else {
             stopRecording();
         }
