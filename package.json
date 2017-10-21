@@ -1,6 +1,6 @@
 {
   "name": "fmradio",
-  "description": "FM Radio Electron App for RTL2832U onglesd",
+  "description": "FM Radio Electron App for RTL2832U dongles",
   "version": "0.9.3",
   "main": "app/main.js",
   "scripts": {
