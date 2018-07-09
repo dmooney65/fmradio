@@ -1,7 +1,7 @@
-const fs = require('fs');
+//const fs = require('fs');
 const path = require('path');
 
-const os = require('os');
+//const os = require('os');
 const $ = require('jquery');
 const flac = require('flac-bindings');
 const httpServer = require('./server.js');
@@ -43,7 +43,7 @@ module.exports.Player = function () {
             if (!audioElement) {
                 createAudioElement();
                 $('#audioParent').append(audioElement);
-                audioElement.setAttribute('src', 'http://' + os.hostname() + ':1337/');
+                audioElement.setAttribute('src', 'http://localhost:1337');// + os.hostname() + ':1337/');
             } else {
                 audioElement.play();
             }
