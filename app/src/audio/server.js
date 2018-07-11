@@ -19,6 +19,11 @@ module.exports.Server = (port, writer) => {
                 //'contentFeatures.dlna.org': 'DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=017000 00000000000000000000000000',
                 //'contentFeatures.dlna.org': 'DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0',
                 //'contentfeatures.dlna.org': 'DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000',
+                'Access-Control-Allow-Origin': '*',
+                //proxy_add_header 'Access-Control-Allow-Origin' 'http://example.com';
+                //proxy_add_header 'Access-Control-Allow-Methods' 'OPTIONS, HEAD, GET, POST, PUT, DELETE';
+                //proxy_add_header 'Access-Control-Allow-Headers' 'X-Requested-With, Content-Type, Content-Length';
+                
                 'Transfer-Encoding': 'chunked',
                 
             });

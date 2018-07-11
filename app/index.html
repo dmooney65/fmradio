@@ -51,9 +51,10 @@
                 <ul class="nav nav-pills nav-stacked text-left text-muted small">
                     <li>
                         <span></span>
-                    </li>
+                    </li>                   
                     <li data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">Signal:
-                        <span id="level">0.0</span>
+                        <span id="level" hidden>0.0</span>
+                        <meter id="meter" low=".5" optimum=".90" high=".89" value="0"></meter>
                     </li>
                     <li data-toggle="tooltip" data-placement="left" title="Status of stereo decoding from current frequency">Stereo:
                         <span id="isStereo">false</span>
@@ -64,7 +65,7 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li class="dropdown" data-toggle="tooltip" data-placement="left" title="Select station preset, or add new preset">
                         <a href="#" class="dropdown-toggle" tabindex="2" data-toggle="dropdown" aria-expanded="false" id="presets">
-                            Station Presets
+                            Presets
                             <span class="caret"></span>
                             <span class="text-muted pull-right" id="presetText"></span>
                         </a>

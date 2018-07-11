@@ -24,6 +24,7 @@ const scanDown = $('#scanDown');
 const scanUp = $('#scanUp');
 const freqText = $('#freq');
 const levelText = $('#level');
+const meter = $('meter');
 const stereoText = $('#isStereo');
 const stereoBtn = $('#stereo');
 const muteBtn = $('#mute');
@@ -95,6 +96,7 @@ let processMessage = (msg) => {
     stereoText.text(msg.data[2]['stereo']);
     levelText.text(level.toFixed(2));
     levelText.change();
+    meter.val(level);
     player.play(left, right);
 };
 
