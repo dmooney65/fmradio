@@ -4,13 +4,12 @@
   "version": "0.9.3",
   "main": "app/main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "eslint app/src --color"
+    "start": "electron app/main.js",
+    "lint": "eslint app/src --color",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "author": "Dominic Mooney",
+  "author": "Dominic Mooney <dominic.mooney99@gmail.com>",
   "keywords": [
     "sdr",
     "rtl-sdr",
@@ -25,67 +24,16 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
-    "electron-forge": "^4.0.0",
-    "electron-forge-maker-nsis": "^19.34.0",
-    "electron-prebuilt-compile": "2.0.4",
+    "electron": "2.0.4",
+    "electron-builder": "^20.19.2",
     "eslint": "^4.7.2"
   },
   "dependencies": {
     "bootstrap-material-design-icons": "^2.2.0",
-    "electron-compile": "^6.4.1",
     "electron-settings": "^3.1.2",
     "flac-bindings": "^1.2.2",
     "jquery": "^3.2.1",
     "sdrjs": "dmooney65/sdrjs",
     "to-arraybuffer": "^1.0.1"
-  },
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel",
-          "nsis"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
-        "ignore": [
-          "build_scripts",
-          "dll_bundle",
-          "screens",
-          ".vscode",
-          ".npmrc"
-        ],
-        "afterExtract": [
-          "./build_scripts/afterExtract.js"
-        ]
-      },
-      "electronWinstallerConfig": {},
-      "electronInstallerDebian": {
-        "icon": "icons/tower.png"
-      },
-      "electronInstallerRedhat": {
-        "icon": "icons/tower.png"
-      },
-      "electronInstallerFlatpak": {
-        "icon": "icons/tower.png"
-      },
-      "github_repository": {
-        "owner": "dmooney65",
-        "name": "fmradio"
-      },
-      "windowsStoreConfig": {
-        "packageName": "fmradio"
-      }
-    }
   }
 }

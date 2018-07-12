@@ -3,27 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; 
+    img-src 'self'; child-src 'self'; style-src 'self'">
     <title>FM Radio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"-->
+
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap/css/custom.css">
     <link rel="stylesheet" href="../node_modules/bootstrap-material-design-icons/css/material-icons.css">
+
+    <!--link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css"-->
     <script>
         window.$ = window.jQuery = require('jquery');
     </script>
-    <!--link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css"-->
-    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script-->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+
 </head>
 
-<body style="min-height:330px">
+<body>
     <div class="container">
         <h1 class="text-center">FM Radio Tuner
-            <small> v<script>document.write(require('../package').version)</script></small>
+            <small> v
+                <script>document.write(require('../package').version)</script>
+            </small>
         </h1>
     </div>
-    <div class="container" style="min-width:600px">
+    <div class="container">
         <div class="btn-group btn-group-justified btn-group-lg">
             <a class="btn btn-default" id="scanDown" data-toggle="tooltip" data-placement="left" title="Scan for stations below current frequency">
                 <span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
@@ -51,7 +57,7 @@
                 <ul class="nav nav-pills nav-stacked text-left text-muted small">
                     <li>
                         <span></span>
-                    </li>                   
+                    </li>
                     <li data-toggle="tooltip" data-placement="left" title="Relative signal strength of current frequency">Signal:
                         <span id="level" hidden>0.0</span>
                         <meter id="meter" low=".5" optimum=".90" high=".89" value="0"></meter>
@@ -105,7 +111,8 @@
     </div>
     <footer class="footer">
         <div class="container">
-            <span class="text-muted">Powered by Electron v<script>document.write(process.versions.electron)</script>
+            <span class="text-muted">Powered by Electron v
+                <script>document.write(process.versions.electron)</script>
             </span>
         </div>
     </footer>
@@ -138,8 +145,7 @@
 </body>
 
 <script>
-                        require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
-
+    require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
 </script>
 
 </html>

@@ -30,6 +30,9 @@ const stereoBtn = $('#stereo');
 const muteBtn = $('#mute');
 const recordBtn = $('#record');
 
+window.eval = global.eval = function () {
+    throw new Error('Sorry, this app does not support window.eval().');
+};
 
 let setDeviceParams = () => {
     device.enableAGC();
@@ -279,6 +282,7 @@ let initListeners = () => {
         scan(freqDown);
     });
 
+    
     scanUp.click(function () {
         scan(freqUp);
     });
