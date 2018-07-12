@@ -7,7 +7,8 @@
     "start": "electron app/main.js",
     "lint": "eslint app/src --color",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "Dominic Mooney <dominic.mooney99@gmail.com>",
   "keywords": [
@@ -33,6 +34,7 @@
     "electron-settings": "^3.1.2",
     "flac-bindings": "^1.2.2",
     "jquery": "^3.2.1",
+    "n": "^2.1.12",
     "sdrjs": "dmooney65/sdrjs",
     "to-arraybuffer": "^1.0.1"
   }
