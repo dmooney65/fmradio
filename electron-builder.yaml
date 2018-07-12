@@ -13,13 +13,14 @@ linux:
   extraFiles: 
   - from: resources/linux/lib
     to: usr/lib
-  - from: resources/linux/udev
-    to: .
+  extraResources: resources/linux/rtlsdr
 
 win:
   target: nsis
   icon: icons/tower.ico
-  extraResources: dll_bundle/**/*
+  extraFiles:
+  - from: resources/windows
+    to: .
 directories:
   output: dist
   buildResources: resources
