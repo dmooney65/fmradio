@@ -1,14 +1,15 @@
 {
-    "name": "fmradio",
-    "description": "FM Radio Electron App for RTL2832U dongles",
-    "version": "0.9.3",
+    "name": "fmadio",
+    "description": "Cross platform FM Radio App for RTL2832U dongles",
+    "version": "0.9.4",
     "main": "app/main.js",
     "scripts": {
         "start": "electron app/main.js",
         "lint": "eslint app/src --color",
         "pack": "electron-builder --dir",
         "dist": "electron-builder",
-        "postinstall": "electron-builder install-app-deps"
+        "packarm": "electron-builder --dir --armv7l",
+        "distarm": "electron-builder --armv7l"
     },
     "author": "Dominic Mooney <dominic.mooney99@gmail.com>",
     "keywords": [
@@ -23,10 +24,10 @@
     "bugs": {
         "url": "https://github.com/dmooney65/fmradio/issues"
     },
-    "license": "MIT",
+    "license": "GPLv2",
     "devDependencies": {
-        "electron": "2.0.4",
-        "electron-builder": "^20.19.2",
+        "electron": "2.0.5",
+        "electron-builder": "^20.23.1",
         "eslint": "^4.7.2"
     },
     "dependencies": {
@@ -34,51 +35,8 @@
         "electron-settings": "^3.1.2",
         "flac-bindings": "^1.2.2",
         "jquery": "^3.2.1",
+        "nedb": "^1.8.0",
         "sdrjs": "dmooney65/sdrjs",
         "to-arraybuffer": "^1.0.1"
-    },
-    "build": {
-        "appId": "io.fmradio.app",
-        "electronVersion": "2.0.4",
-        "mac": {
-            "category": "public.app-category.music",
-            "target": [
-                "dmg"
-            ],
-            "icon": "icons/tower.icns"
-        },
-        "linux": {
-            "category": "AudioVideo",
-            "target": [
-                "AppImage",
-                "deb",
-                "rpm"
-            ],
-            "depends": [
-                "rtl-sdr"
-            ],
-            "executableName": "fmradio"
-        },
-        "win": {
-            "target": "nsis",
-            "icon": "icons/tower.ico",
-            "extraFiles": [
-                {
-                    "from": "resources/windows",
-                    "to": "."
-                }
-            ]
-        },
-        "directories": {
-            "output": "dist",
-            "buildResources": "resources"
-        },
-        "files": [
-            "app/**/*",
-            "demodulator/*",
-            "icons/*",
-            "package.json"
-        ],
-        "publish": null
     }
 }

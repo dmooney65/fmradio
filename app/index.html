@@ -7,13 +7,11 @@
     img-src 'self'; child-src 'self'; style-src 'self'">
     <title>FM Radio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"-->
 
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap/css/custom.css">
     <link rel="stylesheet" href="../node_modules/bootstrap-material-design-icons/css/material-icons.css">
 
-    <!--link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css"-->
     <script>
         window.$ = window.jQuery = require('jquery');
     </script>
@@ -75,7 +73,7 @@
                             <span class="caret"></span>
                             <span class="text-muted pull-right" id="presetText"></span>
                         </a>
-                        <ul class="dropdown-menu scrollable-menu" id="presetList">
+                        <ul class="dropdown-menu col-xs-12 scrollable-menu" id="presetList">
                         </ul>
                     </li>
                     <li class="dropdown" data-toggle="tooltip" data-placement="left" title="Adjust tuner gain">
@@ -111,7 +109,7 @@
     </div>
     <footer class="footer">
         <div class="container">
-            <span class="text-muted">Powered by Electron v
+            <span class="text-muted">Using Electron v
                 <script>document.write(process.versions.electron)</script>
             </span>
         </div>
@@ -121,22 +119,22 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New preset</h5>
+                    <h5 class="modal-title" id="modalLabel">New preset</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form onkeypress="return event.keyCode != 13;">
                         <div class="form-group">
                             <label for="preset-name" class="form-control-label">Station name:</label>
-                            <input type="text" class="form-control" id="presetName">
+                            <input type="text" class="form-control" id="presetName" data-id="null" data-freq="null">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addPreset">Add preset</button>
+                    <button type="button" class="btn btn-primary" id="save">Save</button>
                 </div>
             </div>
         </div>
@@ -145,7 +143,7 @@
 </body>
 
 <script>
-    require('./src/fmRadio.js')//, 'bootstrap/js/bootstrap.min.js')
+    require('./src/fmRadio.js')
 </script>
 
 </html>

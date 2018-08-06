@@ -157,6 +157,7 @@ let isPlaying = false;
 let setPlaying = (playing) => {
     if (!playing) {
         $('#play-pause').find('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
+        meter.val('');
     } else {
         $('#play-pause').find('span').removeClass('glyphicon-play').addClass('glyphicon-pause');
     }
@@ -189,7 +190,7 @@ let initListeners = () => {
 
     frequencies.setFrequency(userSettings.get('lastFrequency'));
 
-    const presetManager = require('./presetManager.js')(device, offset);
+    const presetManager = require('./presets/presetManager.js')(device, offset);
     presetManager.rebuild();
     let poweredOn = false;
     

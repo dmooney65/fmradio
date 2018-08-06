@@ -46,3 +46,4 @@ bower_components
 example-components
 docs
 dist
+build/config.gypi

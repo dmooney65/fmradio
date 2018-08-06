@@ -1,6 +1,6 @@
-const userSettings = require('./settings/settings.js')();
+const userSettings = require('../settings/settings.js')();
 const $ = require('jquery');
-const frequencies = require('./frequencies.js')();
+const frequencies = require('../frequencies.js')();
 
 
 
