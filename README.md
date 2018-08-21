@@ -30,7 +30,7 @@ Download required package from the [releases](https://github.com/dmooney65/fmrad
 ### Windows
 Requires dongle to be properly set up using [Zadig](https://zadig.akeo.ie/).
 ### Mac
-Install [Homebrew](https://brew.sh/) and run `brew install rtl-sdr`. Install the DMG package as normal.
+Install [Homebrew](https://brew.sh/) and run `brew install flac rtl-sdr`. Install the DMG package as normal.
 ### Linux
 Requirements will be installed automatically for deb and rpm packages. For AppImage, librtlsdr0 (debian/ubuntu) or rtl-sdr (Fedora/CentOS etc.) must be installed. A reboot may be required after installation of dependencies. 
 

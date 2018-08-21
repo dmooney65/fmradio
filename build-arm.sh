@@ -20,5 +20,5 @@ export GYP_DEFINES="arm_lib_dir='~/source/armlibs/'"
 
 rm -Rf node_modules/
 
-npm install --arch=arm
+npm install --arch=arm && npm run distarm
 

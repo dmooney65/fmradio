@@ -91,8 +91,12 @@ module.exports.Device = (index) => {
         device.setFrequencyCorrection = ppm;
     };
 
-    let setOffsetTuning = (isOffset) => {
-        device.offsetTuning = isOffset;
+    let setOffsetTuning = (value) => {
+        device.offsetTuning = value;
+    };
+
+    let getOffsetTuning = () => {
+        return device.offsetTuning;
     };
 
     return {
@@ -115,7 +119,8 @@ module.exports.Device = (index) => {
         setIFGain: setIFGain,
         get: get,
         setFrequencyCorrection: setFrequencyCorrection,
-        setOffsetTuning: setOffsetTuning
+        setOffsetTuning: setOffsetTuning,
+        getOffsetTuning: getOffsetTuning
     };
 };
 

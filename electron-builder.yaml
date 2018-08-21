@@ -1,5 +1,12 @@
 appId: io.fmradio.app
-electronVersion: 2.0.4
+productName: FMRadio
+electronVersion: 2.0.5
+deb:
+    depends:
+        - librtlsdr0
+rpm:
+    depends:
+        - rtl-sdr
 mac:
     category: public.app-category.music
     target:
@@ -7,8 +14,11 @@ mac:
     icon: icons/tower.icns
 linux:
     category: AudioVideo
+    
     target:
         - AppImage
+        - deb
+        - rpm
     executableName: fmradio
 win:
     target: nsis
@@ -21,8 +31,10 @@ directories:
     output: dist
     buildResources: resources
 files:
-    - 'app/**/*'
-    - 'demodulator/*'
-    - 'icons/*'
+    - '!app/**/*test.js'
+    - app/**/*
+    - demodulator/*
+    - icons/*
+    - bootstrap/**/*
     - package.json
 publish: null

@@ -22,6 +22,7 @@ module.exports = () => {
     let deletePreset = (id) => {
         return new Promise(function (resolve) {
             db.remove({ _id: id }, {}, function (err, numRemoved) {
+                console.log(numRemoved);
                 resolve(numRemoved);
             });
         });
@@ -58,6 +59,7 @@ module.exports = () => {
         addPreset: addPreset,
         deletePreset: deletePreset,
         editPreset: editPreset,
+        findPreset: findPreset,
         getAll: getAll
     };
 };
