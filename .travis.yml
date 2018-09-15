@@ -9,6 +9,10 @@ matrix:
     before_install:
     - npm i -g npm@latest
     - sudo apt-get install -y librtlsdr-dev libflac-dev rpm
+  - os: osx
+    before_install:
+    - npm i -g npm@latest
+    - brew install flac rtl-sdr
 cache:
   directories:
   - node_modules
