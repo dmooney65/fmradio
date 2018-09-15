@@ -9,10 +9,6 @@ matrix:
     before_install:
     - npm i -g npm@latest
     - sudo apt-get install -y librtlsdr-dev libflac-dev rpm
-#  - os: osx
-#    before_install:
-#    - npm i -g npm@latest
-#    - brew install flac rtl-sdr
 cache:
   directories:
   - node_modules
@@ -23,8 +19,10 @@ script:
 - npm run dist
 deploy:
   provider: releases
+
   api_key:
-    secure: XtsDhewbj+D9Gma7bsZbRbydkp5sbWQghSvXm5XmkQu5sXXF7IZX5thFZOgY2IK/emSxS+KmXu72DNT8TSkEniiwRod5da/TfBwGUjidULIP47WzVuObWpydeSpek5JsBwQIdSOx3yzO7eOhJyalnuz5eK7WkplBv9/NKLCmSkBFy4r+n0+Pyr9Ht/HGCcgd/wZZlpEVAeXl07clVYSGhrJTsgWcqcaZ0DTA9ToHex8g7NGg9jvtrC08+Xepuc8Bgzu41N3s7gfN9vmD9QyCxclS8vH3b76NPm0ugwHOU8cUTGCrinLI+W240P6f9F8tfVZDHci58Np0A63IrPCAFGop+e3gk30PuNCGT3yfGqTvYqiIFEPK5UuDpTmEoP8/u7b4aiyqtC2Nv4IEH+s5FZF3T0CWsx34g9G5PeNJjeDtxm0Oh4/mmo//T3/j3pGq8ze3oVuHUL1xLx7MfG8gNcUypWGZwpM6ah3in8rjFg4HtjPkMuwk7vOUtwNm0FE+aicrAjbaM28KB9E2jw5IB1SNtfItRpuN+W1zcqPP/5bdW3x+gCwpUSvhxylIgc3l2nkkxs+vB9KgZF9iuinNJ/XexPFqCGH+cRSh8imAyeH0M3wmj/5YU8Wn5oQVGdHgUTmmuYmuh4dqjHYAD6uKDDHvkMVvKB89xqJYVh3oRSI=
+    secure: NGLdKAoh9HM5dNMfQh29+rubpRTF3IkXXH0+iJl10gN+Ic1A6e70xHB8rJf8ViGVTPa2Ak7ydcFdau+KJP4gkW4ubjP89iBJX+zaouWnzLsLUp1kAG+UEpxFwmRLjGNIuwixLB7RbdDejsiH2dM3DhzIDRSzTl45ZQhZMoj5vTSUj6HwPEPjs2TQ2QfU6C0ZoINDD8MsNZXj3DZnY0mgulokg+saT1CX5wIwsoiqndFEgO0ZoJBXsx3O8Go3Eb5yvjZHIGo6uaFKY8R1ryUu28nIuP0hh9I695adX2I4lOVYz6mk4DpQ6SBt97z69gtoUriyD7fVMkKSmfxTcENvFCjcgFRYtgl8NbsvFG6Nj42tweGGK497a+CyM06uoAM+eQmcV/hdW1a8sewtxxlheSW7LXr1QejcK5PiHUuPQweNVx4VNnmpvopF+83QaRP9VEPIY5h7qGsUN9hc4GwabkYAcd5fHDtb6p40RGLTwv6FQU7cRoi2wTtSaV+GJqYW4Y8M9eyl8auxD/J85AuDBt9Sn+LwoR5sQqwxlOBNU8p65SrU1JY9o+2hPiE07MGINTnYZDENaiLk1GB1vv2Oj5/6w2C5g5oT5lAh/e/2Ps6789ucITM7iP3BkkyR/TAwFQOx+pNZ8TpKH5ot+a3zQ9LrbuqyfaxOGaAzFOnOQ9g=
   file: dist/*
+  skip_cleanup: true
   on:
     repo: dmooney65/fmradio
