@@ -1,7 +1,6 @@
 language: node_js
 node_js:
 - '8'
-
 matrix:
   include:
   - os: linux
@@ -9,11 +8,10 @@ matrix:
     sudo: required
     before_install:
     - npm i -g npm@latest
-    - sudo apt-get install -y librtlsdr-dev libflac-dev
+    - sudo apt-get install -y librtlsdr-dev libflac-dev rpmbuild
   - os: osx
     before_install:
     - npm i -g npm@latest
-    - brew update
     - brew install flac rtl-sdr
 cache:
   directories:
@@ -21,11 +19,12 @@ cache:
 notifications:
   email: false
 script:
-- npm test
+- xvfb-run npm test
 - npm run dist
 deploy:
   provider: releases
   api_key:
-    secure: SE9hau1ZM0FMf2kFoAsKBLSZu0anoGMaidMXFth6Jx7bzV0wV6wpYilt/wCGJRoYFAtQlHPbl/dYmMNfhBoCyyJT79Alp3noBpU4VQNpmH81OKCCqxpdWA6EmdrMg5+K9t/Wp+mDbDG7KaP+LalmXQ9hfCHqoB/0uMKI/CIv0RfuzacvwfXrrbEh2bFhi7AGSWQRYFGmU7KgkrhtEppqNH5zzU/DGlMeVzWf/aXvs3jCtI1wJFNeGB17VzDaZkudcE2sUZj436H5eFD1plgo93iXJ/eU8QIcILEE1lGu8KY91p4pS+SyVVfYGrpDywaXMCJuxKXbO/2/wKCfYpEcJaSC8l4DE1Gn70DA3dbGBydXVz6OEP7jIxVJE9LG+jTs6HEQt7cNDIr7kqzBoMUWAm+xntfWSEhf4mLqYNkiHAa23xn6bJKX7Xnwm1vDMt93doNRIfBC3nAhnmhCa5EaEOesN3CreCTF8MlxzEVB19PBqcX7VOLolUv3BfmaLJtDv3ZH0ZbPQIxpwgqvw9EH9exE8LZYeYLLAKlKCrAHhUYADNF/GBSSrnHwITklGQwrcof8ou44Q6g6w10zeIPGFzSVcZa0furL+rrswDafKsd+q2bzbJ6DM+ghQQUwo6j3SRAoYnkZVJ1iitlD70/q0ikhy/w9eAbUDscYel3EZ0g=
+    secure: XtsDhewbj+D9Gma7bsZbRbydkp5sbWQghSvXm5XmkQu5sXXF7IZX5thFZOgY2IK/emSxS+KmXu72DNT8TSkEniiwRod5da/TfBwGUjidULIP47WzVuObWpydeSpek5JsBwQIdSOx3yzO7eOhJyalnuz5eK7WkplBv9/NKLCmSkBFy4r+n0+Pyr9Ht/HGCcgd/wZZlpEVAeXl07clVYSGhrJTsgWcqcaZ0DTA9ToHex8g7NGg9jvtrC08+Xepuc8Bgzu41N3s7gfN9vmD9QyCxclS8vH3b76NPm0ugwHOU8cUTGCrinLI+W240P6f9F8tfVZDHci58Np0A63IrPCAFGop+e3gk30PuNCGT3yfGqTvYqiIFEPK5UuDpTmEoP8/u7b4aiyqtC2Nv4IEH+s5FZF3T0CWsx34g9G5PeNJjeDtxm0Oh4/mmo//T3/j3pGq8ze3oVuHUL1xLx7MfG8gNcUypWGZwpM6ah3in8rjFg4HtjPkMuwk7vOUtwNm0FE+aicrAjbaM28KB9E2jw5IB1SNtfItRpuN+W1zcqPP/5bdW3x+gCwpUSvhxylIgc3l2nkkxs+vB9KgZF9iuinNJ/XexPFqCGH+cRSh8imAyeH0M3wmj/5YU8Wn5oQVGdHgUTmmuYmuh4dqjHYAD6uKDDHvkMVvKB89xqJYVh3oRSI=
+  file: dist/*
   on:
     repo: dmooney65/fmradio
