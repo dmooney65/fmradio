@@ -1,11 +1,6 @@
 language: node_js
-
 node_js:
-  - '8'
-
-before_install:
-    - npm i -g npm@latest
-
+- '8'
 
 matrix:
   include:
@@ -13,19 +8,25 @@ matrix:
     dist: trusty
     sudo: required
     before_install:
-        - sudo apt-get install -y librtlsdr-dev libflac8-dev
+    - npm i -g npm@latest
+    - sudo apt-get install -y librtlsdr-dev libflac8-dev
   - os: osx
     before_install:
-        - brew update
-        - brew install flac rtl-sdr
-
+    - npm i -g npm@latest
+    - brew update
+    - brew install flac rtl-sdr
 cache:
   directories:
-    - "node_modules"
-
+  - node_modules
 notifications:
   email: false
 script:
-  - npm test
-  - npm run dist
-
+- npm test
+- npm run dist
+deploy:
+  provider: releases
+  api_key:
+    secure: SE9hau1ZM0FMf2kFoAsKBLSZu0anoGMaidMXFth6Jx7bzV0wV6wpYilt/wCGJRoYFAtQlHPbl/dYmMNfhBoCyyJT79Alp3noBpU4VQNpmH81OKCCqxpdWA6EmdrMg5+K9t/Wp+mDbDG7KaP+LalmXQ9hfCHqoB/0uMKI/CIv0RfuzacvwfXrrbEh2bFhi7AGSWQRYFGmU7KgkrhtEppqNH5zzU/DGlMeVzWf/aXvs3jCtI1wJFNeGB17VzDaZkudcE2sUZj436H5eFD1plgo93iXJ/eU8QIcILEE1lGu8KY91p4pS+SyVVfYGrpDywaXMCJuxKXbO/2/wKCfYpEcJaSC8l4DE1Gn70DA3dbGBydXVz6OEP7jIxVJE9LG+jTs6HEQt7cNDIr7kqzBoMUWAm+xntfWSEhf4mLqYNkiHAa23xn6bJKX7Xnwm1vDMt93doNRIfBC3nAhnmhCa5EaEOesN3CreCTF8MlxzEVB19PBqcX7VOLolUv3BfmaLJtDv3ZH0ZbPQIxpwgqvw9EH9exE8LZYeYLLAKlKCrAHhUYADNF/GBSSrnHwITklGQwrcof8ou44Q6g6w10zeIPGFzSVcZa0furL+rrswDafKsd+q2bzbJ6DM+ghQQUwo6j3SRAoYnkZVJ1iitlD70/q0ikhy/w9eAbUDscYel3EZ0g=
+  file: dist/fmradio-0.9.4-x86_64.AppImage
+  on:
+    repo: dmooney65/fmradio
