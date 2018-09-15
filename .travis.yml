@@ -8,7 +8,7 @@ matrix:
     sudo: required
     before_install:
     - npm i -g npm@latest
-    - sudo apt-get install -y librtlsdr-dev libflac-dev rpmbuild
+    - sudo apt-get install -y librtlsdr-dev libflac-dev librpmbuild3
   - os: osx
     before_install:
     - npm i -g npm@latest
@@ -19,7 +19,7 @@ cache:
 notifications:
   email: false
 script:
-- xvfb-run npm test
+- npm test
 - npm run dist
 deploy:
   provider: releases
