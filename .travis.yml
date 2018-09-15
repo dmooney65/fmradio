@@ -1,0 +1,31 @@
+language: node_js
+
+node_js:
+  - '8'
+
+before_install:
+    - npm i -g npm@latest
+
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    before_install:
+        - sudo apt-get install -y librtlsdr-dev libflac8-dev
+  - os: osx
+    before_install:
+        - brew update
+        - brew install flac rtl-sdr
+
+cache:
+  directories:
+    - "node_modules"
+
+notifications:
+  email: false
+script:
+  - npm test
+  - npm run dist
+

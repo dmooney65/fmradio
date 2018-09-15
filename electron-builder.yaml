@@ -1,6 +1,6 @@
 appId: io.fmradio.app
 productName: FMRadio
-electronVersion: 2.0.5
+electronVersion: 2.0.9
 deb:
     depends:
         - librtlsdr0

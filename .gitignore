@@ -34,7 +34,7 @@ nbproject
 *.wav
 *.flac
 *.mp4
-package-lock.json
+#package-lock.json
 
 # Komodo
 *.komodoproject
@@ -45,6 +45,6 @@ node_modules
 bower_components
 example-components
 docs
-dist
-build/config.gypi
+dist/
+build/
 userdata

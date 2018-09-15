@@ -1,5 +1,5 @@
 {
-    "name": "fmadio",
+    "name": "fmradio",
     "description": "Cross platform FM Radio App for RTL2832U dongles",
     "version": "0.9.4",
     "main": "app/main.js",
@@ -27,7 +27,7 @@
     },
     "license": "GPLv2",
     "devDependencies": {
-        "electron": "2.0.5",
+        "electron": "2.0.9",
         "electron-builder": "^20.23.1",
         "eslint": "^4.7.2",
         "jasmine-core": "^3.2.1",
