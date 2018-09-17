@@ -13,14 +13,14 @@ matrix:
     - npm i -g npm@latest
     - sudo apt-get install -y librtlsdr-dev libflac-dev rpm
   - os: linux
-    dist: trusty
+    dist: xenial
     sudo: required
     env:
         - DEPLOY="false"
         - ARCH="arm"
     before_install:
     - npm i -g npm@latest
-    - sudo apt-get install -y libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf && sudo sed 's~\(\(deb\(-src\)*\) \([^\[]\)\)~\2 [arch=amd64] \4~' /etc/apt/sources.list | sudo tee /etc/apt/sources.list && sudo bash -c 'echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ trusty main multiverse restricted universe" > /etc/apt/sources.list.d/arm-repo.list' && sudo dpkg --add-architecture armhf && sudo apt-get update && sudo apt-get install -y libudev1:armhf libusb-1.0-0:armhf libusb-1.0-0-dev:armhf librtlsdr0:armhf librtlsdr-dev:armhf
+    - sudo apt-get install -y libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf && sudo sed 's~\(\(deb\(-src\)*\) \([^\[]\)\)~\2 [arch=amd64] \4~' /etc/apt/sources.list | sudo tee /etc/apt/sources.list && sudo bash -c 'echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main multiverse restricted universe" > /etc/apt/sources.list.d/arm-repo.list' && sudo dpkg --add-architecture armhf && sudo apt-get update && sudo apt-get install -y libc6:armhf libudev1:armhf libusb-1.0-0:armhf libusb-1.0-0-dev:armhf librtlsdr0:armhf librtlsdr-dev:armhf
   - os: osx
     before_install:
     - npm i -g npm@latest
