@@ -1,4 +1,4 @@
-appId: io.fmradio.app
+appId: com.github.dmooney65.fmradio
 productName: FMRadio
 electronVersion: 2.0.9
 deb:
@@ -14,7 +14,6 @@ mac:
     icon: icons/tower.icns
 linux:
     category: AudioVideo
-    
     target:
         - AppImage
         - deb

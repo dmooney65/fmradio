@@ -10,7 +10,7 @@
         "pack": "electron-builder --dir",
         "dist": "electron-builder",
         "packarm": "electron-builder --dir --armv7l",
-        "distarm": "electron-builder --armv7l"
+        "distarm": "electron-builder --armv7l --linux AppImage"
     },
     "author": "Dominic Mooney <dominic.mooney99@gmail.com>",
     "keywords": [

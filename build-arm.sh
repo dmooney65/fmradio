@@ -16,8 +16,6 @@ export AS="${HOST}-as"
 export LD="$CXX"
 export LINK="$CXX"
 
-export GYP_DEFINES="arm_lib_dir='~/source/armlibs/'"
-
 rm -Rf node_modules/
 
 npm install --arch=arm && npm run distarm
